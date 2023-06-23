@@ -1,3 +1,11 @@
+# System (Default)
+import sys
+#   Add access if it is not in the system path.
+if '../' + 'src' not in sys.path:
+    sys.path.append('../..')
+# Numpy (Array computing) [pip3 install numpy]
+import numpy as np
+
 import numpy as np
 
 import Lib.Manipulator.Interpolation.Utilities as Utilities
