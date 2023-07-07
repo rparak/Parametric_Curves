@@ -59,7 +59,7 @@ class B_Spline_Cls(object):
         
     def __init__(self, P: tp.List[tp.List[float]], N: int) -> None:
         self.__P = np.array(P, dtype=np.float32)
-        self.__dim = self.__P.shape[1]
+        self.__dim = self.__P.shape[1] - 1
 
     @property
     def P(self) -> tp.List[tp.List[float]]:
