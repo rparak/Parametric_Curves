@@ -16,7 +16,17 @@ import Lib.Transformation.Utilities.Mathematics as Mathematics
 
 # https://github.com/pkicki/cnp-b/tree/master/utils
 
+# https://github.com/kentamt/b_spline
+
 # Book ... Nurbs Book
+
+
+# Generation of the Knot Vector:
+#   Method: 
+#       1\ Open Uniform Method
+#       2\ Uniform Method
+#       3\ Chord Lenght Method
+#       4\ Centripetal Method
 
 class B_Spline_Cls(object):
     """
