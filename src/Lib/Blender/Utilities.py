@@ -2,6 +2,9 @@
 import bpy
 # Typing (Support for type hints)
 import typing as tp
+# Custom Library:
+#   ../Lib/Transformation/Core
+import Lib.Transformation.Core as Transformation
 
 def Deselect_All() -> None:
     """
@@ -50,6 +53,29 @@ def Remove_Object(name: str) -> None:
             child.select_set(True)
         bpy.ops.object.delete()
         bpy.context.view_layer.update()
+
+def Set_Object_Material_Color(name: str, color: tp.List[float]):
+    """
+    Description:
+        Set the material color of the individual object and/or the object hierarchy (if exists).
+            
+    Args:
+        (1) name [string]: The name of the object.
+        (2) color [Vector<float>]: RGBA color values: rgba(red, green, blue, alpha).
+    """
+
+    for obj in bpy.data.objects:
+        if bpy.data.objects[name].parent == True:
+            if obj.parent == bpy.data.objects[name]:
+                for material in obj.material_slots:
+                    material.material.node_tree.nodes['Principled BSDF'].inputs["Base Color"].default_value = color
+
+                 # Recursive call.
+                return Set_Object_Material_Color(obj.name, color)
+        else:
+            if obj == bpy.data.objects[name]:
+                for material in obj.material_slots:
+                    material.material.node_tree.nodes['Principled BSDF'].inputs["Base Color"].default_value = color 
 
 def Set_Object_Material_Transparency(name: str, alpha: float) -> None:
     """
@@ -176,3 +202,18 @@ def Remove_Animation_Data() -> None:
     
     for obj in bpy.data.objects:
         obj.animation_data_clear()
+
+def Set_Object_Transformation(name: str, T: tp.List[tp.List[float]]) -> None:
+    """
+    Description:
+        Set the object transformation.
+        
+    Args:
+        (1) name [string]: Name of the main object.
+        (2) T [Matrix<float> 4x4]: Homogeneous transformation matrix (access to location, rotation and scale).
+    """
+
+    if isinstance(T, (list, np.ndarray)):
+        T = Transformation.Homogeneous_Transformation_Matrix_Cls(T, np.float32)
+    
+    bpy.data.objects[name].matrix_basis = T.Transpose().all()
