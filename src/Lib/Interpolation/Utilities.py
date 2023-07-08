@@ -388,6 +388,9 @@ def Generate_Knot_Vector(k: int, P: tp.List[float], method: str) -> tp.List[floa
         A function to generate a normalized vector of knots from selected parameters using an individual 
         selection method (Uniformly-Spaced, Chord-Length, Centripetal).
 
+        Reference:
+            https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/INT-APP/PARA-knot-generation.html
+
     Args:
         (1) k [int]: Degree.
         (2) P [Vector<float> nxm]: Input points.

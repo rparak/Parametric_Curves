@@ -55,14 +55,14 @@ D_X = [1, 1, 0, -0.5, 1, 3]
 D_Y = [0, 1, 2,    3, 1, 1]
 D = [D_X, D_Y]
 N = len(D_X)
-k = 3
+k = 2
 
 parameter_1 = chord_length(N, D)
 #parameter_1 = uniform_spaced(N)
 knot_1 = knot_vector(parameter_1, k, N)
 print(knot_1)
 
-p = np.array([[ 1.,  0., 1.0], [ 1.,  0., 0.0]])
+p = np.array([[ 1.,  0.], [ 1.,  1.], [ 0.,  2.], [ -0.5,   3.], [ 1.,   1.], [ 3.,   1.]])
 
 knot_10 = Utilities.Generate_Knot_Vector(k, p, 'Chord-Length')
 print(knot_10)
