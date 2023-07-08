@@ -65,7 +65,6 @@ def Generate_Chord_Length_Knot_Vector(k, P):
         chord_lengths[i] = chord_lengths[i-1] + L_k
 
     normalized_lengths = chord_lengths / L
-    print(normalized_lengths)
     n_knots = N + k + 1
     knot_vector = np.zeros(n_knots)
     for i in range(n_knots):
@@ -91,7 +90,6 @@ def Generate_Centripetal_Knot_Vector(k, P):
         chord_lengths[i] = chord_lengths[i-1] + L_k
 
     normalized_lengths = chord_lengths / L
-    print(normalized_lengths)
 
     n_knots = N + k + 1
     knot_vector = np.zeros(n_knots)
@@ -113,7 +111,7 @@ k = 3
 
 #print(k, N)
 p_1 = centripetal(N, D)
-print(p_1)
+#print(p_1)
 
 knot = knot_vector(p_1, k, N)
 print(knot)
