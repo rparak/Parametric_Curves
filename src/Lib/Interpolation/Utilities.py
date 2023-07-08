@@ -277,77 +277,152 @@ def RDP_Simplification(P: tp.List[float], epsilon: float) -> tp.List[float]:
         print(f'[ERROR] Information: {error}')
         print(f'[ERROR] The epsilon ({epsilon}) coefficient must be greater than zero.')
 
-def __Uniformly_Spaced(k: float, P: tp.List[float]) -> tp.List[float]:
-    return np.linspace(0.0, 1.0, P.shape[0] + k + 1)
-
-def __Chord_Length(k: float, P: tp.List[float]) -> tp.List[float]:
+def __Uniformly_Spaced(P: tp.List[float]) -> tp.List[float]:
     """
     Description:
-        ..
+        A function to select parameters using the Uniformly-Spaced method.
+
+        Reference:
+            https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/INT-APP/PARA-uniform.html
+
+    Args:
+        (1) P [Vector<float> nxm]: Input points.
+                                    Note:
+                                        Where n is the number of dimensions of the point, and m is the number of points.
+
+    Returns:
+        (1) parameter [Vector<float> 1xn]: Selected parameters to be used to generate the vector of knots.
+                                            Note:
+                                                Where n is the number of dimensions of the point.
+    """
+        
+    return np.linspace(0.0, 1.0, P.shape[0])
+
+def __Chord_Length(P: tp.List[float]) -> tp.List[float]:
+    """
+    Description:
+        A function to select parameters using the Chord-Length method.
+
+        Reference:
+            https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/INT-APP/PARA-chord-length.html
+
+    Args:
+        (1) P [Vector<float> nxm]: Input points.
+                            Note:
+                            Where n is the number of dimensions of the point, and m is the number of points.
+
+    Returns:
+        (1) parameter [Vector<float> 1xn]: Selected parameters to be used to generate the vector of knots.
+                                            Note:
+                                                Where n is the number of dimensions of the point.
     """
 
+    # Express the number of control points.
     N = P.shape[0]
     
-    c = np.zeros(N); L = 0.0
+    t_k = np.zeros(N); L = 0.0
     for i in range(1, N):
         L_k = Mathematics.Euclidean_Norm(P[i] - P[i-1])
-        c[i] = c[i-1] + L_k
+        t_k[i] = t_k[i-1] + L_k
         L += L_k
 
-    return c / L
+    return t_k / L
 
-def __Centripetal(k: float, P: tp.List[float]) -> tp.List[float]:
+def __Centripetal(P: tp.List[float]) -> tp.List[float]:
+    """
+    Description:
+        A function to select parameters using the Centripetal method.
+
+        Reference:
+            https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/INT-APP/PARA-centripetal.html
+    
+    Args:
+        (1) P [Vector<float> nxm]: Input points.
+                            Note:
+                            Where n is the number of dimensions of the point, and m is the number of points.
+
+    Returns:
+        (1) parameter [Vector<float> 1xn]: Selected parameters to be used to generate the vector of knots.
+                                            Note:
+                                                Where n is the number of dimensions of the point.
+    """
+        
+    # Express the number of control points.
     N = P.shape[0]
     
-    c = np.zeros(N); L = 0.0
+    t_k = np.zeros(N); L = 0.0
     for i in range(1, N):
         L_k = Mathematics.Euclidean_Norm(P[i] - P[i-1])
-        c[i] = c[i-1] + L_k ** 0.5
+        t_k[i] = t_k[i-1] + L_k ** 0.5
         L += L_k ** 0.5
 
-    return c / L
+    return t_k / L
 
-def __Knot_Parameter_Selection(k: float, P: tp.List[float], method: str) -> tp.List[float]:
-    return {
-        'Uniformly-Spaced': lambda k, P: __Uniformly_Spaced(k, P),
-        'Chord-Length': lambda k, P: __Chord_Length(k, P),
-        'Centripetal': lambda k, P: __Centripetal(k, P)
-    }[method](k, P)
+def __Knot_Parameter_Selection(P: tp.List[float], method: str) -> tp.List[float]:
+    """
+    Description:
+        A function to select the parameters of the knot vector using an individual calculation method.
 
-def Generate_Knot_Vector(k: float, P: tp.List[float], method: str) -> tp.List[float]:
-    try:
-        assert method in ['Uniformly-Spaced', 'Open-Uniform', 'Chord-Length', 'Centripetal']
+    Args:
+        (1) P [Vector<float> nxm]: Input points.
+                                   Note:
+                                    Where n is the number of dimensions of the point, and m is the number of points.
+        (2) method [string]: The method to be used to select the parameters. Possible string values can be: 
+                             'Uniformly-Spaced', 'Chord-Length', 'Centripetal'.
+
+    Returns:
+        (1) parameter [Vector<float> 1xn]: Selected parameters to be used to generate the vector of knots.
+                                            Note:
+                                                Where n is the number of dimensions of the point.
+    """
         
-        # Get the number of knots.
+    return {
+        'Uniformly-Spaced': lambda x: __Uniformly_Spaced(x),
+        'Chord-Length': lambda x: __Chord_Length(x),
+        'Centripetal': lambda x: __Centripetal(x)
+    }[method](P)
+
+def Generate_Knot_Vector(k: int, P: tp.List[float], method: str) -> tp.List[float]:
+    """
+    Description:
+        A function to generate a normalized vector of knots from selected parameters using an individual 
+        selection method (Uniformly-Spaced, Chord-Length, Centripetal).
+
+    Args:
+        (1) k [int]: Degree.
+        (2) P [Vector<float> nxm]: Input points.
+                                   Note:
+                                    Where n is the number of dimensions of the point, and m is the number of points.
+        (2) method [string]: The method to be used to select the parameters. Possible string values can be: 
+                             'Uniformly-Spaced', 'Chord-Length', 'Centripetal'.
+
+    Returns:
+        (1) parameter [Vector<float> 1xn]: 
+    """
+        
+    try:
+        assert method in ['Uniformly-Spaced', 'Chord-Length', 'Centripetal']
+        
+        # Express the number of control points.
+        N = P.shape[0]
+
+        # Express the number of knots to be generated.
         t_n = N + k + 1
         
-        if method == 'Open-Uniform':
-            N = P.shape[0]
+        # Select the parameters of the knot vector.
+        t_param = __Knot_Parameter_Selection(P, method)
 
-            t = np.zeros(t_n)
-            for i in range(t_n):
-                if i < k + 1:
-                    t[i] = 0.0
-                elif i >= N:
-                    t[i] = 1.0
-                else:
-                    t[i] = (i - k) / (N - k)
+        # Generate a normalized vector of knots from the selected parameters.
+        t = np.zeros(t_n)
+        for i in range(t_n):
+            if i < k + 1:
+                t[i] = 0.0
+            elif i >= N:
+                t[i] = 1.0
+            else:
+                t[i] = np.sum(t_param[i-k:i]) / k
 
-            return t
-        else:
-            # ...
-            t_param = __Knot_Parameter_Selection(k, P)
-
-            t = np.zeros(t_n)
-            for i in range(t_n):
-                if i < k + 1:
-                    t[i] = 0.0
-                elif i >= N:
-                    t[i] = 1.0
-                else:
-                    t[i] = np.sum(t_param[i-k:i]) / k
-
-            return t
+        return t
 
     except AssertionError as error:
         print(f'[ERROR] Information: {error}')
