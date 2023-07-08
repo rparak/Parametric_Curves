@@ -277,23 +277,77 @@ def RDP_Simplification(P: tp.List[float], epsilon: float) -> tp.List[float]:
         print(f'[ERROR] Information: {error}')
         print(f'[ERROR] The epsilon ({epsilon}) coefficient must be greater than zero.')
 
-def __Fce():
-    pass
+def __Uniformly_Spaced(k: float, P: tp.List[float]) -> tp.List[float]:
+    return np.linspace(0.0, 1.0, P.shape[0] + k + 1)
+
+def __Chord_Length(k: float, P: tp.List[float]) -> tp.List[float]:
+    """
+    Description:
+        ..
+    """
+
+    N = P.shape[0]
+    
+    c = np.zeros(N); L = 0.0
+    for i in range(1, N):
+        L_k = Mathematics.Euclidean_Norm(P[i] - P[i-1])
+        c[i] = c[i-1] + L_k
+        L += L_k
+
+    return c / L
+
+def __Centripetal(k: float, P: tp.List[float]) -> tp.List[float]:
+    N = P.shape[0]
+    
+    c = np.zeros(N); L = 0.0
+    for i in range(1, N):
+        L_k = Mathematics.Euclidean_Norm(P[i] - P[i-1])
+        c[i] = c[i-1] + L_k ** 0.5
+        L += L_k ** 0.5
+
+    return c / L
+
+def __Knot_Parameter_Selection(k: float, P: tp.List[float], method: str) -> tp.List[float]:
+    return {
+        'Uniformly-Spaced': lambda k, P: __Uniformly_Spaced(k, P),
+        'Chord-Length': lambda k, P: __Chord_Length(k, P),
+        'Centripetal': lambda k, P: __Centripetal(k, P)
+    }[method](k, P)
 
 def Generate_Knot_Vector(k: float, P: tp.List[float], method: str) -> tp.List[float]:
     try:
-        assert method in ['Uniformly_Spaced', 'Open_Uniform', 'Chord-Length', 'Centripetal']
+        assert method in ['Uniformly-Spaced', 'Open-Uniform', 'Chord-Length', 'Centripetal']
         
-        # N = P.shape[0]
+        # Get the number of knots.
+        t_n = N + k + 1
+        
+        if method == 'Open-Uniform':
+            N = P.shape[0]
 
-        if method == 'Open_Uniform':
-            pass
+            t = np.zeros(t_n)
+            for i in range(t_n):
+                if i < k + 1:
+                    t[i] = 0.0
+                elif i >= N:
+                    t[i] = 1.0
+                else:
+                    t[i] = (i - k) / (N - k)
+
+            return t
         else:
-            return {
-                'Uniformly_Spaced': lambda k, P: __Fce(),
-                'Chord-Length': lambda k, P: __Fce(),
-                'Centripetal': lambda k, P: __Fce()
-            }[method](k, P)
+            # ...
+            t_param = __Knot_Parameter_Selection(k, P)
+
+            t = np.zeros(t_n)
+            for i in range(t_n):
+                if i < k + 1:
+                    t[i] = 0.0
+                elif i >= N:
+                    t[i] = 1.0
+                else:
+                    t[i] = np.sum(t_param[i-k:i]) / k
+
+            return t
 
     except AssertionError as error:
         print(f'[ERROR] Information: {error}')
