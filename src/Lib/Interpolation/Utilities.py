@@ -276,3 +276,26 @@ def RDP_Simplification(P: tp.List[float], epsilon: float) -> tp.List[float]:
     except AssertionError as error:
         print(f'[ERROR] Information: {error}')
         print(f'[ERROR] The epsilon ({epsilon}) coefficient must be greater than zero.')
+
+def __Fce():
+    pass
+
+def Generate_Knot_Vector(k: float, P: tp.List[float], method: str) -> tp.List[float]:
+    try:
+        assert method in ['Uniformly_Spaced', 'Open_Uniform', 'Chord-Length', 'Centripetal']
+        
+        # N = P.shape[0]
+
+        if method == 'Open_Uniform':
+            pass
+        else:
+            return {
+                'Uniformly_Spaced': lambda k, P: __Fce(),
+                'Chord-Length': lambda k, P: __Fce(),
+                'Centripetal': lambda k, P: __Fce()
+            }[method](k, P)
+
+    except AssertionError as error:
+        print(f'[ERROR] Information: {error}')
+        print(f'[ERROR] Incorrect type of function input parameters. The generation method must correspond the name \
+              given in the function description.')
