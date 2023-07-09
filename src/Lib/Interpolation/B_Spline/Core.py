@@ -18,15 +18,12 @@ import Lib.Transformation.Utilities.Mathematics as Mathematics
 
 # https://github.com/kentamt/b_spline
 
+#https://tiborstanko.sk/teaching/geo-num-2017/tp3.html
+#https://en.wikipedia.org/wiki/De_Boor%27s_algorithm
+#https://cran.r-project.org/web/packages/crs/vignettes/spline_primer.pdf
+#https://www.uio.no/studier/emner/matnat/ifi/nedlagte-emner/INF-MAT5340/v05/undervisningsmateriale/kap2-new.pdf
+
 # Book ... Nurbs Book
-
-
-# Generation of the Knot Vector:
-#   Method: 
-#       1\ Open Uniform Method
-#       2\ Uniform Method
-#       3\ Chord Lenght Method
-#       4\ Centripetal Method
 
 class B_Spline_Cls(object):
     """
@@ -75,6 +72,14 @@ class B_Spline_Cls(object):
     
     @P.setter
     def P(self, P: tp.List[tp.List[float]]) -> None:
+        """
+        Description:
+           ...
+        
+        Returns:
+            (1) ...
+        """
+                
         try:
             assert P.shape[1] == self.__dim
 
@@ -84,7 +89,7 @@ class B_Spline_Cls(object):
             print(f'[ERROR] Information: {error}')
     
     @property
-    def B(self) -> tp.List[tp.List[float]]:
+    def S(self) -> tp.List[tp.List[float]]:
         """
         Description:
            ...
@@ -93,9 +98,57 @@ class B_Spline_Cls(object):
             (1) ...
         """
                 
-        return self.__B
+        return self.__S
     
-    def Get_Arc_Length(self, B_dot: tp.List[tp.List[float]]) -> float:
+    @property
+    def t(self) -> tp.List[float]:
+        """
+        Description:
+           ...
+        
+        Returns:
+            (1) ...
+        """
+                
+        return self.__t
+    
+    @property
+    def Time(self) -> tp.List[float]:
+        """
+        Description:
+           ...
+        
+        Returns:
+            (1) ...
+        """
+                
+        return self.__Time
+    
+    @property
+    def N(self) -> int:
+        """
+        Description:
+           ...
+        
+        Returns:
+            (1) ...
+        """
+                
+        return self.__t.shape[0]
+    
+    @property
+    def dim(self) -> int:
+        """
+        Description:
+           ...
+        
+        Returns:
+            (1) ...
+        """
+                
+        return self.__dim
+    
+    def Get_Arc_Length(self) -> float:
         """
         Description:
            ...
@@ -109,32 +162,10 @@ class B_Spline_Cls(object):
                 
         # https://bezier.readthedocs.io/en/stable/python/reference/bezier.curve.html
         L = 0.0
-        for _, B_dot_i in enumerate(B_dot):
-            L += Mathematics.Euclidean_Norm(B_dot_i)
+        for _, S_dot_i in enumerate(self.__S_dot):
+            L += Mathematics.Euclidean_Norm(S_dot_i)
 
         return L / self.N
-
-    def Get_Bounding_Box_Parameters(self) -> tp.Tuple[tp.List[float], 
-                                                      tp.List[float]]:
-        """
-        Description:
-            ....
-        
-        Args:
-            (1) ...
-
-        Returns:
-            (1) ...
-        """
-                
-        # ...
-        min = np.zeros(self.__dim, dtype=np.float32); max = min.copy()
-
-        for i, B_T in enumerate(self.__B.T):
-            min[i] = Mathematics.Min(B_T)[1]
-            max[i] = Mathematics.Max(B_T)[1]
-
-        return (min, max)
 
     def Simplify(self, epsilon: float) -> tp.List[float]:
         """
@@ -148,7 +179,7 @@ class B_Spline_Cls(object):
             (1) ...
         """
 
-        return Utilities.RDP_Simplification(self.__B, epsilon)
+        return Utilities.RDP_Simplification(self.__S, epsilon)
     
     def Derivative_1st(self) -> tp.List[tp.List[float]]:
         """
@@ -163,9 +194,9 @@ class B_Spline_Cls(object):
         """
                 
         # ....
-        self.__B_dot = np.zeros(self.__B_dot.shape, dtype=self.__B_dot.dtype)
+        self.__S_dot = np.zeros(self.__S_dot.shape, dtype=self.__S_dot.dtype)
             
-        return self.__B_dot
+        return self.__S_dot
     
     def Interpolate(self) -> tp.List[tp.List[float]]:  
         """
@@ -180,6 +211,6 @@ class B_Spline_Cls(object):
         """
                   
         # ....
-        self.__B = np.zeros(self.__B.shape, dtype=self.__B.dtype)
+        self.__S = np.zeros(self.__S.shape, dtype=self.__S.dtype)
 
-        return self.__B
+        return self.__S

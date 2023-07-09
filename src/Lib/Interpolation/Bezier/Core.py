@@ -74,6 +74,14 @@ class Bezier_Cls(object):
     
     @P.setter
     def P(self, P: tp.List[tp.List[float]]) -> None:
+        """
+        Description:
+           ...
+        
+        Returns:
+            (1) ...
+        """
+                
         try:
             assert P.shape[1] == self.__dim
 

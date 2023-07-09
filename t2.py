@@ -34,27 +34,25 @@ def basic_function(u, j, k, t):
         var = w1 + w2
     return var
 
-def bspline_basis(u, j, k, t):
+def bspline_basis(i, n, t, x):
     #  Cox-de Boor recursion formula.
-    if k == 0:
-        if u[j] < t <= u[j+1]:
+    if n == 0:
+        if t[i] < x <= t[i + 1]:
             return 1.0
         else:
             return 0.0
     else:
-        denom1 = u[j+k] - u[j]
-        denom2 = u[j+k+1] - u[j+1]
-        result = 0.0
+        denom1 = t[i + n] - t[i]
+        denom2 = t[i + n + 1] - t[i + 1]
+        B_in = 0.0
 
         if denom1 != 0:
-            if j == 5 and k == 3 and t == 1:
-                print(bspline_basis(u, j, k-1, t))
-            result += (t - u[j]) / denom1 * bspline_basis(u, j, k-1, t)
+            B_in += ((x - t[i]) / denom1) * bspline_basis(i, n - 1, t, x)
 
         if denom2 != 0:
-            result += (u[j+k+1] - t) / denom2 * bspline_basis(u, j+1, k-1, t)
+            B_in += ((t[i + n + 1] - x) / denom2) * bspline_basis(i + 1, n - 1, t, x)
 
-        return result
+        return B_in
 
 # Example usage
 control_points = np.array([[0, 0], [1, 1], [2, -1], [3, 0], [4, 2], [5, 1]])
@@ -75,16 +73,12 @@ S = np.zeros((2, len(t)))
 S[:, 0] = Q[:, 0]
 
 for i in range(len(t)):
-    if i==0:
-        continue
-        
     for j in range(6):
         b = basic_function(u, j, n, t[i])
-        b1 = bspline_basis(u, j, n, t[i])
-        if np.round(b1, 3) != np.round(b, 3):
-            print(b1, b)
+        b1 = bspline_basis(j, n, u, t[i])
         S[:, i] = S[:, i] + Q[:, j]*b1
 
+#b1 = bspline_basis(j, n, u, t)
 """
 for t_i in t:
     for i in range(6):
@@ -94,7 +88,7 @@ for t_i in t:
 
 fig = plt.figure("B-spline curve", figsize = (6, 3))
 plt.plot(Q[0, :], Q[1, :], "--s", label="control points")
-plt.plot(S[0, :], S[1, :], "-", label="B spline")
+plt.plot(S[0, :], S[1, :], ".", label="B spline")
 plt.legend()
 plt.title("B spline")
 plt.xlabel("x")

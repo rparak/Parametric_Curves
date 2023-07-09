@@ -172,10 +172,51 @@ def Bernstein_Polynomial(i: int, n: int, t: tp.List[float]) -> tp.List[float]:
               The degree of n ({n}) must be greater than or equal to {Mathematics.CONST_NULL}.')
 
 
-def Basic_Function():
-    # https://tiborstanko.sk/teaching/geo-num-2017/tp3.html
-    # https://en.wikipedia.org/wiki/De_Boor%27s_algorithm
-    pass
+def Basic_Function(i: int, n: int, t: tp.List[float], x: float) -> float:
+    """
+    Description:
+        Get the 'B_in' as a recursively defined basic functions of a B-spline.
+
+        The i-th basis function of degree {n} with {t} knots is defined as follows:
+
+            B_{i, n}(x) = ((x - t_{i})/(t_{i + n} - t_{i})) *  B_{i, n - 1}(x) + 
+                          ((t_{i + n + 1} - x)/(t_{i + n + 1} - t_{i + 1})) *  B_{i + 1, n - 1}(x),
+
+        for all real numbers x, where:
+        
+            B_{i, 0}(x) -> 1, if t_{i} < x <= t_{i + 1}
+                        -> 0, otherwise.
+
+    Args:
+        (1) i [int]: Iteration.
+        (2) n [int]: Degree.
+        (3) t [Vector<float> 1xm]: Normalized knot vector as a non-decreasing sequence of real numbers.
+                                    Note:
+                                        Where m is the number of generated knots defined by the formula:
+                                            N (number of checkpoints) + n (degree) + 1.
+        (4) x [float]: The time parameter in the current episode.
+    
+    Returns:
+        (1) parameter [float]: The result 'B_in' of the basis function calculated from the input parameters.
+    """
+
+    if n == 0:
+        if t[i] < x <= t[i + 1]:
+            return 1.0
+        else:
+            return 0.0
+    else:
+        denominator_1 = t[i + n] - t[i]
+        denominator_2 = t[i + n + 1] - t[i + 1]
+        B_in = 0.0
+
+        if denominator_1 != 0:
+            B_in += ((x - t[i]) / denominator_1) * Basic_Function(i, n - 1, t, x)
+
+        if denominator_2 != 0:
+            B_in += ((t[i + n + 1] - x) / denominator_2) * Basic_Function(i + 1, n - 1, t, x)
+
+        return B_in
 
 def Simple_Simplification(P: tp.List[float], s_f: int) -> tp.List[float]:
     """
@@ -314,8 +355,8 @@ def __Chord_Length(P: tp.List[float]) -> tp.List[float]:
 
     Args:
         (1) P [Vector<float> nxm]: Input points.
-                            Note:
-                            Where n is the number of dimensions of the point, and m is the number of points.
+                                    Note:
+                                    Where n is the number of dimensions of the point, and m is the number of points.
 
     Returns:
         (1) parameter [Vector<float> 1xn]: Selected parameters to be used to generate the vector of knots.
@@ -344,8 +385,8 @@ def __Centripetal(P: tp.List[float]) -> tp.List[float]:
     
     Args:
         (1) P [Vector<float> nxm]: Input points.
-                            Note:
-                            Where n is the number of dimensions of the point, and m is the number of points.
+                                    Note:
+                                    Where n is the number of dimensions of the point, and m is the number of points.
 
     Returns:
         (1) parameter [Vector<float> 1xn]: Selected parameters to be used to generate the vector of knots.
@@ -388,7 +429,7 @@ def __Knot_Parameter_Selection(P: tp.List[float], method: str) -> tp.List[float]
         'Centripetal': lambda x: __Centripetal(x)
     }[method](P)
 
-def Generate_Knot_Vector(k: int, P: tp.List[float], method: str) -> tp.List[float]:
+def Generate_Knot_Vector(n: int, P: tp.List[float], method: str) -> tp.List[float]:
     """
     Description:
         A function to generate a normalized vector of knots from selected parameters using an individual 
@@ -398,7 +439,7 @@ def Generate_Knot_Vector(k: int, P: tp.List[float], method: str) -> tp.List[floa
             https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/INT-APP/PARA-knot-generation.html
 
     Args:
-        (1) k [int]: Degree.
+        (1) n [int]: Degree.
         (2) P [Vector<float> nxm]: Input points.
                                    Note:
                                     Where n is the number of dimensions of the point, and m is the number of points.
@@ -406,7 +447,10 @@ def Generate_Knot_Vector(k: int, P: tp.List[float], method: str) -> tp.List[floa
                              'Uniformly-Spaced', 'Chord-Length', 'Centripetal'.
 
     Returns:
-        (1) parameter [Vector<float> 1xn]: 
+        (1) parameter [Vector<float> 1xm]: Normalized knot vector as a non-decreasing sequence of real numbers.
+                                            Note:
+                                                Where m is the number of generated knots defined by the formula:
+                                                    N (number of checkpoints) + n (degree) + 1.
     """
         
     try:
@@ -416,7 +460,7 @@ def Generate_Knot_Vector(k: int, P: tp.List[float], method: str) -> tp.List[floa
         N = P.shape[0]
 
         # Express the number of knots to be generated.
-        t_n = N + k + 1
+        t_n = N + n + 1
         
         # Select the parameters of the knot vector.
         t_param = __Knot_Parameter_Selection(P, method)
@@ -424,12 +468,12 @@ def Generate_Knot_Vector(k: int, P: tp.List[float], method: str) -> tp.List[floa
         # Generate a normalized vector of knots from the selected parameters.
         t = np.zeros(t_n)
         for i in range(t_n):
-            if i < k + 1:
+            if i < n + 1:
                 t[i] = 0.0
             elif i >= N:
                 t[i] = 1.0
             else:
-                t[i] = np.sum(t_param[i-k:i]) / k
+                t[i] = np.sum(t_param[i - n:i]) / n
 
         return t
 
