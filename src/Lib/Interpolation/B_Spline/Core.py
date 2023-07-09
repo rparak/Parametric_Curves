@@ -55,6 +55,10 @@ class B_Spline_Cls(object):
     """
         
     def __init__(self, P: tp.List[tp.List[float]], N: int) -> None:
+
+        # The time (roots) value must be within the interval: 0.0 <= t <= 1.0
+        self.__Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, N)
+
         self.__P = np.array(P, dtype=np.float32)
         self.__dim = self.__P.shape[1] - 1
 
