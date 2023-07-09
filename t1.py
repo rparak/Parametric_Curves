@@ -66,7 +66,6 @@ for i in range(len(t)):
     for j in range(n):
         #print(j)
         b = basic_function(u, j, d, t[i]) 
-        print(Q[:, j]*b) 
         S[:, i] = S[:, i] + Q[:, j]*b
 
 fig = plt.figure("LSBspline", figsize=(6, 3))

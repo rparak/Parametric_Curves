@@ -171,6 +171,12 @@ def Bernstein_Polynomial(i: int, n: int, t: tp.List[float]) -> tp.List[float]:
         print(f'[ERROR] The input condition for the polynomial calculation is not satisfied. \
               The degree of n ({n}) must be greater than or equal to {Mathematics.CONST_NULL}.')
 
+
+def Basic_Function():
+    # https://tiborstanko.sk/teaching/geo-num-2017/tp3.html
+    # https://en.wikipedia.org/wiki/De_Boor%27s_algorithm
+    pass
+
 def Simple_Simplification(P: tp.List[float], s_f: int) -> tp.List[float]:
     """
     Description:
