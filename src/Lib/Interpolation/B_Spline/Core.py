@@ -203,7 +203,7 @@ class B_Spline_Cls(object):
 
         return L / (self.N)
 
-    def Optimization_Control_Points(self, N: int) -> tp.List[float]:
+    def Optimize_Control_Points(self, N: int) -> tp.List[float]:
         # Least-Squares Fitting of Data with B-Spline Curves
         # https://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf
         # https://github.com/kentamt/b_spline/blob/master/Least_Square_B-spline.ipynb
