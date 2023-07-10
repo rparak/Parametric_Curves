@@ -222,11 +222,21 @@ class Bezier_Cls(object):
             #   The time (roots) value must be within the interval: 0.0 <= t <= 1.0
             if coeff_i.size != 1:
                 roots = Mathematics.Roots(coeff_i[::-1])
+                """
                 t_tmp = np.array([Mathematics.Clamp(roots_i, Utilities.CONST_T_0, 
                                                     Utilities.CONST_T_1) for _, roots_i in enumerate(roots)], dtype=np.float32)
-                print(roots)
-                print(t_tmp)
-                t = np.array([Mathematics.Min(t_tmp)[1], Mathematics.Max(t_tmp)[1]], dtype=np.float32)
+                """
+                t_tmp = []
+                for _, roots_i in enumerate(roots):
+                    if Utilities.CONST_T_0 <= roots_i <= Utilities.CONST_T_1:
+                        t_tmp.append(roots_i)
+                
+                t_tmp = np.array(t_tmp)
+                
+                if t_tmp.size == 0.0:
+                    t = np.array([0.0, 0.0], dtype=np.float32)
+                else:
+                    t = np.array([Mathematics.Min(t_tmp)[1], Mathematics.Max(t_tmp)[1]], dtype=np.float32)
             else:
                 t = Mathematics.Clamp(coeff_i[::-1], Utilities.CONST_T_0, Utilities.CONST_T_1)
 
