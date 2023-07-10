@@ -286,7 +286,6 @@ def RDP_Simplification(P: tp.List[float], epsilon: float) -> tp.List[float]:
                                     Where n is the number of dimensions of the point, and m is the number of points.
         (2) epsilon [float]: The coefficient determines the similarity between the original a
                              and the approximated curve. 
-                             
                              Note: 
                                 epsilon > 0.0
 

@@ -41,7 +41,7 @@ def basic_function(u, j, k, t):
 
 
 
-n = 4 # num of control points
+n = 3 # num of control points
 d = 2 # degree of b-spline
 nk = d + n + 1 # num of knot 
 m = 6 # num of data points

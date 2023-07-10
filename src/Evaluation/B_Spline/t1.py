@@ -42,11 +42,10 @@ def basic_function(u, j, k, t):
 
 
 x = np.arange(0, 10, 0.1)
-yt = 10 - 0.2 * x**2 + 2 * np.sin(x)
 y  = 10 - 0.1 * x**2 + 2 * np.sin(x) + np.random.normal(0.0, 1.0, len(x))
 
-n = 5 # num of control points
-d = 1 # degree of b-spline
+n = 3 # num of control points
+d = 2 # degree of b-spline
 nk = d + n + 1 # num of knot 
 m = len(x) # num of data points
 
@@ -81,7 +80,7 @@ for i in range(len(t)):
 fig = plt.figure("LSBspline", figsize=(6, 3))
 plt.plot(x, y,"o", c="lightgray", mfc="none",  ms=10, label="Samples")
 plt.plot(Q[0, :], Q[1, :], "s--", ms=10,label="Control points")
-#plt.plot(S[0, :], S[1, :], "-", label="B-spline curve")
+plt.plot(S[0, :], S[1, :], "-", label="B-spline curve")
 
 plt.title("Least square B-spline fitting")
 plt.xlabel("x")

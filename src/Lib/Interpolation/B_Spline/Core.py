@@ -58,9 +58,10 @@ class B_Spline_Cls(object):
         try:
             assert n < P.shape[0]
 
+            self.__method = method
             # Generate a normalized vector of knots from the selected parameters 
             # using the chosen method.
-            self.__t = Utilities.Generate_Knot_Vector(n, P, method)
+            self.__t = Utilities.Generate_Knot_Vector(n, P, self.__method)
 
             # The value of the time must be within the interval of the knot vector: 
             #   t[0] <= Time <= t[-1]
@@ -219,15 +220,11 @@ class B_Spline_Cls(object):
                 for j in range(N):
                     A[i, j] = Utilities.Basic_Function(j, self.__n, t, Time[i])
 
-
-            # X = [A'A]^(-1) A'
-            X = np.linalg.inv(A.T @ A) @ A.T
-
             # estimated control points
-            Q = X @ self.__P
+            Q = (np.linalg.inv(A.T @ A) @ A.T) @ self.__P
             Q[0] = self.__P[0]; Q[-1] = self.__P[-1]
 
-            return Q
+            return self.__class__(self.__n, Q, self.__method, self.N)
 
         except AssertionError as error:
             print(f'[ERROR] Information: {error}')
