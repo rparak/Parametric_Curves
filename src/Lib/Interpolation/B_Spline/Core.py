@@ -55,7 +55,6 @@ class B_Spline_Cls(object):
     """
         
     def __init__(self, n: int, P: tp.List[tp.List[float]], method: str, N: int) -> None:
-
         try:
             assert n < P.shape[0]
 
@@ -76,7 +75,11 @@ class B_Spline_Cls(object):
 
         except AssertionError as error:
             print(f'[ERROR] Information: {error}')
-            print(f'[ERROR] Incorrect type of class input parameters. The degree (n = {n}) of the B-spline must be smaller than the number of input control points (N = {P.shape[0]}).')
+            print('[ERROR] Incorrect type of class input parameters.')
+            # Error information.
+            if n >= P.shape[0]:
+                print(f'[ERROR] The degree (n = {n}) of the B-spline must be less than the number of input control points (N = {P.shape[0]}).')
+                
 
     @property
     def n(self) -> int:
@@ -199,7 +202,46 @@ class B_Spline_Cls(object):
 
         return L / (self.N)
 
-    def Simplification(self, method: str, parameter: float) -> tp.List[float]:
+    def Optimization_Control_Points(self, N: int) -> tp.List[float]:
+        # Least-Squares Fitting of Data with B-Spline Curves
+        # https://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf
+
+        try:
+            assert N < self.__P.shape[0] and N > self.__n and N != 1
+
+            Time = np.linspace(self.__t[0], self.__t[-1], self.__P.shape[0])
+
+            A = np.zeros((self.__P.shape[0], N), dtype=self.__P.dtype)
+
+            t = Utilities.Generate_Knot_Vector(self.__n, np.zeros((N, 1), dtype=self.__P.dtype), 
+                                            'Uniformly-Spaced')
+            for i in range(self.__P.shape[0]):
+                for j in range(N):
+                    A[i, j] = Utilities.Basic_Function(j, self.__n, t, Time[i])
+
+
+            # X = [A'A]^(-1) A'
+            X = np.linalg.inv(A.T @ A) @ A.T
+
+            # estimated control points
+            Q = X @ self.__P
+            Q[0] = self.__P[0]; Q[-1] = self.__P[-1]
+
+            return Q
+
+        except AssertionError as error:
+            print(f'[ERROR] Information: {error}')
+            print('[ERROR] Incorrect type of class input parameters.')
+            # Error information.
+            if N >= self.__P.shape[0]:
+                print(f'[ERROR] The number of optimized control points (N = {N}) must be less than the number of input control points (N_in = {self.__P.shape[0]}).')
+            if N <= self.__n:
+                print(f'[ERROR] The number of optimized control points (N = {N}) must be greater than the degree (n = {self.__n}) of the B-spline.')
+            if N == 1:
+                print('[ERROR] The number of optimized control points cannot be equal to 1.')
+            
+
+    def Simplify(self, epsilon: float) -> tp.List[float]:
         """
         Description:
             ....
@@ -211,12 +253,7 @@ class B_Spline_Cls(object):
             (1) ...
         """
 
-        if method == 'RDP':
-            # parameter = epsilon
-            return Utilities.RDP_Simplification(self.__S, parameter)
-        else:
-            # N .. Number of control points.
-            return None
+        return Utilities.RDP_Simplification(self.__S, epsilon)
 
     def Derivative_1st(self) -> tp.List[tp.List[float]]:
         """

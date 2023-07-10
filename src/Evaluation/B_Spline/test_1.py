@@ -18,16 +18,18 @@ import Lib.Interpolation.B_Spline.Core as B_Spline
 def main():
     P = np.array([[0, 0], [1, 1], [2, -1], [3, 0], [4, 2], [5, 1]])
     n = 1
-
+    
     S_Cls = B_Spline.B_Spline_Cls(n, P, 'Chord-Length', 100)
     S = S_Cls.Interpolate()
 
+    S_Opt = S_Cls.Optimization_Control_Points(1)
     #S_dot = S_Cls.Derivative_1st()
     #print(S_dot)
     #print(S_Cls.Get_Arc_Length())
 
     fig = plt.figure("B-spline curve", figsize = (6, 3))
     plt.plot(P[:, 0], P[:, 1], "--s", label="control points")
+    plt.plot(S_Opt[:, 0], S_Opt[:, 1], "--o", label="control points opt.")
     plt.plot(S[:, 0], S[:, 1], "-", label="B-spline 1")
     plt.legend()
     plt.title("B spline")

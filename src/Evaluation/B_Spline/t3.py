@@ -8,8 +8,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-import Lib.Interpolation.Utilities as Utilities
-
 # https://github.com/kentamt/b_spline/blob/master/Least_Square_B-spline.ipynb
 
 def open_uniform_vector(m, degree):
@@ -42,33 +40,35 @@ def basic_function(u, j, k, t):
     return var
 
 
-# x = np.sort(np.random.rand(20) * 10)# 
-x = np.arange(0, 10, 1.0)
 
-yt = 5 - 0.2 * x**2 + 2 * np.sin(x)
-y  = 5 - 0.2 * x**2 + 2 * np.sin(x) + np.random.normal(0.0, 1.0, len(x))
-
-n = 5 # num of control points
-d = 4 # degree of b-spline
+n = 4 # num of control points
+d = 2 # degree of b-spline
 nk = d + n + 1 # num of knot 
-m = len(x) # num of data points
+m = 6 # num of data points
 
 u = open_uniform_vector(nk, d)
-t = np.linspace(0.0, 1, len(x))
+t = np.linspace(0.0, 1.0, 6)
+
+print(u)
 
 # Least Square
-P = np.array([x, y]).T # samples
+P = np.array([[0, 0], [1, 1], [2, -1], [3, 0], [4, 2], [5, 1]]) # samples
 A = np.zeros((m, n)) # Basic function Matrix
 for k in range(m):
     for j in range(n):
         A[k, j] = basic_function(u, j, d, t[k])
-        
+
+#print(A)
 X = np.linalg.inv(A.T.dot(A)).dot(A.T) # X = [A'A]^(-1) A'
+
+#print(X.shape, P.shape)
+
 Q = X.dot(P) # estimated control points
 
-Q[0] = P[0]; Q[-1] = P[-1]
+Q[0]  = P[0]
+Q[-1] = P[-1]
 
-t = np.linspace(0.0, 1, 100)
+t = np.linspace(0.0, 1.0, 100)
 S = np.zeros((2, len(t)))
 Q = Q.T
 S[:, 0] = Q[:, 0]
@@ -81,10 +81,11 @@ for i in range(len(t)):
         b = basic_function(u, j, d, t[i]) 
         S[:, i] = S[:, i] + Q[:, j]*b
 
+Q = Q.T
 fig = plt.figure("LSBspline", figsize=(6, 3))
 plt.plot(P[:, 0], P[:, 1],"--s", c="lightgray", mfc="none",  ms=10, label="Samples")
-plt.plot(Q[0, :], Q[1, :], "s--", ms=10,label="Control points")
-plt.plot(S[0, :], S[1, :], "-", ms=10,label="B-Spline")
+plt.plot(S[0, :], S[1, :], "--", ms=10,label="Control points")
+plt.plot(Q[:, 0], Q[:, 1], "--o", label="control points opt.")
 
 plt.title("Least square B-spline fitting")
 plt.xlabel("x")

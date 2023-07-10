@@ -60,11 +60,11 @@ for k in range(m):
     for j in range(n):
         A[k, j] = basic_function(u, j, d, t[k])
         
-X = np.linalg.inv(A.T.dot(A)).dot(A.T) # X = [A'A]^(-1) A'
+X = np.linalg.inv(A.T @ A) @ A.T # X = [A'A]^(-1) A'
 
 #print(X.shape, P.shape)
 
-Q = X.dot(P) # estimated control points
+Q = X @ P # estimated control points
 
 S = np.zeros((2, len(t)))
 Q = Q.T

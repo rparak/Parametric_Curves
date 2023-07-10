@@ -72,9 +72,6 @@ Q = control_points.T
 S = np.zeros((2, len(t)))
 S[:, 0] = Q[:, 0]
 
-print(S.shape)
-print(Q.shape)
-
 for i in range(len(t)):
     for j in range(6):
         b = basic_function(u, j, n, t[i])
