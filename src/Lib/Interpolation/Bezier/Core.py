@@ -57,8 +57,7 @@ class Bezier_Cls(object):
 
         except AssertionError as error:
             print(f'[ERROR] Information: {error}')
-            print(f'[ERROR] Incorrect type of function input parameters. The calculation method must correspond to \
-                  the name Explicit or Polynomial, not {method}.')
+            print(f'[ERROR] Incorrect type of function input parameters. The calculation method must correspond to the name Explicit or Polynomial, not {method}.')
 
     @property
     def P(self) -> tp.List[tp.List[float]]:

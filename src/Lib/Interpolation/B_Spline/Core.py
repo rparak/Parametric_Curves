@@ -54,13 +54,41 @@ class B_Spline_Cls(object):
                 Cls..
     """
         
-    def __init__(self, P: tp.List[tp.List[float]], N: int) -> None:
+    def __init__(self, n: int, P: tp.List[tp.List[float]], method: str, N: int) -> None:
 
-        # The time (roots) value must be within the interval: 0.0 <= t <= 1.0
-        self.__Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, N)
+        try:
+            assert method in ['Uniformly-Spaced', 'Chord-Length', 'Centripetal']
 
-        self.__P = np.array(P, dtype=np.float32)
-        self.__dim = self.__P.shape[1] - 1
+            # Generate a normalized vector of knots from the selected parameters 
+            # using the chosen method.
+            self.__t = Utilities.Generate_Knot_Vector(n, P, method)
+
+            # The value of the time must be within the interval of the knot vector: 
+            #   t[0] <= Time <= t[-1]
+            self.__Time = np.linspace(self.__t[0], self.__t[-1], N)
+
+            # ...
+            self.__n = n
+            self.__P = np.array(P, dtype=np.float32)
+            self.__dim = self.__P.shape[1]
+            self.__S = np.zeros((N, self.__dim), dtype=np.float32)
+            self.__S_dot = np.zeros((N, self.__dim), dtype=np.float32)
+
+        except AssertionError as error:
+            print(f'[ERROR] Information: {error}')
+            print(f'[ERROR] Incorrect type of class input parameters. The method of generating the knot vector must correspond to the name Uniformly-Spaced, Chord-Length, or Centripetal, not {method}.')
+
+    @property
+    def n(self) -> int:
+        """
+        Description:
+           ...
+        
+        Returns:
+            (1) ...
+        """
+                
+        return self.__n
 
     @property
     def P(self) -> tp.List[tp.List[float]]:
@@ -138,7 +166,7 @@ class B_Spline_Cls(object):
             (1) ...
         """
                 
-        return self.__t.shape[0]
+        return self.__Time.shape[0]
     
     @property
     def dim(self) -> int:
@@ -169,7 +197,7 @@ class B_Spline_Cls(object):
         for _, S_dot_i in enumerate(self.__S_dot):
             L += Mathematics.Euclidean_Norm(S_dot_i)
 
-        return L / self.N
+        return L / (self.N)
 
     def Simplify(self, epsilon: float) -> tp.List[float]:
         """
@@ -196,10 +224,20 @@ class B_Spline_Cls(object):
         Returns:
             (1) ...
         """
-                
+    
+        # https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-derv.html
+        
         # ....
         self.__S_dot = np.zeros(self.__S_dot.shape, dtype=self.__S_dot.dtype)
             
+        t_dot = self.__t[1:-1]
+
+        # ...
+        for i, t_i in enumerate(self.__Time):
+            for j, (p_i, p_ii) in enumerate(zip(self.__P, self.__P[1:])):   
+                Q_i = (self.__n / (t_dot[j + self.__n] - t_dot[j])) * (p_ii - p_i)
+                self.__S_dot[i, :] += Utilities.Basic_Function(j, self.__n - 1, t_dot, t_i) * Q_i
+
         return self.__S_dot
     
     def Interpolate(self) -> tp.List[tp.List[float]]:  
@@ -216,5 +254,10 @@ class B_Spline_Cls(object):
                   
         # ....
         self.__S = np.zeros(self.__S.shape, dtype=self.__S.dtype)
+
+        # ...
+        for i, t_i in enumerate(self.__Time):
+            for j, p_i in enumerate(self.__P):
+                self.__S[i, :] += Utilities.Basic_Function(j, self.__n, self.__t, t_i) * p_i
 
         return self.__S

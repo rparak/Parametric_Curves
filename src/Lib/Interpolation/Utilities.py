@@ -199,7 +199,7 @@ def Basic_Function(i: int, n: int, t: tp.List[float], x: float) -> float:
     Returns:
         (1) parameter [float]: The result 'B_in' of the basis function calculated from the input parameters.
     """
-
+    
     if n == 0:
         if t[i] < x <= t[i + 1]:
             return 1.0
@@ -479,5 +479,4 @@ def Generate_Knot_Vector(n: int, P: tp.List[float], method: str) -> tp.List[floa
 
     except AssertionError as error:
         print(f'[ERROR] Information: {error}')
-        print(f'[ERROR] Incorrect type of function input parameters. The generation method must correspond the name \
-              given in the function description.')
+        print('[ERROR] Incorrect type of function input parameters. The generation method must correspond the name given in the function description.')
