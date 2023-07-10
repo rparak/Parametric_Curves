@@ -216,6 +216,8 @@ class Bezier_Cls(object):
         coeff = np.array([i*self.__C(i) for i in range(1, self.__n + 1)],
                           dtype=np.float32).T
         
+        # Warning!!! Re-write this function ! 
+
         # ....
         for i, coeff_i in enumerate(coeff):
             # Note:
