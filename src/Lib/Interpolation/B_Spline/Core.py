@@ -206,6 +206,7 @@ class B_Spline_Cls(object):
     def Optimization_Control_Points(self, N: int) -> tp.List[float]:
         # Least-Squares Fitting of Data with B-Spline Curves
         # https://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf
+        # https://github.com/kentamt/b_spline/blob/master/Least_Square_B-spline.ipynb
 
         try:
             assert N < self.__P.shape[0] and N > self.__n and N != 1
