@@ -7,6 +7,7 @@ if '../' + 'src' not in sys.path:
 import numpy as np
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+
 import Lib.Interpolation.Utilities as Utilities
 
 # https://github.com/kentamt/b_spline/blob/master/Least_Square_B-spline.ipynb
@@ -41,12 +42,14 @@ def basic_function(u, j, k, t):
     return var
 
 
-x = np.arange(0, 10, 0.1)
-yt = 10 - 0.2 * x**2 + 2 * np.sin(x)
-y  = 10 - 0.1 * x**2 + 2 * np.sin(x) + np.random.normal(0.0, 1.0, len(x))
+# x = np.sort(np.random.rand(20) * 10)# 
+x = np.arange(0, 10, 1.0)
+
+yt = 5 - 0.2 * x**2 + 2 * np.sin(x)
+y  = 5 - 0.2 * x**2 + 2 * np.sin(x) + np.random.normal(0.0, 1.0, len(x))
 
 n = 5 # num of control points
-d = 1 # degree of b-spline
+d = 4 # degree of b-spline
 nk = d + n + 1 # num of knot 
 m = len(x) # num of data points
 
@@ -61,11 +64,11 @@ for k in range(m):
         A[k, j] = basic_function(u, j, d, t[k])
         
 X = np.linalg.inv(A.T.dot(A)).dot(A.T) # X = [A'A]^(-1) A'
-
-#print(X.shape, P.shape)
-
 Q = X.dot(P) # estimated control points
 
+Q[0] = P[0]; Q[-1] = P[-1]
+
+t = np.linspace(0.0, 1, 100)
 S = np.zeros((2, len(t)))
 Q = Q.T
 S[:, 0] = Q[:, 0]
@@ -79,9 +82,9 @@ for i in range(len(t)):
         S[:, i] = S[:, i] + Q[:, j]*b
 
 fig = plt.figure("LSBspline", figsize=(6, 3))
-plt.plot(x, y,"o", c="lightgray", mfc="none",  ms=10, label="Samples")
+plt.plot(P[:, 0], P[:, 1],"--s", c="lightgray", mfc="none",  ms=10, label="Samples")
 plt.plot(Q[0, :], Q[1, :], "s--", ms=10,label="Control points")
-#plt.plot(S[0, :], S[1, :], "-", label="B-spline curve")
+plt.plot(S[0, :], S[1, :], "-", ms=10,label="B-Spline")
 
 plt.title("Least square B-spline fitting")
 plt.xlabel("x")

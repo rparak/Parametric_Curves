@@ -17,19 +17,14 @@ import Lib.Interpolation.B_Spline.Core as B_Spline
 
 def main():
     P = np.array([[0, 0], [1, 1], [2, -1], [3, 0], [4, 2], [5, 1]])
-    n = 3
+    n = 1
 
-    S_Cls = B_Spline.B_Spline_Cls(n, P, 'Chord-Length', 1000)
+    S_Cls = B_Spline.B_Spline_Cls(n, P, 'Chord-Length', 100)
     S = S_Cls.Interpolate()
-    S_dot = S_Cls.Derivative_1st()
-    #print(S_dot)
-    print(S_Cls.Get_Arc_Length())
 
-    L = 0.0; S_N = S.copy()
-    for i in range(1, S.shape[0]):
-        L += np.linalg.norm(S[i] - S[i - 1])
-        S_N[i, :] = S[i] - S[i - 1]
-    print(L)
+    #S_dot = S_Cls.Derivative_1st()
+    #print(S_dot)
+    #print(S_Cls.Get_Arc_Length())
 
     fig = plt.figure("B-spline curve", figsize = (6, 3))
     plt.plot(P[:, 0], P[:, 1], "--s", label="control points")

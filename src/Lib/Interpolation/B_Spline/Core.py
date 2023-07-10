@@ -57,7 +57,7 @@ class B_Spline_Cls(object):
     def __init__(self, n: int, P: tp.List[tp.List[float]], method: str, N: int) -> None:
 
         try:
-            assert method in ['Uniformly-Spaced', 'Chord-Length', 'Centripetal']
+            assert n < P.shape[0]
 
             # Generate a normalized vector of knots from the selected parameters 
             # using the chosen method.
@@ -76,7 +76,7 @@ class B_Spline_Cls(object):
 
         except AssertionError as error:
             print(f'[ERROR] Information: {error}')
-            print(f'[ERROR] Incorrect type of class input parameters. The method of generating the knot vector must correspond to the name Uniformly-Spaced, Chord-Length, or Centripetal, not {method}.')
+            print(f'[ERROR] Incorrect type of class input parameters. The degree (n = {n}) of the B-spline must be smaller than the number of input control points (N = {P.shape[0]}).')
 
     @property
     def n(self) -> int:
@@ -199,7 +199,7 @@ class B_Spline_Cls(object):
 
         return L / (self.N)
 
-    def Simplify(self, epsilon: float) -> tp.List[float]:
+    def Simplification(self, method: str, parameter: float) -> tp.List[float]:
         """
         Description:
             ....
@@ -211,8 +211,13 @@ class B_Spline_Cls(object):
             (1) ...
         """
 
-        return Utilities.RDP_Simplification(self.__S, epsilon)
-    
+        if method == 'RDP':
+            # parameter = epsilon
+            return Utilities.RDP_Simplification(self.__S, parameter)
+        else:
+            # N .. Number of control points.
+            return None
+
     def Derivative_1st(self) -> tp.List[tp.List[float]]:
         """
         Description:
