@@ -25,21 +25,23 @@ def main():
 
     # Check: start in 0,0
     P = np.array([[1, 1], [2, -1], [3, -3], [4, 2], [5, 1]])
+
     #P = np.array([[0, 0], [0, 1]])
     n = 2
 
-    S_Cls = B_Spline.B_Spline_Cls(n, P, 'Chord-Length', 250)
+    S_Cls = B_Spline.B_Spline_Cls(n, P, 'Chord-Length', 100)
     S = S_Cls.Interpolate()
 
+    """
     S_new = np.zeros(S.shape)
     for i, S_i in enumerate(S):
         S_new[i, :] = S_i + np.random.uniform((-1) * np.random.uniform(0.05, 0.20), 
                                               np.random.uniform(0.05, 0.20), S.shape[1])
     S_new[0] = P[0]; S_new[-1] = P[-1]
-    
-    S_01 = B_Spline.B_Spline_Cls(n, S_new, 'Chord-Length', 100)
-    S_Opt_Interp = S_01.Optimize_Control_Points(5)
-    S_New_Opt = S_Opt_Interp.Interpolate()
+    """
+    #S_01 = B_Spline.B_Spline_Cls(n, S_new, 'Chord-Length', 100)
+    #S_Opt_Interp = S_01.Optimize_Control_Points(5)
+    #S_New_Opt = S_Opt_Interp.Interpolate()
     #S_dot = S_Cls.Derivative_1st()
     #print(S_dot)
     #print(S_Cls.Get_Arc_Length())
@@ -49,9 +51,11 @@ def main():
     _, axis = plt.subplots()
     plt.plot(P[:, 0], P[:, 1], "--s", label="control points")
     plt.plot(S[:, 0], S[:, 1], "-", label="B-spline 1")
-    plt.plot(S_new[:, 0], S_new[:, 1], "o", label="B-spline 1")
-    plt.plot(S_New_Opt[:, 0], S_New_Opt[:, 1], "-", label="B-spline 1")
+    #plt.plot(S_new[:, 0], S_new[:, 1], "o", label="B-spline 1")
+    #plt.plot(S_New_Opt[:, 0], S_New_Opt[:, 1], "-", label="B-spline 1")
     plt.legend()
+    plt.minorticks_on()
+    #plt.gca().set_aspect('equal', adjustable='box')
     plt.title("B spline")
     plt.xlabel("x")
     plt.ylabel("y")
