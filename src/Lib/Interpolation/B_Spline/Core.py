@@ -216,7 +216,6 @@ class B_Spline_Cls(object):
             Time = np.linspace(self.__t[0], self.__t[-1], self.__P.shape[0])
 
             A = np.zeros((self.__P.shape[0], N), dtype=self.__P.dtype)
-
             t = Utilities.Generate_Knot_Vector(self.__n, np.zeros((N, 1), dtype=self.__P.dtype), 
                                             'Uniformly-Spaced')
             for i in range(self.__P.shape[0]):

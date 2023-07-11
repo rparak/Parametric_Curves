@@ -20,29 +20,37 @@ def main():
     #x = np.array([ 0. ,  1.2,  1.9,  3.2,  4. ,  6.5])
     #y = np.array([ 0. ,  2.3,  3. ,  4.3,  2.9,  3.1])
 
-    n = 30
-    x = np.sort(np.random.uniform(0, 5, size=n))
-    y = np.sin(x) + 0.1*np.random.randn(n)
+    #x = np.arange(0, 10, 0.1)
+    #y  = 10 - 0.2 * x**2 + 2 * np.cos(x) + np.random.norm(0.0, 1.0, len(x))
 
     # Check: start in 0,0
-    #P = np.array([x, y]).T
-    P = np.array([[0, 0], [0, 1]])
-    n = 1
+    P = np.array([[0, -2], [2, -1], [3, -3]])
+    #P = np.array([[0, 0], [0, 1]])
+    n = 2
 
-    S_Cls = B_Spline.B_Spline_Cls(n, P, 'Chord-Length', 100)
+    S_Cls = B_Spline.B_Spline_Cls(n, P, 'Chord-Length', 250)
     S = S_Cls.Interpolate()
 
+    S_new = np.zeros(S.shape)
+    for i, S_i in enumerate(S):
+        S_new[i, :] = S_i + np.random.uniform((-1) * np.random.uniform(0.05, 0.20), 
+                                              np.random.uniform(0.05, 0.20), S.shape[1])
+    S_new[0] = P[0]; S_new[-1] = P[-1]
+    
+    S_01 = B_Spline.B_Spline_Cls(n, S_new, 'Chord-Length', 100)
+    S_Opt_Interp = S_01.Optimize_Control_Points(3)
+    S_New_Opt = S_Opt_Interp.Interpolate()
     #S_dot = S_Cls.Derivative_1st()
     #print(S_dot)
-    print(S_Cls.Get_Arc_Length())
+    #print(S_Cls.Get_Arc_Length())
     #S_Opt_Interp = S_Cls.Optimize_Control_Points(3)
     #S_new = S_Opt_Interp.Interpolate()
 
     _, axis = plt.subplots()
     plt.plot(P[:, 0], P[:, 1], "--s", label="control points")
-    #plt.plot(S_Opt.P[:, 0], S_Opt.P[:, 1], "--o", label="control points opt.")
     plt.plot(S[:, 0], S[:, 1], "-", label="B-spline 1")
-    #plt.plot(S_new[:, 0], S_new[:, 1], "-", label="B-spline 1")
+    plt.plot(S_new[:, 0], S_new[:, 1], "o", label="B-spline 1")
+    plt.plot(S_New_Opt[:, 0], S_New_Opt[:, 1], "-", label="B-spline 1")
     plt.legend()
     plt.title("B spline")
     plt.xlabel("x")

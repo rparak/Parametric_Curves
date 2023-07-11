@@ -472,7 +472,8 @@ def Generate_Knot_Vector(n: int, P: tp.List[float], method: str) -> tp.List[floa
             elif i >= N:
                 t[i] = 1.0
             else:
-                t[i] = np.sum(t_param[i - n:i]) / n
+                if n > 0:
+                    t[i] = np.sum(t_param[i - n:i]) / n
 
         return t
 
