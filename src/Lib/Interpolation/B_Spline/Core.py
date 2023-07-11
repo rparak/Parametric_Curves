@@ -308,9 +308,9 @@ class B_Spline_Cls(object):
         
         # ....
         self.__S_dot = np.zeros(self.__S_dot.shape, dtype=self.__S_dot.dtype)
-            
-        t_dot = self.__t[1:-1]
+        self.__S_dot[0, :] = self.__P[0, :]
 
+        t_dot = self.__t[1:-1]
         # ...
         for i, t_i in enumerate(self.__Time):
             for j, (p_i, p_ii) in enumerate(zip(self.__P, self.__P[1:])):   
@@ -333,6 +333,7 @@ class B_Spline_Cls(object):
                   
         # ....
         self.__S = np.zeros(self.__S.shape, dtype=self.__S.dtype)
+        self.__S[0, :] = self.__P[0, :]
 
         # ...
         for i, t_i in enumerate(self.__Time):
