@@ -512,7 +512,6 @@ def Roots(p: tp.List[float]) -> tp.List[float]:
         assert p.size > 1
 
         if p.size > 2:
-            """
             # If the roots cannot be solved using a linear equation.
             i = 0
             for _, (p_i, p_ii) in enumerate(zip(p, p[1:])):
@@ -521,8 +520,6 @@ def Roots(p: tp.List[float]) -> tp.List[float]:
                     break
 
             p_n = p[i:]
-            """
-            p_n = p
 
             # Selects the calculation method based on the number of polynomial coefficients {p}.
             return {

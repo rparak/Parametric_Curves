@@ -19,7 +19,7 @@ import Lib.Transformation.Utilities.Mathematics as Mathematics
 
 #P = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 1.8]])
 # L = 18.355664405651
-P = np.array([[0, 0], [1, 1], [2, -1], [3, 8], [4, 2], [5, 1]])
+P = np.array([[0, 0], [1, 1], [2, -1], [3, -3], [4, 2], [5, 1]])
 # np.array([[0, 0], [1, 1], [2, -1], [3, 0], [4, 2], [5, 1]])
 # L = 18.284271247463
 #P = np.array([[0, 0], [10, -10], [0, -10], [10, 0]])
@@ -81,9 +81,10 @@ axis.add_patch(rec3)
 
 axis.grid()
 plt.show()
-"""
+
 """
 
+"""
 # [0. 0.5]
 # [0.66666667, 0.0] -> this is not a result, but the time {t}!!!
 #print(np.round(B_t_0, 2))

@@ -220,30 +220,33 @@ class Bezier_Cls(object):
 
         # ....
         for i, coeff_i in enumerate(coeff):
-            # Note:
-            #   The time (roots) value must be within the interval: 0.0 <= t <= 1.0
             if coeff_i.size != 1:
                 roots = Mathematics.Roots(coeff_i[::-1])
-                """
-                t_tmp = np.array([Mathematics.Clamp(roots_i, Utilities.CONST_T_0, 
-                                                    Utilities.CONST_T_1) for _, roots_i in enumerate(roots)], dtype=np.float32)
-                """
+
+                # The time (roots) value must be within the interval: 0.0 <= t <= 1.0
                 t_tmp = []
                 for _, roots_i in enumerate(roots):
                     if Utilities.CONST_T_0 <= roots_i <= Utilities.CONST_T_1:
                         t_tmp.append(roots_i)
                 
-                t_tmp = np.array(t_tmp)
+                # Remove duplicities.
+                t_tmp = np.array([*set(t_tmp)], dtype=np.float32)
                 
                 if t_tmp.size == 0.0:
-                    t = np.array([0.0, 0.0], dtype=np.float32)
+                    continue
                 else:
-                    t = np.array([Mathematics.Min(t_tmp)[1], Mathematics.Max(t_tmp)[1]], dtype=np.float32)
+                    t = t_tmp
             else:
-                t = Mathematics.Clamp(coeff_i[::-1], Utilities.CONST_T_0, Utilities.CONST_T_1)
+                if Utilities.CONST_T_0 <= coeff_i <= Utilities.CONST_T_1:
+                    t = np.array(coeff_i, dtype=np.float32)
+                else:
+                    continue
 
             # ...
-            B_i = self.__Get_B_t(self.__P[:, i], t)
+            B_i = []
+            for _, t_i in enumerate(t):
+                B_i.append(self.__Get_B_t(self.__P[:, i], np.array(t_i, dtype=np.float32)))
+            B_i = np.array(B_i, dtype=np.float32).flatten()
 
             # ...
             min[i] = Mathematics.Min(np.append(min[i], B_i))[1]
