@@ -196,6 +196,8 @@ class B_Spline_Cls(object):
             (1) ...
         """
                 
+        _ = self.Derivative_1st()
+
         # https://bezier.readthedocs.io/en/stable/python/reference/bezier.curve.html
         L = 0.0
         for _, S_dot_i in enumerate(self.__S_dot):
@@ -238,6 +240,38 @@ class B_Spline_Cls(object):
             if N == 1:
                 print('[ERROR] The number of optimized control points cannot be equal to 1.')
             
+    def Get_Bounding_Box_Parameters(self, method: str) -> tp.Tuple[float, float, 
+                                                                   float, float]:
+        """
+        Description:
+            ....
+        
+        Args:
+            (1) ...
+
+        Returns:
+            (1) ...
+        """
+
+        try:
+            assert method in ['Control-Points', 'Interpolated-Points']
+
+            min = np.zeros(self.__dim, dtype=np.float32); max = min.copy()
+
+            if method == 'Control-Points':
+                for i, P_T in enumerate(self.__P.T):
+                    min[i] = Mathematics.Min(P_T)[1]
+                    max[i] = Mathematics.Max(P_T)[1]
+            else:
+                for i, S_T in enumerate(self.__S.T):
+                    min[i] = Mathematics.Min(S_T)[1]
+                    max[i] = Mathematics.Max(S_T)[1]
+
+            return {'x_min': min[0], 'x_max': max[0], 'y_min': min[1], 'y_max': max[1]}
+        
+        except AssertionError as error:
+            print(f'[ERROR] Information: {error}')
+            print(f'[ERROR] Incorrect type of function input parameters. The method must correspond to the name Control-Points or Interpolated-Points, not {method}.')
 
     def Simplify(self, epsilon: float) -> tp.List[float]:
         """

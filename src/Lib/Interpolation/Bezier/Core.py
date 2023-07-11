@@ -57,7 +57,7 @@ class Bezier_Cls(object):
 
         except AssertionError as error:
             print(f'[ERROR] Information: {error}')
-            print(f'[ERROR] Incorrect type of function input parameters. The calculation method must correspond to the name Explicit or Polynomial, not {method}.')
+            print(f'[ERROR] Incorrect type of class input parameters. The calculation method must correspond to the name Explicit or Polynomial, not {method}.')
 
     @property
     def P(self) -> tp.List[tp.List[float]]:
@@ -149,6 +149,8 @@ class Bezier_Cls(object):
             (1) ...
         """
                 
+        _ = self.Derivative_1st()
+        
         # https://bezier.readthedocs.io/en/stable/python/reference/bezier.curve.html
         L = 0.0
         for _, B_dot_i in enumerate(self.__B_dot):
@@ -194,8 +196,8 @@ class Bezier_Cls(object):
 
         return B
 
-    def Get_Bounding_Box_Parameters(self) -> tp.Tuple[tp.List[float], 
-                                                      tp.List[float]]:
+    def Get_Bounding_Box_Parameters(self, method: str) -> tp.Tuple[float, float, 
+                                                                   float, float]:
         """
         Description:
             ....
@@ -206,53 +208,63 @@ class Bezier_Cls(object):
         Returns:
             (1) ...
         """
-                
-        # https://snoozetime.github.io/2018/05/22/bezier-curve-bounding-box.html
-
-        # ...
-        (min, max) = self.__Get_Initial_Min_Max_BB(self.__P[0], self.__P[-1])
-
-        # ...
-        coeff = np.array([i*self.__C(i) for i in range(1, self.__n + 1)],
-                          dtype=np.float32).T
         
-        # Warning!!! Re-write this function ! 
-
-        # ....
-        for i, coeff_i in enumerate(coeff):
-            if coeff_i.size != 1:
-                roots = Mathematics.Roots(coeff_i[::-1])
-
-                # The time (roots) value must be within the interval: 0.0 <= t <= 1.0
-                t_tmp = []
-                for _, roots_i in enumerate(roots):
-                    if Utilities.CONST_T_0 <= roots_i <= Utilities.CONST_T_1:
-                        t_tmp.append(roots_i)
-                
-                # Remove duplicities.
-                t_tmp = np.array([*set(t_tmp)], dtype=np.float32)
-                
-                if t_tmp.size == 0.0:
-                    continue
-                else:
-                    t = t_tmp
+        try:
+            assert method in ['Control-Points', 'Interpolated-Points']
+        
+            if method == 'Control-Points':
+                min = np.zeros(self.__dim, dtype=np.float32); max = min.copy()
+                for i, P_T in enumerate(self.__P.T):
+                    min[i] = Mathematics.Min(P_T)[1]
+                    max[i] = Mathematics.Max(P_T)[1]
             else:
-                if Utilities.CONST_T_0 <= coeff_i <= Utilities.CONST_T_1:
-                    t = np.array(coeff_i, dtype=np.float32)
-                else:
-                    continue
+                # https://snoozetime.github.io/2018/05/22/bezier-curve-bounding-box.html
+                # ...
+                (min, max) = self.__Get_Initial_Min_Max_BB(self.__P[0], self.__P[-1])
 
-            # ...
-            B_i = []
-            for _, t_i in enumerate(t):
-                B_i.append(self.__Get_B_t(self.__P[:, i], np.array(t_i, dtype=np.float32)))
-            B_i = np.array(B_i, dtype=np.float32).flatten()
+                # ...
+                coeff = np.array([i*self.__C(i) for i in range(1, self.__n + 1)],
+                                dtype=np.float32).T
+                
+                # ....
+                for i, coeff_i in enumerate(coeff):
+                    if coeff_i.size != 1:
+                        roots = Mathematics.Roots(coeff_i[::-1])
 
-            # ...
-            min[i] = Mathematics.Min(np.append(min[i], B_i))[1]
-            max[i] = Mathematics.Max(np.append(max[i], B_i))[1]
+                        # The time (roots) value must be within the interval: 0.0 <= t <= 1.0
+                        t_tmp = []
+                        for _, roots_i in enumerate(roots):
+                            if Utilities.CONST_T_0 <= roots_i <= Utilities.CONST_T_1:
+                                t_tmp.append(roots_i)
+                        
+                        # Remove duplicities.
+                        t_tmp = np.array([*set(t_tmp)], dtype=np.float32)
+                        
+                        if t_tmp.size == 0.0:
+                            continue
+                        else:
+                            t = t_tmp
+                    else:
+                        if Utilities.CONST_T_0 <= coeff_i <= Utilities.CONST_T_1:
+                            t = np.array(coeff_i, dtype=np.float32)
+                        else:
+                            continue
 
-        return (min, max)
+                    # ...
+                    B_i = []
+                    for _, t_i in enumerate(t):
+                        B_i.append(self.__Get_B_t(self.__P[:, i], np.array(t_i, dtype=np.float32)))
+                    B_i = np.array(B_i, dtype=np.float32).flatten()
+
+                    # ...
+                    min[i] = Mathematics.Min(np.append(min[i], B_i))[1]
+                    max[i] = Mathematics.Max(np.append(max[i], B_i))[1]
+
+            return {'x_min': min[0], 'x_max': max[0], 'y_min': min[1], 'y_max': max[1]}
+        
+        except AssertionError as error:
+            print(f'[ERROR] Information: {error}')
+            print(f'[ERROR] Incorrect type of function input parameters. The method must correspond to the name Control-Points or Interpolated-Points, not {method}.')
             
     def __C(self, j: int) -> tp.List[float]:
         """

@@ -32,6 +32,8 @@ import time
 Bezier_0 = Bezier.Bezier_Cls('Explicit', P, 100)
 B_t_0 = Bezier_0.Interpolate()
 
+print(Bezier_0.Get_Arc_Length())
+
 """
 Bezier_0 = Bezier.Bezier_Cls('Explicit', P, 1000)
 t_0 = time.time()
@@ -46,8 +48,8 @@ print(time.time() - t_1)
 x_min_P = np.min(P[:, 0]); x_max_P = np.max(P[:, 0])
 y_min_P = np.min(P[:, 1]); y_max_P = np.max(P[:, 1])
 
-#print(x_min_P,x_max_P)
-#print(y_min_P,y_max_P)
+print(x_min_P,x_max_P)
+print(y_min_P,y_max_P)
 
 min = np.zeros(Bezier_0.dim, dtype=np.float32); max = min.copy()
 for i, B_T in enumerate(B_t_0.T):
@@ -62,7 +64,7 @@ print(x_min_B,x_max_B)
 print(y_min_B,y_max_B)
 
 #print(Bezier_0.P[0])
-print(Bezier_0.Get_Bounding_Box_Parameters())
+print(Bezier_0.Get_Bounding_Box_Parameters('Interpolated-Points'))
 
 """
 _, axis = plt.subplots()
