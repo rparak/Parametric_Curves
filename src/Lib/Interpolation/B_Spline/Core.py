@@ -240,8 +240,7 @@ class B_Spline_Cls(object):
             if N == 1:
                 print('[ERROR] The number of optimized control points cannot be equal to 1.')
             
-    def Get_Bounding_Box_Parameters(self, method: str) -> tp.Tuple[float, float, 
-                                                                   float, float]:
+    def Get_Bounding_Box_Parameters(self, method: str) -> tp.Tuple[tp.List[float]]:
         """
         Description:
             ....
@@ -267,7 +266,13 @@ class B_Spline_Cls(object):
                     min[i] = Mathematics.Min(S_T)[1]
                     max[i] = Mathematics.Max(S_T)[1]
 
-            return {'x_min': min[0], 'x_max': max[0], 'y_min': min[1], 'y_max': max[1]}
+            if self.__dim == 2:
+                return {'x_min': min[0], 'x_max': max[0], 
+                        'y_min': min[1], 'y_max': max[1]}
+            else:
+                return {'x_min': min[0], 'x_max': max[0], 
+                        'y_min': min[1], 'y_max': max[1],
+                        'z_min': min[2], 'z_max': max[2]}
         
         except AssertionError as error:
             print(f'[ERROR] Information: {error}')

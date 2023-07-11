@@ -32,7 +32,7 @@ import time
 Bezier_0 = Bezier.Bezier_Cls('Explicit', P, 100)
 B_t_0 = Bezier_0.Interpolate()
 
-print(Bezier_0.Get_Arc_Length())
+#print(Bezier_0.Get_Arc_Length())
 
 """
 Bezier_0 = Bezier.Bezier_Cls('Explicit', P, 1000)
