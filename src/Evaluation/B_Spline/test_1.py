@@ -24,7 +24,7 @@ def main():
     #y  = 10 - 0.2 * x**2 + 2 * np.cos(x) + np.random.norm(0.0, 1.0, len(x))
 
     # Check: start in 0,0
-    P = np.array([[0, -2], [2, -1], [3, -3]])
+    P = np.array([[1, 1], [2, -1], [3, -3], [4, 2], [5, 1]])
     #P = np.array([[0, 0], [0, 1]])
     n = 2
 
@@ -38,7 +38,7 @@ def main():
     S_new[0] = P[0]; S_new[-1] = P[-1]
     
     S_01 = B_Spline.B_Spline_Cls(n, S_new, 'Chord-Length', 100)
-    S_Opt_Interp = S_01.Optimize_Control_Points(3)
+    S_Opt_Interp = S_01.Optimize_Control_Points(5)
     S_New_Opt = S_Opt_Interp.Interpolate()
     #S_dot = S_Cls.Derivative_1st()
     #print(S_dot)
