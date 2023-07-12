@@ -76,8 +76,8 @@ def main():
     bpy.data.objects['Viewpoint_2'].location = S_Cls.P[-1]
 
     # Create a class to visualize a line segment.
-    B_Spline_Poly = Lib.Blender.Core.Poly_3D_Cls('B-Spline', {'bevel_depth': 0.0025, 'color': [1, 0.635, 0.275,1.0]}, 
-                                                 {'visibility': True, 'radius': 0.005, 'color': [1, 0.635, 0.275,1.0]})
+    B_Spline_Poly = Lib.Blender.Core.Poly_3D_Cls('B-Spline', {'bevel_depth': 0.0020, 'color': [1.0,0.25,0.0,1.0]}, 
+                                                 {'visibility': True, 'radius': 0.004, 'color': [1.0,0.550,0.150,1.0]})
     
     # Initialize the size (length) of the polyline data set.
     B_Spline_Poly.Initialization(N)
