@@ -5,8 +5,6 @@ if '../' + 'src' not in sys.path:
     sys.path.append('../..')
 # Numpy (Array computing) [pip3 install numpy]
 import numpy as np
-# OS (Operating system interfaces)
-import os
 # SciencePlots (Matplotlib styles for scientific plotting) [pip3 install SciencePlots]
 import scienceplots
 # Matplotlib (Visualization) [pip3 install matplotlib]
@@ -44,7 +42,7 @@ def main():
     _, ax = plt.subplots()
 
     # ...
-    ax.plot(P[:, 0], P[:, 1], 'o--', color='#d0d0d0', linewidth=1.0, markersize = 8.0, 
+    ax.plot(B_Cls.P[:, 0], B_Cls.P[:, 1], 'o--', color='#d0d0d0', linewidth=1.0, markersize = 8.0, 
             markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Control Points')
     # ...
     ax.plot(B[:, 0], B[:, 1], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
@@ -58,13 +56,13 @@ def main():
     # Set parameters of the graph (plot).
     ax.set_title(f'Bézier Curve Interpolation in {P.shape[1]}-Dimensional Space', fontsize=25, pad=50.0)
     #   Set the x ticks.
-    ax.set_xticks(np.arange(np.min(P[:, 0]) - 0.5, np.max(P[:, 0]) + 1.0, 0.5))
+    ax.set_xticks(np.arange(np.min(B_Cls.P[:, 0]) - 0.5, np.max(B_Cls.P[:, 0]) + 1.0, 0.5))
     #   Set the y ticks.
-    ax.set_yticks(np.arange(np.min(P[:, 1]) - 0.5, np.max(P[:, 1]) + 1.0, 0.5))
+    ax.set_yticks(np.arange(np.min(B_Cls.P[:, 1]) - 0.5, np.max(B_Cls.P[:, 1]) + 1.0, 0.5))
     #   Label
     ax.set_xlabel(r'x-axis in meters', fontsize=15, labelpad=10); ax.set_ylabel(r'y-axis in meters', fontsize=15, labelpad=10) 
     #   Set parameters of the visualization.
-    ax.grid(which='major', linewidth = 0.25, linestyle = '--')
+    ax.grid(which='major', linewidth = 0.15, linestyle = '--')
     # Get handles and labels for the legend.
     handles, labels = plt.gca().get_legend_handles_labels()
     # Remove duplicate labels.

@@ -59,6 +59,7 @@ class B_Spline_Cls(object):
             assert n < P.shape[0]
 
             self.__method = method
+
             # Generate a normalized vector of knots from the selected parameters 
             # using the chosen method.
             self.__t = Utilities.Generate_Knot_Vector(n, P, self.__method)
@@ -69,6 +70,7 @@ class B_Spline_Cls(object):
 
             # ...
             self.__n = n
+            self.__N = N
             self.__P = np.array(P, dtype=np.float32)
             self.__dim = self.__P.shape[1]
             self.__S = np.zeros((N, self.__dim), dtype=np.float32)
@@ -119,6 +121,15 @@ class B_Spline_Cls(object):
         try:
             assert P.shape[1] == self.__dim
 
+            # Generate a normalized vector of knots from the selected parameters 
+            # using the chosen method.
+            self.__t = Utilities.Generate_Knot_Vector(self.__n, P, self.__method)
+
+            # The value of the time must be within the interval of the knot vector: 
+            #   t[0] <= Time <= t[-1]
+            self.__Time = np.linspace(self.__t[0], self.__t[-1], self.__N)
+
+            # ...
             self.__P = np.array(P, dtype=np.float32)
 
         except AssertionError as error:
