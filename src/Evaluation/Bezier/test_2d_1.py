@@ -13,13 +13,13 @@ import scienceplots
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat
 # Custom Script:
-#   ../Lib/Interpolation/B_Spline/Core
-import Lib.Interpolation.B_Spline.Core as B_Spline
+#   ../Lib/Interpolation/Bezier/Core
+import Lib.Interpolation.Bezier.Core as Bezier
 
 def main():
     # ...
     #   ...
-    n = 3; N = 100
+    method = 'Explicit'; N = 100
     #   ...
     P = np.array([[1.00,  0.00], 
                   [2.00, -0.75], 
@@ -29,14 +29,13 @@ def main():
                   [5.00,  1.00]])
 
     # ...
-    S_Cls = B_Spline.B_Spline_Cls(n, P, 'Chord-Length', N)
+    B_Cls = Bezier.Bezier_Cls(method, P, N)
     # ...
-    S = S_Cls.Interpolate()
+    B = B_Cls.Interpolate()
     # ...
-    L = S_Cls.Get_Arc_Length()
+    L = B_Cls.Get_Arc_Length()
     # ...
-    P_Bounding_Box = S_Cls.Get_Bounding_Box_Parameters('Control-Points')
-    S_Bounding_Box = S_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
+    B_Bounding_Box = B_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
 
     # Set the parameters for the scientific style.
     plt.style.use(['science'])
@@ -48,25 +47,20 @@ def main():
     ax.plot(P[:, 0], P[:, 1], 'o--', color='#d0d0d0', linewidth=1.0, markersize = 8.0, 
             markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Control Points')
     # ...
-    ax.plot(S[:, 0], S[:, 1], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
-            markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'Interpolated Points: n = {n}, N = {N}')
+    ax.plot(B[:, 0], B[:, 1], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
+            markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'Bézier Curve (method = {method}, N = {N}, L = {L:.03})')
     
     # ...
-    Bounding_Box_Control_Points = pat.Rectangle(xy = (P_Bounding_Box['x_min'], P_Bounding_Box['y_min']), width = P_Bounding_Box['x_max'] - P_Bounding_Box['x_min'],
-                                                height = P_Bounding_Box['y_max'] -  P_Bounding_Box['y_min'], facecolor = 'none', edgecolor = '#e1e1e1', linewidth = 1.5)
-    ax.add_patch(Bounding_Box_Control_Points)
-    Bounding_Box_Interpolated_Points = pat.Rectangle(xy = (S_Bounding_Box['x_min'], S_Bounding_Box['y_min']), width = S_Bounding_Box['x_max'] - S_Bounding_Box['x_min'],
-                                                     height = S_Bounding_Box['y_max'] -  S_Bounding_Box['y_min'], facecolor = 'none', edgecolor = '#ffd8b2', linewidth = 1.5)
+    Bounding_Box_Interpolated_Points = pat.Rectangle(xy = (B_Bounding_Box['x_min'], B_Bounding_Box['y_min']), width = B_Bounding_Box['x_max'] - B_Bounding_Box['x_min'],
+                                                     height = B_Bounding_Box['y_max'] -  B_Bounding_Box['y_min'], facecolor = 'none', edgecolor = '#ffd8b2', linewidth = 1.5, label='Bézier Curve Bounding Box')
     ax.add_patch(Bounding_Box_Interpolated_Points)
 
     # Set parameters of the graph (plot).
-    ax.set_title('B-Spline Interpolation', fontsize=25, pad=50.0)
-    ax.text(((np.min(P[:, 0]) + np.max(P[:, 0]))/2.0), 1.625, f'Arc Length: {L:.03}', fontsize=15, 
-            bbox={'facecolor': '#d0d0d0', 'alpha': 0.1, 'pad': 5}, ha='center', va='center')
+    ax.set_title(f'Bézier Curve Interpolation in {P.shape[1]}-Dimensional Space', fontsize=25, pad=50.0)
     #   Set the x ticks.
-    ax.set_xticks(np.arange(np.min(P[:, 0]) - 1.0, np.max(P[:, 0]) + 1.0, 0.5))
+    ax.set_xticks(np.arange(np.min(P[:, 0]) - 0.5, np.max(P[:, 0]) + 1.0, 0.5))
     #   Set the y ticks.
-    ax.set_yticks(np.arange(np.min(P[:, 1]) - 1.0, np.max(P[:, 1]) + 1.0, 0.5))
+    ax.set_yticks(np.arange(np.min(P[:, 1]) - 0.5, np.max(P[:, 1]) + 1.0, 0.5))
     #   Label
     ax.set_xlabel(r'x-axis in meters', fontsize=15, labelpad=10); ax.set_ylabel(r'y-axis in meters', fontsize=15, labelpad=10) 
     #   Set parameters of the visualization.
