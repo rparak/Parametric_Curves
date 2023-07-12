@@ -60,7 +60,7 @@ def main():
         i += 1
 
     # Removes the curve, if exists.
-    for _, curve_name in enumerate(['B-Spline_Poly', 'Control_Points_Poly']):
+    for _, curve_name in enumerate(['B-Spline_Poly', 'Control_Points_Poly', 'Bounding_Box']):
         if Lib.Blender.Utilities.Object_Exist(curve_name) == True:
             Lib.Blender.Utilities.Remove_Object(curve_name)
 
@@ -88,7 +88,9 @@ def main():
     S_Cls = B_Spline.B_Spline_Cls(n, np.array(P), method, N)
     # ...
     S = S_Cls.Interpolate()
-        
+    # ...
+    S_Bounding_Box = S_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
+
     # ...
     bpy.data.objects['Viewpoint_Control_Point_0'].location = S_Cls.P[0]
     bpy.data.objects['Viewpoint_Control_Point_n'].location = S_Cls.P[-1]
@@ -112,9 +114,16 @@ def main():
 
 
     # ...
-    bounding_box_properties = {'transformation': {'Size': float, 'Scale': Vector<float>, Location': Vector<float>}, 
-                               'material': {'RGBA': Vector<float>, 'alpha': float}}
-    Lib.Blender.Utilities.Create_Primitive('Cube', 'Bounding_Box', )
+    bounding_box_properties = {'transformation': {'Size': 1.0, 
+                                                  'Scale': [S_Bounding_Box['x_max'] - S_Bounding_Box['x_min'],
+                                                            S_Bounding_Box['y_max'] - S_Bounding_Box['y_min'],
+                                                            S_Bounding_Box['z_max'] - S_Bounding_Box['z_min']], 
+                                                  'Location': [(S_Bounding_Box['x_max'] + S_Bounding_Box['x_min']) / 2.0,
+                                                               (S_Bounding_Box['y_max'] + S_Bounding_Box['y_min']) / 2.0,
+                                                               (S_Bounding_Box['z_max'] + S_Bounding_Box['z_min']) / 2.0]}, 
+                               'material': {'RGBA': [1.0,0.25,0.0,1.0], 'alpha': 0.05}}
+    
+    Lib.Blender.Utilities.Create_Primitive('Cube', 'Bounding_Box', bounding_box_properties)
 
 if __name__ == '__main__':
     main()
