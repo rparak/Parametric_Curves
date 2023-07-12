@@ -26,11 +26,25 @@ def main():
                   [5.00,  1.00, -1.50]])
 
     # ...
-    S_Cls = B_Spline.B_Spline_Cls(n, P, method, N)
+    S_Cls_1 = B_Spline.B_Spline_Cls(n, P, method, N)
     # ...
-    S = S_Cls.Interpolate()
+    S = S_Cls_1.Interpolate()
+
     # ...
-    L = S_Cls.Get_Arc_Length()
+    S_noise = np.zeros(S.shape)
+    for i, S_i in enumerate(S):
+        S_noise[i, :] = S_i + np.random.uniform((-1) * np.random.uniform(0.05, 0.20), 
+                                              np.random.uniform(0.05, 0.20), S.shape[1])
+    S_noise[0] = P[0]; S_noise[-1] = P[-1]
+
+    # ...
+    S_Cls_2 = B_Spline.B_Spline_Cls(n, S_noise, method, N)
+    # ...
+    S_Cls_optimized = S_Cls_2.Optimize_Control_Points(P.shape[0])
+    S_optimized = S_Cls_optimized.Interpolate()
+
+    # ...
+    L = S_Cls_optimized.Get_Arc_Length()
 
     # Set the parameters for the scientific style.
     plt.style.use(['science'])
@@ -39,11 +53,14 @@ def main():
     figure = plt.figure()
     ax = figure.add_subplot(projection='3d')
 
+    # ... 
+    ax.plot(S_noise[:, 0], S_noise[:, 1], S_noise[:, 2], 'o', color='#e7e7e7', linewidth=1.0, markersize = 8.0, 
+            markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Noisy Control Points')
     # ...
-    ax.plot(S_Cls.P[:, 0], S_Cls.P[:, 1], S_Cls.P[:, 2], 'o--', color='#d0d0d0', linewidth=1.0, markersize = 8.0, 
-            markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Control Points')
+    ax.plot(S_Cls_optimized.P[:, 0], S_Cls_optimized.P[:, 1], S_Cls_optimized.P[:, 2], 'o--', color='#8ca8c5', linewidth=1.0, markersize = 8.0, 
+            markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Optimized Control Points')
     # ...
-    ax.plot(S[:, 0], S[:, 1], S[:, 2], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
+    ax.plot(S_optimized[:, 0], S_optimized[:, 1], S_optimized[:, 2], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
             markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'B-Spline (n = {n}, N = {N}, L = {L:.03})')
 
     # Set parameters of the graph (plot).
@@ -55,11 +72,11 @@ def main():
     #   Set the z ticks.
     ax.set_zticks(np.arange(np.min(P[:, 2]) - 0.5, np.max(P[:, 2]) + 1.0, 0.5))
     #   Limits.
-    ax.set_xlim(np.minimum.reduce(S_Cls.P[:, 0]) - 0.5, np.maximum.reduce(S_Cls.P[:, 0]) + 1.0)
+    ax.set_xlim(np.minimum.reduce(S_Cls_1.P[:, 0]) - 0.5, np.maximum.reduce(S_Cls_1.P[:, 0]) + 1.0)
     ax.xaxis.pane.set_color((1.0, 1.0, 1.0, 1.0))
-    ax.set_ylim(np.minimum.reduce(S_Cls.P[:, 1]) - 0.5, np.maximum.reduce(S_Cls.P[:, 1]) + 1.0)
+    ax.set_ylim(np.minimum.reduce(S_Cls_1.P[:, 1]) - 0.5, np.maximum.reduce(S_Cls_1.P[:, 1]) + 1.0)
     ax.yaxis.pane.set_color((1.0, 1.0, 1.0, 1.0))
-    ax.set_zlim(np.minimum.reduce(S_Cls.P[:, 2]) - 0.5, np.maximum.reduce(S_Cls.P[:, 2]) + 1.0)
+    ax.set_zlim(np.minimum.reduce(S_Cls_1.P[:, 2]) - 0.5, np.maximum.reduce(S_Cls_1.P[:, 2]) + 1.0)
     ax.zaxis.pane.set_color((1.0, 1.0, 1.0, 1.0))
     #   Label.
     ax.set_xlabel(r'x-axis in meters', fontsize=15, labelpad=10); ax.set_ylabel(r'y-axis in meters', fontsize=15, labelpad=10) 
