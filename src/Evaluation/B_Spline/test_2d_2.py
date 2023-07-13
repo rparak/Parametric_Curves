@@ -24,7 +24,7 @@ def main():
                   [3.00, -2.50], 
                   [3.75, -1.25], 
                   [4.00,  0.75], 
-                  [5.00,  1.00]])
+                  [5.00,  1.00]], dtype=np.float32)
 
     # ...
     S_Cls_1 = B_Spline.B_Spline_Cls(n, P, method, N)
@@ -64,7 +64,7 @@ def main():
             markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'B-Spline (n = {n}, N = {N}, L = {L:.03})')
     
     # Set parameters of the graph (plot).
-    ax.set_title(f'B-Spline Interpolation in {P.shape[1]}-Dimensional Space', fontsize=25, pad=50.0)
+    ax.set_title(f'B-Spline Interpolation in {P.shape[1]}-Dimensional Space', fontsize=25, pad=25.0)
     #   Set the x ticks.
     ax.set_xticks(np.arange(np.min(S_Cls_1.P[:, 0]) - 0.5, np.max(S_Cls_1.P[:, 0]) + 1.0, 0.5))
     #   Set the y ticks.
