@@ -288,7 +288,7 @@ class B_Spline_Cls(object):
             print(f'[ERROR] Information: {error}')
             print(f'[ERROR] Incorrect type of function input parameters. The method must correspond to the name Control-Points or Interpolated-Points, not {method}.')
 
-    def Simplify(self, epsilon: float) -> tp.List[float]:
+    def Reduce_Interpolated_Points(self, epsilon: float) -> tp.List[float]:
         """
         Description:
             ....

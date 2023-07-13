@@ -221,7 +221,7 @@ def Basic_Function(i: int, n: int, t: tp.List[float], x: float) -> float:
 def Simple_Simplification(P: tp.List[float], s_f: int) -> tp.List[float]:
     """
     Description:
-        A function to simplify the point vector by a simplification factor s_{f}. The first and end point are unchanged, the others 
+        A function to simplify (reduce) the point vector by a simplification factor s_{f}. The first and end point are unchanged, the others 
         depend on the simplification factor.
 
         The points must be in the following form:
@@ -271,7 +271,7 @@ def Simple_Simplification(P: tp.List[float], s_f: int) -> tp.List[float]:
 def RDP_Simplification(P: tp.List[float], epsilon: float) -> tp.List[float]:
     """
     Description:
-        A function to simplify a given array of points using the Ramer-Douglas-Peucker algorithm.
+        A function to simplify (reduce) a given array of points using the Ramer-Douglas-Peucker algorithm.
 
         Note:
             The Ramer-Douglas-Peucker (RDP) is an algorithm for reducing the number of points on a curve, that 

@@ -294,7 +294,7 @@ class Bezier_Cls(object):
 
         return eq_ls * eq_rs
 
-    def Simplify(self, epsilon: float) -> tp.List[float]:
+    def Reduce_Interpolated_Points(self, epsilon: float) -> tp.List[float]:
         """
         Description:
             ....
