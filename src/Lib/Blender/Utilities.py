@@ -2,6 +2,8 @@
 import bpy
 # Typing (Support for type hints)
 import typing as tp
+# Numpy (Array computing) [pip3 install numpy]tp
+import numpy as np
 # Custom Library:
 #   ../Lib/Transformation/Core
 import Lib.Transformation.Core as Transformation
@@ -217,3 +219,48 @@ def Set_Object_Transformation(name: str, T: tp.List[tp.List[float]]) -> None:
         T = Transformation.Homogeneous_Transformation_Matrix_Cls(T, np.float32)
     
     bpy.data.objects[name].matrix_basis = T.Transpose().all()
+
+def Convert_Ax_Str2Id(ax: str) -> int:
+    """
+    Description:
+        Convert a string axis letter to an identification number.
+        
+    Args:
+        (1) ax [string]: Axis name.
+        
+    Returns:
+        (1) parameter [int]: Identification number.
+    """
+    
+    return {
+        'X': 0,
+        'Y': 1,
+        'Z': 2,
+        'ALL': -1
+    }[ax]
+
+def Insert_Key_Frame(name: str, property: str, frame: int, index: str):
+    """
+    Description:
+        Insert a keyframe with the given property.
+        
+    Args:
+        (1) name [string]: Name of the main object.
+        (2) property [string]: The path to the property that is supposed to be the key (matrix_basis, location, rotation_euler, scale, etc.)
+        (3) frame [int]: The frame in which the keyframe is inserted.
+        (4) index [string]: The index of the property to be the key.
+                            Note:
+                                The "location" property has 3 parts: [x, y, z][Vector<float>]
+                                1\ index = 'ALL' -> all parts
+                                2\ index = 'X' -> x part, etc.
+    """
+    
+    # Convert a string letter to an identification number.
+    index_id_num = Convert_Ax_Str2Id(index)
+    
+    if property == 'matrix_basis':
+        bpy.data.objects[name].keyframe_insert('location', frame=frame, index=index_id_num)
+        bpy.data.objects[name].keyframe_insert('rotation_euler', frame=frame, index=index_id_num)
+        bpy.data.objects[name].keyframe_insert('scale', frame=frame, index=index_id_num)
+    else:
+        bpy.data.objects[name].keyframe_insert(property, frame=frame, index=index_id_num) 

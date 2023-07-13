@@ -16,6 +16,10 @@ import Lib.Blender.Utilities
 import Lib.Blender.Parameters.Camera
 #   ../Lib/Interpolation/Bezier/Core
 import Lib.Interpolation.Bezier.Core as Bezier
+#   ../Lib/Interpolation/Utilities
+import Lib.Interpolation.Utilities as Utilities
+#   ../Lib/Transformation/Core
+from Lib.Transformation.Core import Homogeneous_Transformation_Matrix_Cls as HTM_Cls, Euler_Angle_Cls as EA_Cls
 
 """
 Description:
@@ -60,7 +64,7 @@ def main():
         i += 1
 
     # Removes the curve, if exists.
-    for _, curve_name in enumerate(['Bezier_Poly', 'Control_Points_Poly']):
+    for _, curve_name in enumerate(['Bezier_Poly', 'Control_Points_Poly', 'Bounding_Box']):
         if Lib.Blender.Utilities.Object_Exist(curve_name) == True:
             Lib.Blender.Utilities.Remove_Object(curve_name)
 
@@ -88,10 +92,17 @@ def main():
     B_Cls = Bezier.Bezier_Cls(method, np.array(P), N)
     # ...
     B = B_Cls.Interpolate()
-        
+    # ...
+    B_Bounding_Box = B_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
+
     # ...
     bpy.data.objects['Viewpoint_Control_Point_0'].location = B_Cls.P[0]
     bpy.data.objects['Viewpoint_Control_Point_n'].location = B_Cls.P[-1]
+
+    q_0 = EA_Cls(np.array(bpy.data.objects['Viewpoint_Control_Point_0'].rotation_euler), 
+                 'ZYX', np.float32).Get_Quaternion()
+    q_1 = EA_Cls(np.array(bpy.data.objects['Viewpoint_Control_Point_n'].rotation_euler), 
+                 'ZYX', np.float32).Get_Quaternion()
 
     """
     Description:
@@ -99,7 +110,7 @@ def main():
     """
     # Create a class to visualize a line segment.
     Bezier_Poly = Lib.Blender.Core.Poly_3D_Cls('Bezier_Poly', {'bevel_depth': 0.002, 'color': [1.0,0.25,0.0,1.0]}, 
-                                                 {'visibility': True, 'radius': 0.004, 'color': [1.0,0.25,0.0,1.0]})
+                                               {'visibility': True, 'radius': 0.004, 'color': [1.0,0.25,0.0,1.0]})
     
     # Initialize the size (length) of the polyline data set.
     Bezier_Poly.Initialization(N)
@@ -109,6 +120,42 @@ def main():
        
     # Visualization of a 3-D (dimensional) polyline in the scene.
     Bezier_Poly.Visualization()
+    
+    """
+    # ...
+    bounding_box_properties = {'transformation': {'Size': 1.0, 
+                                                  'Scale': [B_Bounding_Box['x_max'] - B_Bounding_Box['x_min'],
+                                                            B_Bounding_Box['y_max'] - B_Bounding_Box['y_min'],
+                                                            B_Bounding_Box['z_max'] - B_Bounding_Box['z_min']], 
+                                                  'Location': [(B_Bounding_Box['x_max'] + B_Bounding_Box['x_min']) / 2.0,
+                                                               (B_Bounding_Box['y_max'] + B_Bounding_Box['y_min']) / 2.0,
+                                                               (B_Bounding_Box['z_max'] + B_Bounding_Box['z_min']) / 2.0]}, 
+                               'material': {'RGBA': [1.0,0.25,0.0,1.0], 'alpha': 0.05}}
+    Lib.Blender.Utilities.Create_Primitive('Cube', 'Bounding_Box', bounding_box_properties)
+    """
 
+    # The last frame on which the animation stops.
+    #   Note:
+    #       Convert the time in seconds to the FPS value from the Blender settings.
+    bpy.context.scene.frame_end = np.int32(5.0 * (bpy.context.scene.render.fps / bpy.context.scene.render.fps_base))
+
+    # Get the FPS (Frames Per Seconds) value from the Blender settings.
+    fps = bpy.context.scene.render.fps / bpy.context.scene.render.fps_base
+
+    # ...
+    for i, (S_i, t_i) in enumerate(zip(B, B_Cls.t)):
+        q = Utilities.Slerp('Quaternion', q_0, q_1, t_i)
+
+        # ...
+        T = HTM_Cls(None, np.float32).Rotation(q.all(), 'QUATERNION').Translation(S_i)
+
+        # ...
+        frame = np.int32((i/(B_Cls.N / 5.0)) * fps)
+        # Set scene frame.
+        bpy.context.scene.frame_set(frame)
+        # Set the object transformation obtained from the current absolute position of the joints.
+        Lib.Blender.Utilities.Set_Object_Transformation('Viewpoint', T)
+        # Insert a keyframe of the object (Viewpoint) into the frame at time t(1). 
+        Lib.Blender.Utilities.Insert_Key_Frame('Viewpoint', 'matrix_basis', frame, 'ALL')
 if __name__ == '__main__':
     main()

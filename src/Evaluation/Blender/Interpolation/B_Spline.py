@@ -16,6 +16,10 @@ import Lib.Blender.Utilities
 import Lib.Blender.Parameters.Camera
 #   ../Lib/Interpolation/B_Spline/Core
 import Lib.Interpolation.B_Spline.Core as B_Spline
+#   ../Lib/Interpolation/Utilities
+import Lib.Interpolation.Utilities as Utilities
+#   ../Lib/Transformation/Core
+from Lib.Transformation.Core import Homogeneous_Transformation_Matrix_Cls as HTM_Cls, Euler_Angle_Cls as EA_Cls
 
 """
 Description:
@@ -95,6 +99,12 @@ def main():
     bpy.data.objects['Viewpoint_Control_Point_0'].location = S_Cls.P[0]
     bpy.data.objects['Viewpoint_Control_Point_n'].location = S_Cls.P[-1]
 
+    q_0 = EA_Cls(np.array(bpy.data.objects['Viewpoint_Control_Point_0'].rotation_euler), 
+                 'ZYX', np.float32).Get_Quaternion()
+    q_1 = EA_Cls(np.array(bpy.data.objects['Viewpoint_Control_Point_n'].rotation_euler), 
+                 'ZYX', np.float32).Get_Quaternion()
+                
+
     """
     Description:
         ...
@@ -112,7 +122,7 @@ def main():
     # Visualization of a 3-D (dimensional) polyline in the scene.
     B_Spline_Poly.Visualization()
 
-
+    """
     # ...
     bounding_box_properties = {'transformation': {'Size': 1.0, 
                                                   'Scale': [S_Bounding_Box['x_max'] - S_Bounding_Box['x_min'],
@@ -122,8 +132,32 @@ def main():
                                                                (S_Bounding_Box['y_max'] + S_Bounding_Box['y_min']) / 2.0,
                                                                (S_Bounding_Box['z_max'] + S_Bounding_Box['z_min']) / 2.0]}, 
                                'material': {'RGBA': [1.0,0.25,0.0,1.0], 'alpha': 0.05}}
-    
     Lib.Blender.Utilities.Create_Primitive('Cube', 'Bounding_Box', bounding_box_properties)
+    """
+
+    # The last frame on which the animation stops.
+    #   Note:
+    #       Convert the time in seconds to the FPS value from the Blender settings.
+    bpy.context.scene.frame_end = np.int32(5.0 * (bpy.context.scene.render.fps / bpy.context.scene.render.fps_base))
+
+    # Get the FPS (Frames Per Seconds) value from the Blender settings.
+    fps = bpy.context.scene.render.fps / bpy.context.scene.render.fps_base
+
+    # ...
+    for i, (S_i, t_i) in enumerate(zip(S, S_Cls.Time)):
+        q = Utilities.Slerp('Quaternion', q_0, q_1, t_i)
+
+        # ...
+        T = HTM_Cls(None, np.float32).Rotation(q.all(), 'QUATERNION').Translation(S_i)
+
+        # ...
+        frame = np.int32((i/(S_Cls.N / 5.0)) * fps)
+        # Set scene frame.
+        bpy.context.scene.frame_set(frame)
+        # Set the object transformation obtained from the current absolute position of the joints.
+        Lib.Blender.Utilities.Set_Object_Transformation('Viewpoint', T)
+        # Insert a keyframe of the object (Viewpoint) into the frame at time t(1). 
+        Lib.Blender.Utilities.Insert_Key_Frame('Viewpoint', 'matrix_basis', frame, 'ALL')
 
 if __name__ == '__main__':
     main()
