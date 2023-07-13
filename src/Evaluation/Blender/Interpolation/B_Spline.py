@@ -73,7 +73,7 @@ def main():
         ...
     """
     # Create a class to visualize a line segment.
-    Control_Points_Poly = Lib.Blender.Core.Poly_3D_Cls('Control_Points_Poly', {'bevel_depth': 0.0015, 'color': [0.25,0.25,0.25,1.0]}, 
+    Control_Points_Poly = Lib.Blender.Core.Poly_3D_Cls('Control_Points_Poly', {'bevel_depth': 0.001, 'color': [0.05,0.05,0.05,1.0]}, 
                                                        {'visibility': False, 'radius': None, 'color': None})
     
     # Initialize the size (length) of the polyline data set.
@@ -104,13 +104,12 @@ def main():
     q_1 = EA_Cls(np.array(bpy.data.objects['Viewpoint_Control_Point_n'].rotation_euler), 
                  'ZYX', np.float32).Get_Quaternion()
                 
-
     """
     Description:
         ...
     """
     # Create a class to visualize a line segment.
-    B_Spline_Poly = Lib.Blender.Core.Poly_3D_Cls('B-Spline_Poly', {'bevel_depth': 0.002, 'color': [1.0,0.25,0.0,1.0]}, 
+    B_Spline_Poly = Lib.Blender.Core.Poly_3D_Cls('B-Spline_Poly', {'bevel_depth': 0.0015, 'color': [1.0,0.25,0.0,1.0]}, 
                                                  {'visibility': True, 'radius': 0.004, 'color': [1.0,0.25,0.0,1.0]})
     
     # Initialize the size (length) of the polyline data set.
@@ -145,13 +144,14 @@ def main():
 
     # ...
     for i, (S_i, t_i) in enumerate(zip(S, S_Cls.Time)):
+        print(t_i)
         q = Utilities.Slerp('Quaternion', q_0, q_1, t_i)
 
         # ...
         T = HTM_Cls(None, np.float32).Rotation(q.all(), 'QUATERNION').Translation(S_i)
 
         # ...
-        frame = np.int32((i/(S_Cls.N / 5.0)) * fps)
+        frame = np.int32((i/(N / 5.0)) * fps)
         # Set scene frame.
         bpy.context.scene.frame_set(frame)
         # Set the object transformation obtained from the current absolute position of the joints.
