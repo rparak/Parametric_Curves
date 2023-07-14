@@ -139,7 +139,7 @@ def main():
     Bezier_Poly = Lib.Blender.Core.Poly_3D_Cls('Bezier_Poly', {'bevel_depth': 0.0015, 'color': [1.0,0.25,0.0,1.0]}, 
                                                {'visibility': True, 'radius': 0.004, 'color': [1.0,0.25,0.0,1.0]})
     # Initialize the size (length) of the polyline data set.
-    Bezier_Poly.Initialization(N)
+    Bezier_Poly.Initialization(B_Cls.N)
     # Add coordinates to the polyline.
     for i, B_i in enumerate(B):           
         Bezier_Poly.Add(i, B_i)

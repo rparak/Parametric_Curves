@@ -139,7 +139,7 @@ def main():
     B_Spline_Poly = Lib.Blender.Core.Poly_3D_Cls('B-Spline_Poly', {'bevel_depth': 0.0015, 'color': [1.0,0.25,0.0,1.0]}, 
                                                  {'visibility': True, 'radius': 0.004, 'color': [1.0,0.25,0.0,1.0]})
     # Initialize the size (length) of the polyline data set.
-    B_Spline_Poly.Initialization(N)
+    B_Spline_Poly.Initialization(S_Cls.N)
     # Add coordinates to the polyline.
     for i, S_i in enumerate(S):           
         B_Spline_Poly.Add(i, S_i)
