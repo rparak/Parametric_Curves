@@ -33,7 +33,7 @@ def main():
 
     # The value of the time must be within the interval of the knot vector: 
     #   t[0] <= Time <= t[-1]
-    t = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, N)
+    Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, N)
 
     # Degree of a polynomial.
     n = P.shape[0] - 1
@@ -45,8 +45,8 @@ def main():
     _, ax = plt.subplots()
 
     for i in range(P.shape[0]):
-        B_in = Utilities.Bernstein_Polynomial(i, n, t)
-        ax.plot(t, B_in, '-', linewidth=1.0, label=r'$B_{(%d, %d)}(t)$' % (i, n))
+        B_in = Utilities.Bernstein_Polynomial(i, n, Time)
+        ax.plot(Time, B_in, '-', linewidth=1.0, label=r'$B_{(%d, %d)}(t)$' % (i, n))
 
     # Set parameters of the graph (plot).
     ax.set_title(f'Bernstein Basis Polynomials of the {n}-th Degree Curve', fontsize=25, pad=25.0)

@@ -181,8 +181,8 @@ def Basic_Function(i: int, n: int, t: tp.List[float], x: float) -> float:
 
         for all real numbers x, where:
         
-            B_{i, 0}(x) -> 1, if t_{i} < x <= t_{i + 1}
-                        -> 0, otherwise.
+            B_{i, 0}(x) -> 1, t -> [t_{i}, t_{i + 1})
+                        -> 0, otherwise.    
 
     Args:
         (1) i [int]: Iteration.
