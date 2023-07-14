@@ -66,7 +66,7 @@ def main():
         # Create a primitive two-dimensional object (Rectangle -> Bounding-Box) with additional properties.
         Bounding_Box_Interpolated_Points = pat.Rectangle(xy = (B_Bounding_Box['x_min'], B_Bounding_Box['y_min']), width = B_Bounding_Box['x_max'] - B_Bounding_Box['x_min'],
                                                          height = B_Bounding_Box['y_max'] -  B_Bounding_Box['y_min'], facecolor = 'none', edgecolor = '#ffd8b2', linewidth = 1.5, 
-                                                         label='B-Spline Bounding Box')
+                                                         label='Bézier Curve Bounding Box')
         ax.add_patch(Bounding_Box_Interpolated_Points)
 
 

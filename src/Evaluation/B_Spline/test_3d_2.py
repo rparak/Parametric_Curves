@@ -31,10 +31,7 @@ def main():
         ..
     """
         
-    # ...
-    #   ...
-    n = 3; N = 100; method = 'Chord-Length'
-    #   ...
+    # Input control points {P} in three-dimensional space.
     P = np.array([[1.00,  0.00, -1.00], 
                   [2.00, -0.75,  0.50], 
                   [3.00, -2.50,  1.00], 
@@ -43,7 +40,8 @@ def main():
                   [5.00,  1.00, -1.50]], dtype=np.float32)
 
     # ...
-    S_Cls_1 = B_Spline.B_Spline_Cls(n, P, method, N)
+    S_Cls_1 = B_Spline.B_Spline_Cls(CONST_B_SPLINE['n'], CONST_B_SPLINE['method'], P, 
+                                  CONST_B_SPLINE['N'])
     # ...
     S = S_Cls_1.Interpolate()
 
@@ -55,7 +53,8 @@ def main():
     S_noise[0] = P[0]; S_noise[-1] = P[-1]
 
     # ...
-    S_Cls_2 = B_Spline.B_Spline_Cls(n, S_noise, method, N)
+    S_Cls_2 = B_Spline.B_Spline_Cls(CONST_B_SPLINE['n'], CONST_B_SPLINE['method'], S_noise, 
+                                    CONST_B_SPLINE['N'])
     # ...
     S_Cls_optimized = S_Cls_2.Optimize_Control_Points(P.shape[0])
     S_optimized = S_Cls_optimized.Interpolate()
@@ -78,7 +77,7 @@ def main():
             markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Optimized Control Points')
     # ...
     ax.plot(S_optimized[:, 0], S_optimized[:, 1], S_optimized[:, 2], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
-            markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'B-Spline (n = {n}, N = {N}, L = {L:.03})')
+            markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'B-Spline (n = {S_Cls_optimized.n}, N = {S_Cls_optimized.N}, L = {L:.03})')
 
    # Visibility of the bounding box of the interpolated curve.
     if CONST_BOUNDING_BOX_VISIBILITY == True:

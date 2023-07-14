@@ -32,7 +32,6 @@ def main():
         ..
     """
         
-
     # Input control points {P} in three-dimensional space.
     P = np.array([[1.00,  0.00, -1.00], 
                   [2.00, -0.75,  0.50], 
@@ -110,7 +109,7 @@ def main():
     # Get handles and labels for the legend.
     handles, labels = plt.gca().get_legend_handles_labels()
     if CONST_BOUNDING_BOX_VISIBILITY == True:
-        #   Add a bounding box legend.
+        # Add a bounding box legend.
         handles.append(pat.Rectangle(xy = (0.0, 0.02), width = 0.0, height = 0.0, facecolor = 'none',
                                     edgecolor = '#ffd8b2', linewidth = 1.5))
         labels.append('B-Spline Bounding Box')
