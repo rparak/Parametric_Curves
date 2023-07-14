@@ -32,29 +32,42 @@ class B_Spline_Cls(object):
 
     Initialization of the Class:
         Args:
-            (1) ...
+            (1) n [int]: Degree.
+            (2) method [string]: The method to be used to select the parameters. 
+                                    Note: 
+                                        method = 'Uniformly-Spaced', 'Chord-Length' or 'Centripetal'.
+            (3) P [Vector<float> 1xn]: Input control points to be interpolated.
+                                          Note:
+                                            Where n is the number of dimensions of the point.
+            (4) N [int]: The number of points to be generated in the interpolation function.
 
         Example:
             Initialization:
                 # Assignment of the variables.
-                ...
+                n = 3; method = 'Chord-Length'; N = 100
+                P = np.array([[1.00,  0.00], 
+                              [2.00, -0.75], 
+                              [3.00, -2.50], 
+                              [3.75, -1.25], 
+                              [4.00,  0.75], 
+                              [5.00,  1.00]], dtype=np.float32)
 
                 # Initialization of the class.
-                Cls = ...
+                Cls = B_Spline_Cls(n, method, P, N)
 
             Features:
                 # Properties of the class.
-                Cls..
+                Cls.P; Cls.Time, Cls.N
                 ...
-                Cls..
+                Cls.dim
 
                 # Functions of the class.
-                Cls..
+                Cls.Get_Arc_Length()
                 ...
-                Cls..
+                Cls.Interpolate()
     """
         
-    def __init__(self, n: int,  method: str, P: tp.List[tp.List[float]], N: int) -> None:
+    def __init__(self, n: int, method: str, P: tp.List[tp.List[float]], N: int) -> None:
         try:
             assert n < P.shape[0]
 
@@ -318,7 +331,6 @@ class B_Spline_Cls(object):
         
         # ....
         self.__S_dot = np.zeros(self.__S_dot.shape, dtype=self.__S_dot.dtype)
-        self.__S_dot[0, :] = self.__P[0, :]
 
         t_dot = self.__t[1:-1]
         # ...
@@ -343,7 +355,6 @@ class B_Spline_Cls(object):
                   
         # ....
         self.__S = np.zeros(self.__S.shape, dtype=self.__S.dtype)
-        self.__S[0, :] = self.__P[0, :]
 
         # ...
         for i, t_i in enumerate(self.__Time):

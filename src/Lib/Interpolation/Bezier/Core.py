@@ -15,26 +15,38 @@ class Bezier_Cls(object):
 
     Initialization of the Class:
         Args:
-            (1) ...
+            (1) method [string]: The name of the method to calculate the interpolation function.
+                                    Note:
+                                        method = 'Explicit' or 'Polynomial'.
+            (2) P [Vector<float> 1xn]: Input control points to be interpolated.
+                                          Note:
+                                            Where n is the number of dimensions of the point.
+            (3) N [int]: The number of points to be generated in the interpolation function.
 
         Example:
             Initialization:
                 # Assignment of the variables.
-                ...
+                method = 'Explicit'; N = 100
+                P = np.array([[1.00,  0.00], 
+                              [2.00, -0.75], 
+                              [3.00, -2.50], 
+                              [3.75, -1.25], 
+                              [4.00,  0.75], 
+                              [5.00,  1.00]], dtype=np.float32)
 
                 # Initialization of the class.
-                Cls = ...
+                Cls = Bezier_Cls(method, P, N)
 
             Features:
                 # Properties of the class.
-                Cls..
+                Cls.P; Cls.Time, Cls.N
                 ...
-                Cls..
+                Cls.dim
 
                 # Functions of the class.
-                Cls..
+                Cls.Get_Arc_Length()
                 ...
-                Cls..
+                Cls.Interpolate()
     """
         
     def __init__(self, method: str, P: tp.List[tp.List[float]], N: int) -> None:
@@ -43,7 +55,8 @@ class Bezier_Cls(object):
 
             self.__method_id = 0 if method == 'Explicit' else 1
 
-            # The time (roots) value must be within the interval: 0.0 <= t <= 1.0
+            # The value of the time must be within the interval of the knot vector: 
+            #   t[0] <= Time <= t[-1]
             self.__Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, N)
 
             # ...

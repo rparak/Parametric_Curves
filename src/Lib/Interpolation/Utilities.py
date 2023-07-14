@@ -196,24 +196,24 @@ def Basic_Function(i: int, n: int, t: tp.List[float], x: float) -> float:
     Returns:
         (1) parameter [float]: The result 'B_in' of the basis function calculated from the input parameters.
     """
-    
+
     if n == 0:
-        if t[i] < x <= t[i + 1]:
-            return 1.0
+        if x == 1:
+            return 1.0 if t[i] <= x <= t[i + 1] else 0.0
         else:
-            return 0.0
+            return 1.0 if t[i] <= x < t[i + 1] else 0.0
     else:
         denominator_1 = t[i + n] - t[i]
         denominator_2 = t[i + n + 1] - t[i + 1]
-        B_in = 0.0
+        B_in_1 = 0.0; B_in_2 = 0.0
 
         if denominator_1 != 0:
-            B_in += ((x - t[i]) / denominator_1) * Basic_Function(i, n - 1, t, x)
+            B_in_1 = ((x - t[i]) / denominator_1) * Basic_Function(i, n - 1, t, x)
 
         if denominator_2 != 0:
-            B_in += ((t[i + n + 1] - x) / denominator_2) * Basic_Function(i + 1, n - 1, t, x)
+            B_in_2 = ((t[i + n + 1] - x) / denominator_2) * Basic_Function(i + 1, n - 1, t, x)
 
-        return B_in
+        return B_in_1 + B_in_2
 
 def Simple_Simplification(P: tp.List[float], s_f: int) -> tp.List[float]:
     """
