@@ -44,7 +44,7 @@ class Bezier_Cls(object):
             self.__method_id = 0 if method == 'Explicit' else 1
 
             # The time (roots) value must be within the interval: 0.0 <= t <= 1.0
-            self.__t = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, N)
+            self.__Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, N)
 
             # ...
             self.__P = np.array(P, dtype=np.float32)
@@ -102,7 +102,7 @@ class Bezier_Cls(object):
         return self.__B
     
     @property
-    def t(self) -> tp.List[float]:
+    def Time(self) -> tp.List[float]:
         """
         Description:
            ...
@@ -111,7 +111,7 @@ class Bezier_Cls(object):
             (1) ...
         """
                 
-        return self.__t
+        return self.__Time
     
     @property
     def N(self) -> int:
@@ -123,7 +123,7 @@ class Bezier_Cls(object):
             (1) ...
         """
                 
-        return self.__t.shape[0]
+        return self.__Time.shape[0]
     
     @property
     def dim(self) -> int:
@@ -330,14 +330,14 @@ class Bezier_Cls(object):
             # ...
             for i, (p_i, p_ii) in enumerate(zip(self.__P, self.__P[1:])):
                 for j, (p_ij, p_iij) in enumerate(zip(p_i, p_ii)):
-                    self.__B_dot[:, j] += Utilities.Bernstein_Polynomial(i, n, self.__t) * (p_iij - p_ij)
+                    self.__B_dot[:, j] += Utilities.Bernstein_Polynomial(i, n, self.__Time) * (p_iij - p_ij)
 
             self.__B_dot = self.__n * self.__B_dot
 
         elif self.__method_id == 1:
             for j in range(1, self.__n + 1):
                 for i, C_j in enumerate(self.__C(j)):
-                    self.__B_dot[:, i] += (self.__t ** (j - 1)) * C_j * j
+                    self.__B_dot[:, i] += (self.__Time ** (j - 1)) * C_j * j
             
         return self.__B_dot
     
@@ -360,12 +360,12 @@ class Bezier_Cls(object):
             # ...
             for i, p_i in enumerate(self.__P):
                 for j, p_ij in enumerate(p_i):
-                    self.__B[:, j] += Utilities.Bernstein_Polynomial(i, self.__n, self.__t) * p_ij
+                    self.__B[:, j] += Utilities.Bernstein_Polynomial(i, self.__n, self.__Time) * p_ij
 
         elif self.__method_id == 1:
             # ...
             for j in range(1, self.__n + 1):
                 for i, C_j in enumerate(self.__C(j)): 
-                    self.__B[:, i] += (self.__t ** j) * C_j
+                    self.__B[:, i] += (self.__Time ** j) * C_j
 
         return self.__B
