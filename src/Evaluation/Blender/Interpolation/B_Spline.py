@@ -36,9 +36,11 @@ Description:
 """
 # Set the structure of the main parameters of the camera.
 CONST_CAMERA_TYPE = Lib.Blender.Parameters.Camera.Right_View_Camera_Parameters_Str
-# Visibility of the bounding box of the interpolated curve.
+# B-Spline interpolation parameters.
+CONST_B_SPLINE = {'n': 3, 'N': 100, 'method': 'Chord-Length'}
+#   Visibility of the bounding box of the interpolated curve.
 CONST_BOUNDING_BOX_VISIBILITY = False
-# Animation stop(t_0), start(t_1) time in seconds.
+#   Animation stop(t_0), start(t_1) time in seconds.
 CONST_T_0 = 0.0
 CONST_T_1 = 5.0
 
@@ -96,10 +98,9 @@ def main():
 
     # ...
     #   ...
-    n = 3; N = 50; method = 'Chord-Length'
-    # ...
-    S_Cls = B_Spline.B_Spline_Cls(n, np.array(P), method, N)
-    # ...
+    S_Cls = B_Spline.B_Spline_Cls(CONST_B_SPLINE['n'], CONST_B_SPLINE['method'], np.array(P),
+                                  CONST_B_SPLINE['N'])
+    #   ...
     S = S_Cls.Interpolate()
 
     # Visibility of the bounding box of the interpolated curve.

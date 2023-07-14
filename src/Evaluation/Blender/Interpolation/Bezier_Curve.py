@@ -36,9 +36,11 @@ Description:
 """
 # Set the structure of the main parameters of the camera.
 CONST_CAMERA_TYPE = Lib.Blender.Parameters.Camera.Right_View_Camera_Parameters_Str
-# Visibility of the bounding box of the interpolated curve.
+# Bezier curve interpolation parameters.
+CONST_BEZIER_CURVE = {'method': 'Explicit', 'N': 100}
+#   Visibility of the bounding box of the interpolated curve.
 CONST_BOUNDING_BOX_VISIBILITY = False
-# Animation stop(t_0), start(t_1) time in seconds.
+#   Animation stop(t_0), start(t_1) time in seconds.
 CONST_T_0 = 0.0
 CONST_T_1 = 5.0
 
@@ -96,10 +98,9 @@ def main():
 
     # ...
     #   ...
-    method = 'Explicit'; N = 100
-    # ...
-    B_Cls = Bezier.Bezier_Cls(method, np.array(P), N)
-    # ...
+    B_Cls = Bezier.Bezier_Cls(CONST_BEZIER_CURVE['method'], np.array(P), 
+                              CONST_BEZIER_CURVE['N'])
+    #   ...
     B = B_Cls.Interpolate()
 
     # Visibility of the bounding box of the interpolated curve.

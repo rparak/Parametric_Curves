@@ -17,11 +17,22 @@ import Lib.Interpolation.Bezier.Core as Bezier
 #   ../Lib/Utilities/Primitives
 import Lib.Utilities.Primitives as Primitives
 
+"""
+Description:
+    Initialization of constants.
+"""
+# Bezier curve interpolation parameters.
+CONST_BEZIER_CURVE = {'method': 'Explicit', 'N': 100}
+#   Visibility of the bounding box of the interpolated curve.
+CONST_BOUNDING_BOX_VISIBILITY = False
+
 def main():
-    # ...
-    #   ...
-    method = 'Explicit'; N = 100
-    #   ...
+    """
+    Description:
+        ..
+    """
+        
+    # Input control points {P} in three-dimensional space.
     P = np.array([[1.00,  0.00, -1.00], 
                   [2.00, -0.75,  0.50], 
                   [3.00, -2.50,  1.00], 
@@ -30,25 +41,13 @@ def main():
                   [5.00,  1.00, -1.50]], dtype=np.float32)
 
     # ...
-    B_Cls = Bezier.Bezier_Cls(method, P, N)
+    B_Cls = Bezier.Bezier_Cls(CONST_BEZIER_CURVE['method'], P, 
+                              CONST_BEZIER_CURVE['N'])
     # ...
     B = B_Cls.Interpolate()
     # ...
     L = B_Cls.Get_Arc_Length()
-    # ...
-    B_Bounding_Box = B_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
-    
-    # ...
-    Box_Cls = Primitives.Box_Cls([0.0, 0.0, 0.0], [B_Bounding_Box['x_max'] - B_Bounding_Box['x_min'], 
-                                                   B_Bounding_Box['y_max'] - B_Bounding_Box['y_min'], 
-                                                   B_Bounding_Box['z_max'] - B_Bounding_Box['z_min']])
-    #   ...
-    Bounding_Box = np.zeros(Box_Cls.Faces.shape)
-    for i, Box_Faces_i in enumerate(Box_Cls.Faces):
-        for j, Box_Faces_ij in enumerate(Box_Faces_i):
-            Bounding_Box[i, j, :] = Box_Faces_ij + [(B_Bounding_Box['x_max'] + B_Bounding_Box['x_min']) / 2.0, 
-                                                    (B_Bounding_Box['y_max'] + B_Bounding_Box['y_min']) / 2.0, 
-                                                    (B_Bounding_Box['z_max'] + B_Bounding_Box['z_min']) / 2.0]
+
 
     # Set the parameters for the scientific style.
     plt.style.use(['science'])
@@ -62,11 +61,29 @@ def main():
             markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Control Points')
     # ...
     ax.plot(B[:, 0], B[:, 1], B[:, 2], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
-            markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'Bézier Curve (method = {method}, N = {N}, L = {L:.03})')
+            markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'Bézier Curve (N = {B_Cls.N}, L = {L:.03})')
 
-    # ...
-    ax.add_collection3d(mpl_toolkits.mplot3d.art3d.Poly3DCollection(Bounding_Box, linewidths=1.5, edgecolors='#ffd8b2', 
-                                                                    facecolors = '#ffffff', alpha=0.01))
+    # Visibility of the bounding box of the interpolated curve.
+    if CONST_BOUNDING_BOX_VISIBILITY == True:
+        # ...
+        B_Bounding_Box = B_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
+
+        # Create a primitive three-dimensional object (Cube -> Bounding-Box) with additional properties.
+        Box_Cls = Primitives.Box_Cls([0.0, 0.0, 0.0], [B_Bounding_Box['x_max'] - B_Bounding_Box['x_min'], 
+                                                       B_Bounding_Box['y_max'] - B_Bounding_Box['y_min'], 
+                                                       B_Bounding_Box['z_max'] - B_Bounding_Box['z_min']])
+        
+        # Change the position of the bounding box.
+        Bounding_Box = np.zeros(Box_Cls.Faces.shape)
+        for i, Box_Faces_i in enumerate(Box_Cls.Faces):
+            for j, Box_Faces_ij in enumerate(Box_Faces_i):
+                Bounding_Box[i, j, :] = Box_Faces_ij + [(B_Bounding_Box['x_max'] + B_Bounding_Box['x_min']) / 2.0, 
+                                                        (B_Bounding_Box['y_max'] + B_Bounding_Box['y_min']) / 2.0, 
+                                                        (B_Bounding_Box['z_max'] + B_Bounding_Box['z_min']) / 2.0]
+                
+        # Add a 3D collection object to the plot.
+        ax.add_collection3d(mpl_toolkits.mplot3d.art3d.Poly3DCollection(Bounding_Box, linewidths=1.5, edgecolors='#ffd8b2', 
+                                                                        facecolors = '#ffffff', alpha=0.01))
 
     # Set parameters of the graph (plot).
     ax.set_title(f'Bézier Curve Interpolation in {P.shape[1]}-Dimensional Space', fontsize=25, pad=25.0)
@@ -92,10 +109,11 @@ def main():
     ax.zaxis._axinfo['grid'].update({'linewidth': 0.15, 'linestyle': '--'})
     # Get handles and labels for the legend.
     handles, labels = plt.gca().get_legend_handles_labels()
-    #   Add a bounding box legend.
-    handles.append(pat.Rectangle(xy = (0.0, 0.02), width = 0.0, height = 0.0, facecolor = 'none',
-                                edgecolor = '#ffd8b2', linewidth = 1.5))
-    labels.append('Bézier Curve Bounding Box')
+    if CONST_BOUNDING_BOX_VISIBILITY == True:
+        # Add a bounding box legend.
+        handles.append(pat.Rectangle(xy = (0.0, 0.02), width = 0.0, height = 0.0, facecolor = 'none',
+                                    edgecolor = '#ffd8b2', linewidth = 1.5))
+        labels.append('Bézier Curve Bounding Box')
     # Remove duplicate labels.
     legend = dict(zip(labels, handles))
     # Show the labels (legends) of the graph.

@@ -64,8 +64,7 @@ def Lerp(method: str, p_0: tp.List[float], p_1: tp.List[float], t: float) -> tp.
         
     except AssertionError as error:
         print(f'[ERROR] Information: {error}')
-        print(f'[ERROR] Incorrect type of function input parameters. The calculation method must correspond to \
-              the name Explicit or Polynomial, not {method}.')
+        print(f'[ERROR] Incorrect type of function input parameters. The calculation method must correspond to the name Explicit or Polynomial, not {method}.')
 
 def Slerp(method: str, q_0: tp.List[float], q_1: tp.List[float], t: float) -> tp.List[float]:
     """
@@ -127,8 +126,7 @@ def Slerp(method: str, q_0: tp.List[float], q_1: tp.List[float], t: float) -> tp
     
     except AssertionError as error:
         print(f'[ERROR] Information: {error}')
-        print(f'[ERROR] Incorrect type of function input parameters. The calculation method must correspond to \
-              the name Geometric or Quaternion, not {method}.')
+        print(f'[ERROR] Incorrect type of function input parameters. The calculation method must correspond to the name Geometric or Quaternion, not {method}.')
         
 def Bernstein_Polynomial(i: int, n: int, t: tp.List[float]) -> tp.List[float]:
     """
@@ -168,8 +166,7 @@ def Bernstein_Polynomial(i: int, n: int, t: tp.List[float]) -> tp.List[float]:
 
     except AssertionError as error:
         print(f'[ERROR] Information: {error}')
-        print(f'[ERROR] The input condition for the polynomial calculation is not satisfied. \
-              The degree of n ({n}) must be greater than or equal to {Mathematics.CONST_NULL}.')
+        print(f'[ERROR] The input condition for the polynomial calculation is not satisfied. The degree of n ({n}) must be greater than or equal to {Mathematics.CONST_NULL}.')
 
 
 def Basic_Function(i: int, n: int, t: tp.List[float], x: float) -> float:

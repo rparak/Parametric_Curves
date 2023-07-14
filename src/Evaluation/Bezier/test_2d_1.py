@@ -14,11 +14,22 @@ import matplotlib.patches as pat
 #   ../Lib/Interpolation/Bezier/Core
 import Lib.Interpolation.Bezier.Core as Bezier
 
+"""
+Description:
+    Initialization of constants.
+"""
+# Bezier curve interpolation parameters.
+CONST_BEZIER_CURVE = {'method': 'Explicit', 'N': 100}
+#   Visibility of the bounding box of the interpolated curve.
+CONST_BOUNDING_BOX_VISIBILITY = False
+
 def main():
-    # ...
-    #   ...
-    method = 'Explicit'; N = 100
-    #   ...
+    """
+    Description:
+        ..
+    """
+
+    # Input control points {P} in two-dimensional space.
     P = np.array([[1.00,  0.00], 
                   [2.00, -0.75], 
                   [3.00, -2.50], 
@@ -27,13 +38,12 @@ def main():
                   [5.00,  1.00]], dtype=np.float32)
 
     # ...
-    B_Cls = Bezier.Bezier_Cls(method, P, N)
+    B_Cls = Bezier.Bezier_Cls(CONST_BEZIER_CURVE['method'], P, 
+                              CONST_BEZIER_CURVE['N'])
     # ...
     B = B_Cls.Interpolate()
     # ...
     L = B_Cls.Get_Arc_Length()
-    # ...
-    B_Bounding_Box = B_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
 
     # Set the parameters for the scientific style.
     plt.style.use(['science'])
@@ -46,12 +56,19 @@ def main():
             markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Control Points')
     # ...
     ax.plot(B[:, 0], B[:, 1], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
-            markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'Bézier Curve (method = {method}, N = {N}, L = {L:.03})')
+            markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'Bézier Curve (N = {B_Cls.N}, L = {L:.03})')
     
-    # ...
-    Bounding_Box_Interpolated_Points = pat.Rectangle(xy = (B_Bounding_Box['x_min'], B_Bounding_Box['y_min']), width = B_Bounding_Box['x_max'] - B_Bounding_Box['x_min'],
-                                                     height = B_Bounding_Box['y_max'] -  B_Bounding_Box['y_min'], facecolor = 'none', edgecolor = '#ffd8b2', linewidth = 1.5, label='Bézier Curve Bounding Box')
-    ax.add_patch(Bounding_Box_Interpolated_Points)
+    # Visibility of the bounding box of the interpolated curve.
+    if CONST_BOUNDING_BOX_VISIBILITY == True:
+        # ...
+        B_Bounding_Box = B_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
+
+        # Create a primitive two-dimensional object (Rectangle -> Bounding-Box) with additional properties.
+        Bounding_Box_Interpolated_Points = pat.Rectangle(xy = (B_Bounding_Box['x_min'], B_Bounding_Box['y_min']), width = B_Bounding_Box['x_max'] - B_Bounding_Box['x_min'],
+                                                         height = B_Bounding_Box['y_max'] -  B_Bounding_Box['y_min'], facecolor = 'none', edgecolor = '#ffd8b2', linewidth = 1.5, 
+                                                         label='B-Spline Bounding Box')
+        ax.add_patch(Bounding_Box_Interpolated_Points)
+
 
     # Set parameters of the graph (plot).
     ax.set_title(f'Bézier Curve Interpolation in {P.shape[1]}-Dimensional Space', fontsize=25, pad=25.0)

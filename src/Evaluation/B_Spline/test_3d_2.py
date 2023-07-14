@@ -9,11 +9,28 @@ import numpy as np
 import scienceplots
 # Matplotlib (Visualization) [pip3 install matplotlib]
 import matplotlib.pyplot as plt
+import mpl_toolkits.mplot3d.art3d
+import matplotlib.patches as pat
 # Custom Script:
 #   ../Lib/Interpolation/B_Spline/Core
 import Lib.Interpolation.B_Spline.Core as B_Spline
+#   ../Lib/Utilities/Primitives
+import Lib.Utilities.Primitives as Primitives
+"""
+Description:
+    Initialization of constants.
+"""
+# B-Spline interpolation parameters.
+CONST_B_SPLINE = {'n': 3, 'N': 100, 'method': 'Chord-Length'}
+#   Visibility of the bounding box of the interpolated curve.
+CONST_BOUNDING_BOX_VISIBILITY = False
 
 def main():
+    """
+    Description:
+        ..
+    """
+        
     # ...
     #   ...
     n = 3; N = 100; method = 'Chord-Length'
@@ -63,6 +80,28 @@ def main():
     ax.plot(S_optimized[:, 0], S_optimized[:, 1], S_optimized[:, 2], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
             markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'B-Spline (n = {n}, N = {N}, L = {L:.03})')
 
+   # Visibility of the bounding box of the interpolated curve.
+    if CONST_BOUNDING_BOX_VISIBILITY == True:
+        # ...
+        S_Bounding_Box = S_Cls_optimized.Get_Bounding_Box_Parameters('Interpolated-Points')
+
+        # Create a primitive three-dimensional object (Cube -> Bounding-Box) with additional properties.
+        Box_Cls = Primitives.Box_Cls([0.0, 0.0, 0.0], [S_Bounding_Box['x_max'] - S_Bounding_Box['x_min'], 
+                                                       S_Bounding_Box['y_max'] - S_Bounding_Box['y_min'], 
+                                                       S_Bounding_Box['z_max'] - S_Bounding_Box['z_min']])
+        
+        # Change the position of the bounding box.
+        Bounding_Box = np.zeros(Box_Cls.Faces.shape)
+        for i, Box_Faces_i in enumerate(Box_Cls.Faces):
+            for j, Box_Faces_ij in enumerate(Box_Faces_i):
+                Bounding_Box[i, j, :] = Box_Faces_ij + [(S_Bounding_Box['x_max'] + S_Bounding_Box['x_min']) / 2.0, 
+                                                        (S_Bounding_Box['y_max'] + S_Bounding_Box['y_min']) / 2.0, 
+                                                        (S_Bounding_Box['z_max'] + S_Bounding_Box['z_min']) / 2.0]
+                
+        # Add a 3D collection object to the plot.
+        ax.add_collection3d(mpl_toolkits.mplot3d.art3d.Poly3DCollection(Bounding_Box, linewidths=1.5, edgecolors='#ffd8b2', 
+                                                                        facecolors = '#ffffff', alpha=0.01))
+        
     # Set parameters of the graph (plot).
     ax.set_title(f'B-Spline Interpolation in {P.shape[1]}-Dimensional Space', fontsize=25, pad=25.0)
     #   Set the x ticks.
@@ -87,6 +126,11 @@ def main():
     ax.zaxis._axinfo['grid'].update({'linewidth': 0.15, 'linestyle': '--'})
     # Get handles and labels for the legend.
     handles, labels = plt.gca().get_legend_handles_labels()
+    if CONST_BOUNDING_BOX_VISIBILITY == True:
+        # Add a bounding box legend.
+        handles.append(pat.Rectangle(xy = (0.0, 0.02), width = 0.0, height = 0.0, facecolor = 'none',
+                                    edgecolor = '#ffd8b2', linewidth = 1.5))
+        labels.append('B-Spline Bounding Box')
     # Remove duplicate labels.
     legend = dict(zip(labels, handles))
     # Show the labels (legends) of the graph.

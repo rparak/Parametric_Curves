@@ -17,11 +17,23 @@ import Lib.Interpolation.B_Spline.Core as B_Spline
 #   ../Lib/Utilities/Primitives
 import Lib.Utilities.Primitives as Primitives
 
+"""
+Description:
+    Initialization of constants.
+"""
+# B-Spline interpolation parameters.
+CONST_B_SPLINE = {'n': 3, 'N': 100, 'method': 'Chord-Length'}
+#   Visibility of the bounding box of the interpolated curve.
+CONST_BOUNDING_BOX_VISIBILITY = False
+
 def main():
-    # ...
-    #   ...
-    n = 3; N = 100; method = 'Chord-Length'
-    #   ...
+    """
+    Description:
+        ..
+    """
+        
+
+    # Input control points {P} in three-dimensional space.
     P = np.array([[1.00,  0.00, -1.00], 
                   [2.00, -0.75,  0.50], 
                   [3.00, -2.50,  1.00], 
@@ -30,25 +42,12 @@ def main():
                   [5.00,  1.00, -1.50]], dtype=np.float32)
 
     # ...
-    S_Cls = B_Spline.B_Spline_Cls(n, P, method, N)
+    S_Cls = B_Spline.B_Spline_Cls(CONST_B_SPLINE['n'], CONST_B_SPLINE['method'], P, 
+                                  CONST_B_SPLINE['N'])
     # ...
     S = S_Cls.Interpolate()
     # ...
     L = S_Cls.Get_Arc_Length()
-    # ...
-    S_Bounding_Box = S_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
-    
-    # ...
-    Box_Cls = Primitives.Box_Cls([0.0, 0.0, 0.0], [S_Bounding_Box['x_max'] - S_Bounding_Box['x_min'], 
-                                                   S_Bounding_Box['y_max'] - S_Bounding_Box['y_min'], 
-                                                   S_Bounding_Box['z_max'] - S_Bounding_Box['z_min']])
-    #   ...
-    Bounding_Box = np.zeros(Box_Cls.Faces.shape)
-    for i, Box_Faces_i in enumerate(Box_Cls.Faces):
-        for j, Box_Faces_ij in enumerate(Box_Faces_i):
-            Bounding_Box[i, j, :] = Box_Faces_ij + [(S_Bounding_Box['x_max'] + S_Bounding_Box['x_min']) / 2.0, 
-                                                    (S_Bounding_Box['y_max'] + S_Bounding_Box['y_min']) / 2.0, 
-                                                    (S_Bounding_Box['z_max'] + S_Bounding_Box['z_min']) / 2.0]
 
     # Set the parameters for the scientific style.
     plt.style.use(['science'])
@@ -62,12 +61,30 @@ def main():
             markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Control Points')
     # ...
     ax.plot(S[:, 0], S[:, 1], S[:, 2], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
-            markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'B-Spline (n = {n}, N = {N}, L = {L:.03})')
+            markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'B-Spline (n = {S_Cls.n}, N = {S_Cls.N}, L = {L:.03})')
 
-    # ...
-    ax.add_collection3d(mpl_toolkits.mplot3d.art3d.Poly3DCollection(Bounding_Box, linewidths=1.5, edgecolors='#ffd8b2', 
-                                                                    facecolors = '#ffffff', alpha=0.01))
+    # Visibility of the bounding box of the interpolated curve.
+    if CONST_BOUNDING_BOX_VISIBILITY == True:
+        # ...
+        S_Bounding_Box = S_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
 
+        # Create a primitive three-dimensional object (Cube -> Bounding-Box) with additional properties.
+        Box_Cls = Primitives.Box_Cls([0.0, 0.0, 0.0], [S_Bounding_Box['x_max'] - S_Bounding_Box['x_min'], 
+                                                       S_Bounding_Box['y_max'] - S_Bounding_Box['y_min'], 
+                                                       S_Bounding_Box['z_max'] - S_Bounding_Box['z_min']])
+        
+        # Change the position of the bounding box.
+        Bounding_Box = np.zeros(Box_Cls.Faces.shape)
+        for i, Box_Faces_i in enumerate(Box_Cls.Faces):
+            for j, Box_Faces_ij in enumerate(Box_Faces_i):
+                Bounding_Box[i, j, :] = Box_Faces_ij + [(S_Bounding_Box['x_max'] + S_Bounding_Box['x_min']) / 2.0, 
+                                                        (S_Bounding_Box['y_max'] + S_Bounding_Box['y_min']) / 2.0, 
+                                                        (S_Bounding_Box['z_max'] + S_Bounding_Box['z_min']) / 2.0]
+                
+        # Add a 3D collection object to the plot.
+        ax.add_collection3d(mpl_toolkits.mplot3d.art3d.Poly3DCollection(Bounding_Box, linewidths=1.5, edgecolors='#ffd8b2', 
+                                                                        facecolors = '#ffffff', alpha=0.01))
+        
     # Set parameters of the graph (plot).
     ax.set_title(f'B-Spline Interpolation in {P.shape[1]}-Dimensional Space', fontsize=25, pad=25.0)
     #   Set the x ticks.
@@ -92,10 +109,11 @@ def main():
     ax.zaxis._axinfo['grid'].update({'linewidth': 0.15, 'linestyle': '--'})
     # Get handles and labels for the legend.
     handles, labels = plt.gca().get_legend_handles_labels()
-    #   Add a bounding box legend.
-    handles.append(pat.Rectangle(xy = (0.0, 0.02), width = 0.0, height = 0.0, facecolor = 'none',
-                                edgecolor = '#ffd8b2', linewidth = 1.5))
-    labels.append('B-Spline Bounding Box')
+    if CONST_BOUNDING_BOX_VISIBILITY == True:
+        #   Add a bounding box legend.
+        handles.append(pat.Rectangle(xy = (0.0, 0.02), width = 0.0, height = 0.0, facecolor = 'none',
+                                    edgecolor = '#ffd8b2', linewidth = 1.5))
+        labels.append('B-Spline Bounding Box')
     # Remove duplicate labels.
     legend = dict(zip(labels, handles))
     # Show the labels (legends) of the graph.

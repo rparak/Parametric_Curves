@@ -54,7 +54,7 @@ class B_Spline_Cls(object):
                 Cls..
     """
         
-    def __init__(self, n: int, P: tp.List[tp.List[float]], method: str, N: int) -> None:
+    def __init__(self, n: int,  method: str, P: tp.List[tp.List[float]], N: int) -> None:
         try:
             assert n < P.shape[0]
 
@@ -237,7 +237,7 @@ class B_Spline_Cls(object):
             Q = (np.linalg.inv(A.T @ A) @ A.T) @ self.__P
             Q[0] = self.__P[0]; Q[-1] = self.__P[-1]
 
-            return self.__class__(self.__n, Q, self.__method, self.N)
+            return self.__class__(self.__n, self.__method, Q, self.N)
 
         except AssertionError as error:
             print(f'[ERROR] Information: {error}')
