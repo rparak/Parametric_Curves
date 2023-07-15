@@ -236,6 +236,29 @@ class Bezier_Cls(object):
 
         return B
 
+    def __C(self, j: int) -> tp.List[float]:
+        """
+        Description:
+            ....
+        
+        Args:
+            (1) j [int]: ...
+
+        Returns:
+            (1) parameter [Vector<float> ..]:
+        """
+                
+        eq_ls = 1.0
+
+        for m in range(0, j):
+            eq_ls *= self.__n - m
+
+        eq_rs = 0.0
+        for i in range(0, j + 1):
+            eq_rs += (((-1) ** (i + j)) * self.__P[i]) / (Mathematics.Factorial(i)*Mathematics.Factorial(j - i))
+
+        return eq_ls * eq_rs
+    
     def Get_Bounding_Box_Parameters(self, limitation: str) -> tp.Tuple[tp.List[float]]:
         """
         Description:
@@ -269,7 +292,9 @@ class Bezier_Cls(object):
                     max[i] = Mathematics.Max(P_T)[1]
             else:
                 # https://snoozetime.github.io/2018/05/22/bezier-curve-bounding-box.html
-                # ...
+
+                # Obtain the minimum and maximum values in each axis from 
+                # the input control points (P_0, P_N).
                 (min, max) = self.__Get_Initial_Min_Max_BB(self.__P[0], self.__P[-1])
 
                 # ...
@@ -341,39 +366,13 @@ class Bezier_Cls(object):
 
         return Utilities.RDP_Simplification(self.__B, epsilon)
     
-    def __C(self, j: int) -> tp.List[float]:
-        """
-        Description:
-            ....
-        
-        Args:
-            (1) ...
-
-        Returns:
-            (1) ...
-        """
-                
-        eq_ls = 1.0
-
-        for m in range(0, j):
-            eq_ls *= self.__n - m
-
-        eq_rs = 0.0
-        for i in range(0, j + 1):
-            eq_rs += (((-1) ** (i + j)) * self.__P[i]) / (Mathematics.Factorial(i)*Mathematics.Factorial(j - i))
-
-        return eq_ls * eq_rs
-    
     def Derivative_1st(self) -> tp.List[tp.List[float]]:
         """
         Description:
             ....
-        
-        Args:
-            (1) ...
 
         Returns:
-            (1) ...
+            (1) parameter [Vector<float> ..]: 
         """
                 
         # ....
@@ -401,12 +400,9 @@ class Bezier_Cls(object):
         """
         Description:
             ....
-        
-        Args:
-            (1) ...
 
         Returns:
-            (1) ...
+            (1) parameter [Vector<float> ..]: 
         """
                   
         # ....

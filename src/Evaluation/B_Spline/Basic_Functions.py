@@ -47,6 +47,7 @@ def main():
     # Create a figure.
     _, ax = plt.subplots()
 
+    # ...
     for j in range(P.shape[0]):
         B_in = np.zeros(Time.shape, dtype=Time.dtype)
         for i, t_i in enumerate(Time):

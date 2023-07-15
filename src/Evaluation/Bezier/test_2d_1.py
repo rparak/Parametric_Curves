@@ -42,7 +42,8 @@ def main():
                               CONST_BEZIER_CURVE['N'])
     # ...
     B = B_Cls.Interpolate()
-    # ...
+    
+    # Obtain the arc length L(t) of the general parametric curve.
     L = B_Cls.Get_Arc_Length()
 
     # Set the parameters for the scientific style.
@@ -60,7 +61,7 @@ def main():
     
     # Visibility of the bounding box of the interpolated curve.
     if CONST_BOUNDING_BOX_VISIBILITY == True:
-        # ...
+        # Obtain the bounding parameters (min, max) of the general parametric curve.
         B_Bounding_Box = B_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
 
         # Create a primitive two-dimensional object (Rectangle -> Bounding-Box) with additional properties.

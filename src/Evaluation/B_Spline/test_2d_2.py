@@ -57,7 +57,7 @@ def main():
     S_Cls_optimized = S_Cls_2.Optimize_Control_Points(P.shape[0])
     S_optimized = S_Cls_optimized.Interpolate()
 
-    # ...
+    # Obtain the arc length L(t) of the general parametric curve.
     L = S_Cls_optimized.Get_Arc_Length()
 
     # Set the parameters for the scientific style.
@@ -78,7 +78,7 @@ def main():
     
     # Visibility of the bounding box of the interpolated curve.
     if CONST_BOUNDING_BOX_VISIBILITY == True:
-        # ...
+        # Obtain the bounding parameters (min, max) of the general parametric curve.
         S_Bounding_Box = S_Cls_optimized.Get_Bounding_Box_Parameters('Interpolated-Points')
 
         # Create a primitive two-dimensional object (Rectangle -> Bounding-Box) with additional properties.

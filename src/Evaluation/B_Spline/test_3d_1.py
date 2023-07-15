@@ -45,7 +45,8 @@ def main():
                                   CONST_B_SPLINE['N'])
     # ...
     S = S_Cls.Interpolate()
-    # ...
+    
+    # Obtain the arc length L(t) of the general parametric curve.
     L = S_Cls.Get_Arc_Length()
 
     # Set the parameters for the scientific style.
@@ -64,7 +65,7 @@ def main():
 
     # Visibility of the bounding box of the interpolated curve.
     if CONST_BOUNDING_BOX_VISIBILITY == True:
-        # ...
+        # Obtain the bounding parameters (min, max) of the general parametric curve.
         S_Bounding_Box = S_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
 
         # Create a primitive three-dimensional object (Cube -> Bounding-Box) with additional properties.

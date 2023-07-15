@@ -44,8 +44,11 @@ def main():
     # Create a figure.
     _, ax = plt.subplots()
 
+    # ...
     for i in range(P.shape[0]):
         B_in = Utilities.Bernstein_Polynomial(i, n, Time)
+
+        # ...
         ax.plot(Time, B_in, '-', linewidth=1.0, label=r'$B_{(%d, %d)}(t)$' % (i, n))
 
     # Set parameters of the graph (plot).

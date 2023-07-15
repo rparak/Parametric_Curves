@@ -253,6 +253,17 @@ class B_Spline_Cls(object):
         return L / (self.N)
 
     def Optimize_Control_Points(self, N: int) -> cls_data_type:
+        """
+        Description:
+            ....
+
+        Args:
+            (1) N [int]: 
+
+        Returns:
+            (1) parameter [B_Spline_Cls(object)]: 
+        """
+                
         # Least-Squares Fitting of Data with B-Spline Curves
         # https://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf
         # https://github.com/kentamt/b_spline/blob/master/Least_Square_B-spline.ipynb
@@ -356,12 +367,9 @@ class B_Spline_Cls(object):
         """
         Description:
             ....
-        
-        Args:
-            (1) ...
 
         Returns:
-            (1) ...
+            (1) parameter [Vector<float> ..]: 
         """
     
         # https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-derv.html
@@ -382,12 +390,9 @@ class B_Spline_Cls(object):
         """
         Description:
             ....
-        
-        Args:
-            (1) ...
 
         Returns:
-            (1) ...
+            (1) parameter [Vector<float> ..]: 
         """
                   
         # ....
