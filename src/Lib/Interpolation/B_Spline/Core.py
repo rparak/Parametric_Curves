@@ -32,13 +32,13 @@ class B_Spline_Cls(object):
 
     Initialization of the Class:
         Args:
-            (1) n [int]: Degree.
-            (2) method [string]: The method to be used to select the parameters. 
+            (1) n [int]: Degree of a polynomial.
+            (2) method [string]: The method to be used to select the parameters of the knot vector. 
                                     Note: 
                                         method = 'Uniformly-Spaced', 'Chord-Length' or 'Centripetal'.
-            (3) P [Vector<float> 1xn]: Input control points to be interpolated.
+            (3) P [Vector<float> mxn]: Input control points to be interpolated.
                                           Note:
-                                            Where n is the number of dimensions of the point.
+                                            Where m is the number of points and n is the dimension (2-D, 3-D).
             (4) N [int]: The number of points to be generated in the interpolation function.
 
         Example:
@@ -67,10 +67,14 @@ class B_Spline_Cls(object):
                 Cls.Interpolate()
     """
         
+    # Create a global data type for the class.
+    cls_data_type = tp.TypeVar('cls_data_type')
+
     def __init__(self, n: int, method: str, P: tp.List[tp.List[float]], N: int) -> None:
         try:
             assert n < P.shape[0]
 
+            # The method to be used to select the parameters of the knot vector.
             self.__method = method
 
             # Generate a normalized vector of knots from the selected parameters 
@@ -81,13 +85,19 @@ class B_Spline_Cls(object):
             #   t[0] <= Time <= t[-1]
             self.__Time = np.linspace(self.__t[0], self.__t[-1], N)
 
-            # ...
-            self.__n = n
-            self.__N = N
+            # Initialization of other class parameters.
+            #   Control Points.
             self.__P = np.array(P, dtype=np.float32)
+            #   Dimension (2-D, 3-D).
             self.__dim = self.__P.shape[1]
+            #   Interpolated points.
             self.__S = np.zeros((N, self.__dim), dtype=np.float32)
+            #   First derivation of interpolated points.
             self.__S_dot = np.zeros((N, self.__dim), dtype=np.float32)
+            #   Degree of a polynomial.
+            self.__n = n
+            #   The number of points to be generated in the interpolation function.
+            self.__N = N
 
         except AssertionError as error:
             print(f'[ERROR] Information: {error}')
@@ -101,10 +111,10 @@ class B_Spline_Cls(object):
     def n(self) -> int:
         """
         Description:
-           ...
+           Get the degree of a polynomial.
         
         Returns:
-            (1) ...
+            (1) parameter [int]: Degree of a polynomial.
         """
                 
         return self.__n
@@ -113,10 +123,12 @@ class B_Spline_Cls(object):
     def P(self) -> tp.List[tp.List[float]]:
         """
         Description:
-           ...
+           Get the control points of the curve.
         
         Returns:
-            (1) ...
+            (1) parameter [Vector<float> mxn]: Control points.
+                                                Note:
+                                                    Where m is the number of points and n is the dimension (2-D, 3-D).
         """
                 
         return self.__P
@@ -125,14 +137,18 @@ class B_Spline_Cls(object):
     def P(self, P: tp.List[tp.List[float]]) -> None:
         """
         Description:
-           ...
+           Set the new control points of the curve.
         
-        Returns:
-            (1) ...
+        Args:
+            (1) P [Vector<float> mxn]: Control points.
+                                        Note:
+                                            Where m is the number of points and n is the dimension (2-D, 3-D)
         """
                 
         try:
             assert P.shape[1] == self.__dim
+
+            self.__P = np.array(P, dtype=np.float32)
 
             # Generate a normalized vector of knots from the selected parameters 
             # using the chosen method.
@@ -142,20 +158,20 @@ class B_Spline_Cls(object):
             #   t[0] <= Time <= t[-1]
             self.__Time = np.linspace(self.__t[0], self.__t[-1], self.__N)
 
-            # ...
-            self.__P = np.array(P, dtype=np.float32)
-
         except AssertionError as error:
             print(f'[ERROR] Information: {error}')
+            print(f'[ERROR] Incorrect dimensions of input control points. The point dimension must be {self.__dim} and not {P.shape[1]}.')
     
     @property
     def S(self) -> tp.List[tp.List[float]]:
         """
         Description:
-           ...
+           Get the interpolated points of the curve.
         
         Returns:
-            (1) ...
+            (1) parameter [Vector<float> mxn]: Interpolated points.
+                                                Note:
+                                                    Where m is the number of points and n is the dimension (2-D, 3-D).
         """
                 
         return self.__S
@@ -164,10 +180,13 @@ class B_Spline_Cls(object):
     def t(self) -> tp.List[float]:
         """
         Description:
-           ...
+           Get the normalized vector of knots.
         
         Returns:
-            (1) ...
+            (1) parameter [Vector<float> 1xm]: Normalized knot vector as a non-decreasing sequence of real numbers.
+                                                Note:
+                                                    Where m is the number of generated knots defined by the formula:
+                                                        N (number of control points) + n (degree) + 1.
         """
                 
         return self.__t
@@ -176,10 +195,12 @@ class B_Spline_Cls(object):
     def Time(self) -> tp.List[float]:
         """
         Description:
-           ...
+           Get the time as an interval of values from 0 to 1.
         
         Returns:
-            (1) ...
+            (1) parameter [Vector<float> 1xn]: Time.
+                                                Note:
+                                                    Where n is the number of points.
         """
                 
         return self.__Time
@@ -188,22 +209,22 @@ class B_Spline_Cls(object):
     def N(self) -> int:
         """
         Description:
-           ...
+           Get the number of points to be generated in the interpolation function.
         
         Returns:
-            (1) ...
+            (1) parameter [int]: Number of interpolated points. 
         """
                 
-        return self.__Time.shape[0]
+        return self.__N
     
     @property
     def dim(self) -> int:
         """
         Description:
-           ...
+           Get the dimension (2-D, 3-D) of the control/interpolated points.
         
         Returns:
-            (1) ...
+            (1) parameter [int]: The dimension of the points at which the interpolation is performed.
         """
                 
         return self.__dim
@@ -229,7 +250,7 @@ class B_Spline_Cls(object):
 
         return L / (self.N)
 
-    def Optimize_Control_Points(self, N: int) -> tp.List[float]:
+    def Optimize_Control_Points(self, N: int) -> cls_data_type:
         # Least-Squares Fitting of Data with B-Spline Curves
         # https://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf
         # https://github.com/kentamt/b_spline/blob/master/Least_Square_B-spline.ipynb

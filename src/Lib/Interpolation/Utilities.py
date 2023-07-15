@@ -190,7 +190,7 @@ def Basic_Function(i: int, n: int, t: tp.List[float], x: float) -> float:
         (3) t [Vector<float> 1xm]: Normalized knot vector as a non-decreasing sequence of real numbers.
                                     Note:
                                         Where m is the number of generated knots defined by the formula:
-                                            N (number of checkpoints) + n (degree) + 1.
+                                            N (number of control points) + n (degree) + 1.
         (4) x [float]: The time parameter in the current episode.
     
     Returns:
@@ -446,7 +446,7 @@ def Generate_Knot_Vector(n: int, P: tp.List[float], method: str) -> tp.List[floa
         (1) parameter [Vector<float> 1xm]: Normalized knot vector as a non-decreasing sequence of real numbers.
                                             Note:
                                                 Where m is the number of generated knots defined by the formula:
-                                                    N (number of checkpoints) + n (degree) + 1.
+                                                    N (number of control points) + n (degree) + 1.
     """
         
     try:

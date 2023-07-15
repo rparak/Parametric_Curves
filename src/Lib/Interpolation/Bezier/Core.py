@@ -18,9 +18,9 @@ class Bezier_Cls(object):
             (1) method [string]: The name of the method to calculate the interpolation function.
                                     Note:
                                         method = 'Explicit' or 'Polynomial'.
-            (2) P [Vector<float> 1xn]: Input control points to be interpolated.
+            (2) P [Vector<float> mxn]: Input control points to be interpolated.
                                           Note:
-                                            Where n is the number of dimensions of the point.
+                                            Where m is the number of points and n is the dimension (2-D, 3-D).
             (3) N [int]: The number of points to be generated in the interpolation function.
 
         Example:
@@ -53,19 +53,24 @@ class Bezier_Cls(object):
         try:
             assert method in ['Explicit', 'Polynomial']
 
+            # Convert the string to an identification number.
+            #   'Explicit': 0; 'Polynomial': 1
             self.__method_id = 0 if method == 'Explicit' else 1
 
             # The value of the time must be within the interval of the knot vector: 
             #   t[0] <= Time <= t[-1]
             self.__Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, N)
 
-            # ...
+            # Initialization of other class parameters.
+            #   Control Points.
             self.__P = np.array(P, dtype=np.float32)
+            #   Dimension (2-D, 3-D).
             self.__dim = self.__P.shape[1]
+            #   Interpolated points.
             self.__B = np.zeros((N, self.__dim), dtype=np.float32)
+            #   First derivation of interpolated points.
             self.__B_dot = np.zeros((N, self.__dim), dtype=np.float32)
-
-            # Degree of a polynomial.
+            #   Degree of a polynomial.
             self.__n = self.__P.shape[0] - 1
 
         except AssertionError as error:
@@ -76,10 +81,12 @@ class Bezier_Cls(object):
     def P(self) -> tp.List[tp.List[float]]:
         """
         Description:
-           ...
+           Get the control points of the curve.
         
         Returns:
-            (1) ...
+            (1) parameter [Vector<float> mxn]: Control points.
+                                                Note:
+                                                    Where m is the number of points and n is the dimension (2-D, 3-D).
         """
                 
         return self.__P
@@ -88,10 +95,12 @@ class Bezier_Cls(object):
     def P(self, P: tp.List[tp.List[float]]) -> None:
         """
         Description:
-           ...
+           Set the new control points of the curve.
         
-        Returns:
-            (1) ...
+        Args:
+            (1) P [Vector<float> mxn]: Control points.
+                                        Note:
+                                            Where m is the number of points and n is the dimension (2-D, 3-D).
         """
                 
         try:
@@ -101,15 +110,18 @@ class Bezier_Cls(object):
 
         except AssertionError as error:
             print(f'[ERROR] Information: {error}')
+            print(f'[ERROR] Incorrect dimensions of input control points. The point dimension must be {self.__dim} and not {P.shape[1]}.')
     
     @property
     def B(self) -> tp.List[tp.List[float]]:
         """
         Description:
-           ...
+           Get the interpolated points of the curve.
         
         Returns:
-            (1) ...
+            (1) parameter [Vector<float> mxn]: Interpolated points.
+                                                Note:
+                                                    Where m is the number of points and n is the dimension (2-D, 3-D).
         """
                 
         return self.__B
@@ -118,10 +130,13 @@ class Bezier_Cls(object):
     def Time(self) -> tp.List[float]:
         """
         Description:
-           ...
+           Get the time as an interval of values from 0 to 1.
         
         Returns:
-            (1) ...
+            (1) parameter [Vector<float> 1xn]: Time.
+                                                Note:
+                                                    Where n is the number of points.
+
         """
                 
         return self.__Time
@@ -130,10 +145,10 @@ class Bezier_Cls(object):
     def N(self) -> int:
         """
         Description:
-           ...
+           Get the number of points to be generated in the interpolation function.
         
         Returns:
-            (1) ...
+            (1) parameter [int]: Number of interpolated points. 
         """
                 
         return self.__Time.shape[0]
@@ -142,10 +157,10 @@ class Bezier_Cls(object):
     def dim(self) -> int:
         """
         Description:
-           ...
+           Get the dimension (2-D, 3-D) of the control/interpolated points.
         
         Returns:
-            (1) ...
+            (1) parameter [int]: The dimension of the points at which the interpolation is performed.
         """
                 
         return self.__dim
