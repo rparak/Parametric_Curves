@@ -15,13 +15,13 @@ class Bezier_Cls(object):
 
     Initialization of the Class:
         Args:
-            (1) method [string]: The name of the method to calculate the interpolation function.
+            (1) method [string]: The name of the method to be used to interpolate the parametric curve.
                                     Note:
                                         method = 'Explicit' or 'Polynomial'.
             (2) P [Vector<float> mxn]: Input control points to be interpolated.
                                           Note:
                                             Where m is the number of points and n is the dimension (2-D, 3-D).
-            (3) N [int]: The number of points to be generated in the interpolation function.
+            (3) N [int]: The number of interpolated points of the parametric curve.
 
         Example:
             Initialization:
@@ -144,7 +144,7 @@ class Bezier_Cls(object):
     def N(self) -> int:
         """
         Description:
-           Get the number of points to be generated in the interpolation function.
+           Get the number of interpolated points of the parametric curve.
         
         Returns:
             (1) parameter [int]: Number of interpolated points. 
@@ -378,6 +378,7 @@ class Bezier_Cls(object):
         # ....
         self.__B_dot = np.zeros(self.__B_dot.shape, dtype=self.__B_dot.dtype)
 
+        # 'Explicit': 0; 'Polynomial': 1
         if self.__method_id == 0:
             # ...
             n = self.__n - 1
@@ -408,14 +409,13 @@ class Bezier_Cls(object):
         # ....
         self.__B = np.zeros(self.__B.shape, dtype=self.__B.dtype)
 
+        # 'Explicit': 0; 'Polynomial': 1
         if self.__method_id == 0:
-            # ...
             for i, p_i in enumerate(self.__P):
                 for j, p_ij in enumerate(p_i):
                     self.__B[:, j] += Utilities.Bernstein_Polynomial(i, self.__n, self.__Time) * p_ij
 
         elif self.__method_id == 1:
-            # ...
             for j in range(1, self.__n + 1):
                 for i, C_j in enumerate(self.__C(j)): 
                     self.__B[:, i] += (self.__Time ** j) * C_j

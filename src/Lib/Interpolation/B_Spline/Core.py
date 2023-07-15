@@ -39,7 +39,7 @@ class B_Spline_Cls(object):
             (3) P [Vector<float> mxn]: Input control points to be interpolated.
                                           Note:
                                             Where m is the number of points and n is the dimension (2-D, 3-D).
-            (4) N [int]: The number of points to be generated in the interpolation function.
+            (4) N [int]: The number of interpolated points of the parametric curve.
 
         Example:
             Initialization:
@@ -96,7 +96,7 @@ class B_Spline_Cls(object):
             self.__S_dot = np.zeros((N, self.__dim), dtype=np.float32)
             #   Degree of a polynomial.
             self.__n = n
-            #   The number of points to be generated in the interpolation function.
+            #   The number of interpolated points of the parametric curve.
             self.__N = N
 
         except AssertionError as error:
@@ -209,7 +209,7 @@ class B_Spline_Cls(object):
     def N(self) -> int:
         """
         Description:
-           Get the number of points to be generated in the interpolation function.
+           Get the number of interpolated points of the parametric curve.
         
         Returns:
             (1) parameter [int]: Number of interpolated points. 
@@ -244,7 +244,6 @@ class B_Spline_Cls(object):
                 
         # ...   
         _ = self.Derivative_1st()
-
 
         L = 0.0
         for _, S_dot_i in enumerate(self.__S_dot):
