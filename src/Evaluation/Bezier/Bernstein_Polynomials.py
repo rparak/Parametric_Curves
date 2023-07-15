@@ -17,7 +17,7 @@ import Lib.Interpolation.Utilities as Utilities
 def main():
     """
     Description:
-        ..
+        A program for visualization of Bernstein basis polynomials functions of degree n.
     """
 
     # Input control points {P} in two-dimensional space.
@@ -44,15 +44,13 @@ def main():
     # Create a figure.
     _, ax = plt.subplots()
 
-    # ...
+    # Visualization of Bernstein basis polynomials functions of degree n.
     for i in range(P.shape[0]):
         B_in = Utilities.Bernstein_Polynomial(i, n, Time)
-
-        # ...
         ax.plot(Time, B_in, '-', linewidth=1.0, label=r'$B_{(%d, %d)}(t)$' % (i, n))
 
     # Set parameters of the graph (plot).
-    ax.set_title(f'Bernstein Basis Polynomials of the {n}-th Degree Curve', fontsize=25, pad=25.0)
+    ax.set_title(f'Bernstein Basis Polynomials of the Degree {n}', fontsize=25, pad=25.0)
     #   Set the x ticks.
     ax.set_xticks(np.arange(Utilities.CONST_T_0 - 0.1, Utilities.CONST_T_1 + 0.1, 0.1))
     #   Set the y ticks.

@@ -16,7 +16,7 @@ import Lib.Interpolation.Utilities as Utilities
 def main():
     """
     Description:
-        ..
+        A program for visualization of n-th degree B-spline basis functions.
     """
 
     # Input control points {P} in two-dimensional space.
@@ -47,19 +47,19 @@ def main():
     # Create a figure.
     _, ax = plt.subplots()
 
-    # ...
+    # Visualization of n-th degree B-spline basis functions.
     for j in range(P.shape[0]):
         B_in = np.zeros(Time.shape, dtype=Time.dtype)
         for i, t_i in enumerate(Time):
             B_in[i] = Utilities.Basic_Function(j, n, t, t_i)
         ax.plot(Time, B_in, '-', linewidth=1.0, label=r'$B_{(%d, %d)}(t)$' % (j, n))
 
-    # ...
+    # Visualization of the normalized vector of knots.
     ax.plot(t, t.shape[0] * [0.0],'o', color='#8d8d8d', linewidth=1.0, markersize = 8.0, 
             markeredgewidth = 4.0, markerfacecolor = '#ffffff', label=r'Normalized Knot Vector')
 
     # Set parameters of the graph (plot).
-    ax.set_title(f'B-spline Basis Functions of the {n}-th Degree Curve', fontsize=25, pad=25.0)
+    ax.set_title(f'B-spline Basis Functions of the {n}-th Degree', fontsize=25, pad=25.0)
     #   Set the x ticks.
     ax.set_xticks(np.arange(Utilities.CONST_T_0 - 0.1, Utilities.CONST_T_1 + 0.1, 0.1))
     #   Set the y ticks.
