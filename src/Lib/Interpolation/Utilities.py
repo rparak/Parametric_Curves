@@ -241,16 +241,16 @@ def Simple_Simplification(P: tp.List[float], s_f: int) -> tp.List[float]:
                     n = 5
 
     Args:
-        (1) P [Vector<float> nxm]: Input points to be simplified.
+        (1) P [Vector<float> mxn]: Input points to be simplified.
                                    Note:
-                                    Where n is the number of dimensions of the point, and m is the number of points.
+                                    Where m is the number of points and n is the dimension (2-D, 3-D).
         (2) s_f [int]: The coefficient determines the simplification of the point vector.
 
     Returns:
-        (1) parameter [Vector<float> nxn_s]: Simplified vector of points {P}.
+        (1) parameter [Vector<float> mxn]: Simplified vector of points {P}.
                                              Note:
-                                                Where n is the number of dimensions of the point, and n_s is number 
-                                                of points after simplification.
+                                                Where m is the number of points after simplification 
+                                                and n is the dimension (2-D, 3-D).
     """
 
     P_aux = []
@@ -278,19 +278,19 @@ def RDP_Simplification(P: tp.List[float], epsilon: float) -> tp.List[float]:
             P = [p_0{x, y, ..}, p_1{x, y, ..}, ...]
 
     Args:
-        (1) P [Vector<float> nxm]: Input points to be simplified.
+        (1) P [Vector<float> mxn]: Input points to be simplified.
                                    Note:
-                                    Where n is the number of dimensions of the point, and m is the number of points.
+                                    Where m is the number of points and n is the dimension (2-D, 3-D).
         (2) epsilon [float]: The coefficient determines the similarity between the original a
                              and the approximated curve. 
                              Note: 
-                                epsilon > 0.0
+                                epsilon > 0.0.
 
     Returns:
-        (1) parameter [Vector<float> nxn_a]: Simplified vector of points {P}.
+        (1) parameter [Vector<float> mxn]: Simplified vector of points {P}.
                                              Note:
-                                                Where n is the number of dimensions of the point, and n_a is number 
-                                                of points after approximation.
+                                                Where m is the number of points after simplification 
+                                                and n is the dimension (2-D, 3-D).
     """
 
     try:

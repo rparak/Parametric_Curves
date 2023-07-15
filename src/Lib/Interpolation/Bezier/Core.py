@@ -167,18 +167,19 @@ class Bezier_Cls(object):
     def Get_Arc_Length(self) -> float:
         """
         Description:
-           ...
-        
-        Args:
-            (1) ...
+            Obtain the arc length L(t) of the general parametric curve.
+
+            The arc length L(t) is defined by:
+                
+                L(t) = \int_{0}^{t} ||B'(t)||_{2} dt.
 
         Returns:
-            (1) ...
+            (1) parameter [float]: The arc length L(t) of the general parametric curve.
         """
                 
+        # ...
         _ = self.Derivative_1st()
         
-        # https://bezier.readthedocs.io/en/stable/python/reference/bezier.curve.html
         L = 0.0
         for _, B_dot_i in enumerate(self.__B_dot):
             L += Mathematics.Euclidean_Norm(B_dot_i)
@@ -189,32 +190,44 @@ class Bezier_Cls(object):
                                                                                              tp.List[float]]:
         """
         Description:
-           ...
+           Obtain the minimum and maximum values in each axis from the input control points (P_0, P_N).
         
         Args:
-            (1) ...
+            (1, 2) P_0, P_N [Vector<float> mxn]: First (P_0) and last (P_N) control point.
+                                                    Note:
+                                                        Where m is the number of points and n is the dimension (2-D, 3-D).
 
         Returns:
-            (1) ...
+            (1) parameter [Vector<float> 1xn]: Minimum values in each axis from control points P_0 and P_N.
+            (2) parameter [Vector<float> 1xn]: Maximum values in each axis from control points P_0 and P_N.
+                                                Note:
+                                                    Where n is the dimension (2-D, 3-D).
         """
 
         min = np.zeros(self.__dim, dtype=np.float32); max = min.copy()
         for i, (p_0_i, p_n_i) in enumerate(zip(P_0, P_N)):
-            min[i] = np.minimum(p_0_i, p_n_i)
-            max[i] = np.maximum(p_0_i, p_n_i)
+            min[i] = Mathematics.Min([p_0_i, p_n_i])[1]
+            max[i] = Mathematics.Max([p_0_i, p_n_i])[1]
 
         return (min, max)
     
-    def __Get_B_t(self, P: tp.List[float], t: tp.Union[float, tp.List[float]]) -> tp.List[float]:
+    def __Get_B_t(self, P: tp.List[float], t: tp.List[float]) -> tp.List[float]:
         """
         Description:
-            Interpolate with defined t value ....
+            Obtain the interpolated control points with the defined time value t.
         
         Args:
-            (1) ...
+            (1) P [Vector<float> mxn]: Input control points to be interpolated.
+                                        Note:
+                                            Where m is the number of points and n is the dimension (2-D, 3-D).
+            (2) t [Vector<float> 1xk]: Defined time value t.
+                                        Note:
+                                            Where k is the number of values in the vector.
 
         Returns:
-            (1) ...
+            (1) parameter [Vector<float> 1xn]: Interpolated points.
+                                                Note:
+                                                    Where n is the dimension (2-D, 3-D).
         """
 
         B = np.zeros(self.__dim, dtype=np.float32)
@@ -223,22 +236,33 @@ class Bezier_Cls(object):
 
         return B
 
-    def Get_Bounding_Box_Parameters(self, method: str) -> tp.Tuple[tp.List[float]]:
+    def Get_Bounding_Box_Parameters(self, limitation: str) -> tp.Tuple[tp.List[float]]:
         """
         Description:
-            ....
+            Obtain the bounding parameters (min, max) of the general parametric 
+            curve (interpolated points) as well as the control points.
         
         Args:
-            (1) ...
+            (1) limitation [string]: The limitation to be used to describe the bounding box.
+                                        Note:
+                                            limitation = 'Control-Points'
+                                                - The result depends on the parameters (min, max) of the control points.
+                                            limitation = 'Interpolated-Points'
+                                                - The result depends on the parameters (min, max) of the general parametric 
+                                                curve (interpolated points).
 
         Returns:
-            (1) ...
+            (1) parameter [Dictionary {'x_min': int, 'y_min': int, etc.}]: Bounding box parameters (min, max) defined by the limitation 
+                                                                           from the arguments of the function.
+                                                                            Note:
+                                                                                The number of values in both parameters min and max depends 
+                                                                                on the dimension of the points.
         """
         
         try:
-            assert method in ['Control-Points', 'Interpolated-Points']
+            assert limitation in ['Control-Points', 'Interpolated-Points']
         
-            if method == 'Control-Points':
+            if limitation == 'Control-Points':
                 min = np.zeros(self.__dim, dtype=np.float32); max = min.copy()
                 for i, P_T in enumerate(self.__P.T):
                     min[i] = Mathematics.Min(P_T)[1]
@@ -250,23 +274,24 @@ class Bezier_Cls(object):
 
                 # ...
                 coeff = np.array([i*self.__C(i) for i in range(1, self.__n + 1)],
-                                dtype=np.float32).T
+                                 dtype=np.float32).T
                 
                 # ....
                 for i, coeff_i in enumerate(coeff):
                     if coeff_i.size != 1:
                         roots = Mathematics.Roots(coeff_i[::-1])
 
-                        # The time (roots) value must be within the interval: 0.0 <= t <= 1.0
+                        # The value of the time must be within the interval of the knot vector: 
+                        #   t[0] <= Time <= t[-1]
                         t_tmp = []
                         for _, roots_i in enumerate(roots):
                             if Utilities.CONST_T_0 <= roots_i <= Utilities.CONST_T_1:
                                 t_tmp.append(roots_i)
                         
-                        # Remove duplicities.
+                        # Remove duplicates from the vector.
                         t_tmp = np.array([*set(t_tmp)], dtype=np.float32)
                         
-                        if t_tmp.size == 0.0:
+                        if t_tmp.size == 0:
                             continue
                         else:
                             t = t_tmp
@@ -296,8 +321,26 @@ class Bezier_Cls(object):
         
         except AssertionError as error:
             print(f'[ERROR] Information: {error}')
-            print(f'[ERROR] Incorrect type of function input parameters. The method must correspond to the name Control-Points or Interpolated-Points, not {method}.')
-            
+            print(f'[ERROR] Incorrect type of function input parameters. The limitation must correspond to the name Control-Points or Interpolated-Points, not {limitation}.')
+
+    def Reduce_Interpolated_Points(self, epsilon: float) -> tp.List[float]:
+        """
+        Description:
+            A function to simplify (reduce) a given array of interpolated points using 
+            the Ramer-Douglas-Peucker algorithm.
+        
+        Args:
+            (1) epsilon [float]: The coefficient determines the similarity between the original a
+                                 and the approximated curve. 
+                                    Note: 
+                                        epsilon > 0.0.
+
+        Returns:
+            (1) parameter [Vector<float> ]: Simplified (reduced) vector of interpolated points {B}.
+        """
+
+        return Utilities.RDP_Simplification(self.__B, epsilon)
+    
     def __C(self, j: int) -> tp.List[float]:
         """
         Description:
@@ -320,20 +363,6 @@ class Bezier_Cls(object):
             eq_rs += (((-1) ** (i + j)) * self.__P[i]) / (Mathematics.Factorial(i)*Mathematics.Factorial(j - i))
 
         return eq_ls * eq_rs
-
-    def Reduce_Interpolated_Points(self, epsilon: float) -> tp.List[float]:
-        """
-        Description:
-            ....
-        
-        Args:
-            (1) ...
-
-        Returns:
-            (1) ...
-        """
-
-        return Utilities.RDP_Simplification(self.__B, epsilon)
     
     def Derivative_1st(self) -> tp.List[tp.List[float]]:
         """
