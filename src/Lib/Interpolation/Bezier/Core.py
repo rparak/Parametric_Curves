@@ -136,7 +136,6 @@ class Bezier_Cls(object):
             (1) parameter [Vector<float> 1xn]: Time.
                                                 Note:
                                                     Where n is the number of points.
-
         """
                 
         return self.__Time
