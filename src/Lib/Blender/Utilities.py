@@ -7,6 +7,8 @@ import numpy as np
 # Custom Library:
 #   ../Lib/Transformation/Core
 import Lib.Transformation.Core as Transformation
+#   ../Lib/Blender/Parameters/Camera
+import Lib.Blender.Parameters.Camera
 
 def Deselect_All() -> None:
     """
@@ -264,3 +266,23 @@ def Insert_Key_Frame(name: str, property: str, frame: int, index: str):
         bpy.data.objects[name].keyframe_insert('scale', frame=frame, index=index_id_num)
     else:
         bpy.data.objects[name].keyframe_insert(property, frame=frame, index=index_id_num) 
+
+def Set_Camera_Properties(name: str, Camera_Parameters_Str: Lib.Blender.Parameters.Camera.Camera_Parameters_Str):
+    """
+    Description:
+        Set the camera (object) transformation and projection.
+
+    Args:
+        (1) name [string]: Object name.
+        (2) Camera_Parameters_Str [Camera_Parameters_Str(object)]: The structure of the main parameters of the camera.
+    """
+
+    # Set the object transformation.
+    Set_Object_Transformation(name, Camera_Parameters_Str.T)
+
+    # Set the projection of the camera.
+    bpy.data.cameras[name].type = Camera_Parameters_Str.Type
+    if Camera_Parameters_Str.Type == 'PERSP':
+        bpy.data.cameras[name].lens = Camera_Parameters_Str.Value
+    elif Camera_Parameters_Str.Type == 'ORTHO':
+        bpy.data.cameras[name].ortho_scale = Camera_Parameters_Str.Value

@@ -20,8 +20,9 @@ Description:
 """
 # B-Spline interpolation parameters.
 CONST_B_SPLINE = {'n': 3, 'N': 100, 'method': 'Chord-Length'}
-#   Visibility of the bounding box of the interpolated curve.
-CONST_BOUNDING_BOX_VISIBILITY = False
+# Visibility of the bounding box:
+#   'limitation': 'Control-Points' or 'Interpolated-Points'
+CONST_BOUNDING_BOX = {'visibility': False, 'limitation': 'Control-Points'}
 
 def main():
     """
@@ -77,14 +78,15 @@ def main():
             markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'B-Spline (n = {S_Cls_optimized.n}, N = {S_Cls_optimized.N}, L = {L:.03})')
     
     # Visibility of the bounding box of the interpolated curve.
-    if CONST_BOUNDING_BOX_VISIBILITY == True:
-        # Obtain the bounding parameters (min, max) of the general parametric curve.
-        S_Bounding_Box = S_Cls_optimized.Get_Bounding_Box_Parameters('Interpolated-Points')
+    if CONST_BOUNDING_BOX['visibility'] == True:
+        # Get the bounding parameters (min, max) selected by the user.
+        Bounding_Box = S_Cls_optimized.Get_Bounding_Box_Parameters(CONST_BOUNDING_BOX['limitation'])
 
         # Create a primitive two-dimensional object (Rectangle -> Bounding-Box) with additional properties.
-        Bounding_Box_Interpolated_Points = pat.Rectangle(xy = (S_Bounding_Box['x_min'], S_Bounding_Box['y_min']), width = S_Bounding_Box['x_max'] - S_Bounding_Box['x_min'],
-                                                         height = S_Bounding_Box['y_max'] -  S_Bounding_Box['y_min'], facecolor = 'none', edgecolor = '#ffd8b2', linewidth = 1.5, 
-                                                         label='B-Spline Bounding Box')
+        edgcolor = '#ebebeb' if CONST_BOUNDING_BOX['limitation'] == 'Control-Points' else '#ffd8b2'
+        Bounding_Box_Interpolated_Points = pat.Rectangle(xy = (Bounding_Box['x_min'], Bounding_Box['y_min']), width = Bounding_Box['x_max'] - Bounding_Box['x_min'],
+                                                         height = Bounding_Box['y_max'] -  Bounding_Box['y_min'], facecolor = 'none', edgecolor = edgcolor, linewidth = 1.5, 
+                                                         label='Bounding Box')
         ax.add_patch(Bounding_Box_Interpolated_Points)
 
     # Set parameters of the graph (plot).

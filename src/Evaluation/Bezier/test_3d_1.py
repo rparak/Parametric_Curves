@@ -23,8 +23,9 @@ Description:
 """
 # Bezier curve interpolation parameters.
 CONST_BEZIER_CURVE = {'method': 'Explicit', 'N': 100}
-#   Visibility of the bounding box of the interpolated curve.
-CONST_BOUNDING_BOX_VISIBILITY = False
+# Visibility of the bounding box:
+#   'limitation': 'Control-Points' or 'Interpolated-Points'
+CONST_BOUNDING_BOX = {'visibility': False, 'limitation': 'Control-Points'}
 
 def main():
     """
@@ -64,25 +65,26 @@ def main():
             markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'Bézier Curve (N = {B_Cls.N}, L = {L:.03})')
 
     # Visibility of the bounding box of the interpolated curve.
-    if CONST_BOUNDING_BOX_VISIBILITY == True:
-        # Obtain the bounding parameters (min, max) of the general parametric curve.
-        B_Bounding_Box = B_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
+    if CONST_BOUNDING_BOX['visibility'] == True:
+        # Get the bounding parameters (min, max) selected by the user.
+        Bounding_Box = B_Cls.Get_Bounding_Box_Parameters(CONST_BOUNDING_BOX['limitation'])
 
         # Create a primitive three-dimensional object (Cube -> Bounding-Box) with additional properties.
-        Box_Cls = Primitives.Box_Cls([0.0, 0.0, 0.0], [B_Bounding_Box['x_max'] - B_Bounding_Box['x_min'], 
-                                                       B_Bounding_Box['y_max'] - B_Bounding_Box['y_min'], 
-                                                       B_Bounding_Box['z_max'] - B_Bounding_Box['z_min']])
+        Box_Cls = Primitives.Box_Cls([0.0, 0.0, 0.0], [Bounding_Box['x_max'] - Bounding_Box['x_min'], 
+                                                       Bounding_Box['y_max'] - Bounding_Box['y_min'], 
+                                                       Bounding_Box['z_max'] - Bounding_Box['z_min']])
         
         # Change the position of the bounding box.
-        Bounding_Box = np.zeros(Box_Cls.Faces.shape)
+        Bounding_Box_new = np.zeros(Box_Cls.Faces.shape)
         for i, Box_Faces_i in enumerate(Box_Cls.Faces):
             for j, Box_Faces_ij in enumerate(Box_Faces_i):
-                Bounding_Box[i, j, :] = Box_Faces_ij + [(B_Bounding_Box['x_max'] + B_Bounding_Box['x_min']) / 2.0, 
-                                                        (B_Bounding_Box['y_max'] + B_Bounding_Box['y_min']) / 2.0, 
-                                                        (B_Bounding_Box['z_max'] + B_Bounding_Box['z_min']) / 2.0]
+                Bounding_Box_new[i, j, :] = Box_Faces_ij + [(Bounding_Box['x_max'] + Bounding_Box['x_min']) / 2.0, 
+                                                            (Bounding_Box['y_max'] + Bounding_Box['y_min']) / 2.0, 
+                                                            (Bounding_Box['z_max'] + Bounding_Box['z_min']) / 2.0]
                 
         # Add a 3D collection object to the plot.
-        ax.add_collection3d(mpl_toolkits.mplot3d.art3d.Poly3DCollection(Bounding_Box, linewidths=1.5, edgecolors='#ffd8b2', 
+        edgcolor = '#ebebeb' if CONST_BOUNDING_BOX['limitation'] == 'Control-Points' else '#ffd8b2'
+        ax.add_collection3d(mpl_toolkits.mplot3d.art3d.Poly3DCollection(Bounding_Box_new, linewidths=1.5, edgecolors=edgcolor, 
                                                                         facecolors = '#ffffff', alpha=0.01))
 
     # Set parameters of the graph (plot).
@@ -109,11 +111,11 @@ def main():
     ax.zaxis._axinfo['grid'].update({'linewidth': 0.15, 'linestyle': '--'})
     # Get handles and labels for the legend.
     handles, labels = plt.gca().get_legend_handles_labels()
-    if CONST_BOUNDING_BOX_VISIBILITY == True:
+    if CONST_BOUNDING_BOX['visibility'] == True:
         # Add a bounding box legend.
         handles.append(pat.Rectangle(xy = (0.0, 0.02), width = 0.0, height = 0.0, facecolor = 'none',
-                                    edgecolor = '#ffd8b2', linewidth = 1.5))
-        labels.append('Bézier Curve Bounding Box')
+                                    edgecolor = edgcolor, linewidth = 1.5))
+        labels.append('Bounding Box')
     # Remove duplicate labels.
     legend = dict(zip(labels, handles))
     # Show the labels (legends) of the graph.

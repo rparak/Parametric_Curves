@@ -38,8 +38,9 @@ Description:
 CONST_CAMERA_TYPE = Lib.Blender.Parameters.Camera.Right_View_Camera_Parameters_Str
 # Bezier curve interpolation parameters.
 CONST_BEZIER_CURVE = {'method': 'Explicit', 'N': 100}
-#   Visibility of the bounding box of the interpolated curve.
-CONST_BOUNDING_BOX_VISIBILITY = False
+# Visibility of the bounding box:
+#   'limitation': 'Control-Points' or 'Interpolated-Points'
+CONST_BOUNDING_BOX = {'visibility': False, 'limitation': 'Control-Points'}
 #   Animation stop(t_0), start(t_1) time in seconds.
 CONST_T_0 = 0.0
 CONST_T_1 = 5.0
@@ -104,19 +105,22 @@ def main():
     B = B_Cls.Interpolate()
 
     # Visibility of the bounding box of the interpolated curve.
-    if CONST_BOUNDING_BOX_VISIBILITY == True:
-        # ...
-        B_Bounding_Box = B_Cls.Get_Bounding_Box_Parameters('Interpolated-Points')
+    if CONST_BOUNDING_BOX['visibility'] == True:
+        # Get the bounding parameters (min, max) selected by the user.
+        Bounding_Box = B_Cls.Get_Bounding_Box_Parameters(CONST_BOUNDING_BOX['limitation'])
+
+        # Set the color of the bounding box.
+        color = [0.05,0.05,0.05,1.0] if CONST_BOUNDING_BOX['limitation'] == 'Control-Points' else [1.0,0.25,0.0,1.0]
 
         # Properties of the created object.
         bounding_box_properties = {'transformation': {'Size': 1.0, 
-                                                      'Scale': [B_Bounding_Box['x_max'] - B_Bounding_Box['x_min'],
-                                                                B_Bounding_Box['y_max'] - B_Bounding_Box['y_min'],
-                                                                B_Bounding_Box['z_max'] - B_Bounding_Box['z_min']], 
-                                                      'Location': [(B_Bounding_Box['x_max'] + B_Bounding_Box['x_min']) / 2.0,
-                                                                   (B_Bounding_Box['y_max'] + B_Bounding_Box['y_min']) / 2.0,
-                                                                   (B_Bounding_Box['z_max'] + B_Bounding_Box['z_min']) / 2.0]}, 
-                                'material': {'RGBA': [1.0,0.25,0.0,1.0], 'alpha': 0.05}}
+                                                      'Scale': [Bounding_Box['x_max'] - Bounding_Box['x_min'],
+                                                                Bounding_Box['y_max'] - Bounding_Box['y_min'],
+                                                                Bounding_Box['z_max'] - Bounding_Box['z_min']], 
+                                                      'Location': [(Bounding_Box['x_max'] + Bounding_Box['x_min']) / 2.0,
+                                                                   (Bounding_Box['y_max'] + Bounding_Box['y_min']) / 2.0,
+                                                                   (Bounding_Box['z_max'] + Bounding_Box['z_min']) / 2.0]}, 
+                                'material': {'RGBA': color, 'alpha': 0.05}}
         # Create a primitive three-dimensional object (Cube -> Bounding-Box) with additional properties.
         Lib.Blender.Utilities.Create_Primitive('Cube', 'Bounding_Box', bounding_box_properties)
 
