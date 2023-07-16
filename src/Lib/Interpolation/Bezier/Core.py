@@ -195,7 +195,7 @@ class Bezier_Cls(object):
             (1) parameter [float]: The arc length L(t) of the general parametric curve.
         """
                 
-        # ...
+        # Obtain the first derivative of the Bézier curve. 
         _ = self.Derivative_1st()
         
         L = 0.0
@@ -275,7 +275,6 @@ class Bezier_Cls(object):
         eq_rs = 0.0
         for i in range(0, j + 1):
             eq_rs += (((-1) ** (i + j)) * self.__P[i]) / (Mathematics.Factorial(i)*Mathematics.Factorial(j - i))
-
 
         return eq_ls * eq_rs
     

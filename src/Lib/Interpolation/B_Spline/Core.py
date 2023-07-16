@@ -256,16 +256,16 @@ class B_Spline_Cls(object):
         Description:
             ....
 
+            # Least-Squares Fitting of Data with B-Spline Curves
+            # https://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf
+            # https://github.com/kentamt/b_spline/blob/master/Least_Square_B-spline.ipynb
+
         Args:
-            (1) N [int]: 
+            (1) N [int]: The resulting number of optimized control points.
 
         Returns:
             (1) parameter [B_Spline_Cls(object)]: 
         """
-                
-        # Least-Squares Fitting of Data with B-Spline Curves
-        # https://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf
-        # https://github.com/kentamt/b_spline/blob/master/Least_Square_B-spline.ipynb
 
         try:
             assert N < self.__P.shape[0] and N > self.__n and N != 1
@@ -367,20 +367,16 @@ class B_Spline_Cls(object):
         Description:
             Obtain the first derivative of the B-Spline curve of degree {n} using De Boor's algorithm.
 
+            # ...
+            # https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-derv.html
 
         Returns:
             (1) parameter [Vector<float> Nxn]: Interpolated points of the first derivative of the parametric B-Spline curve.
                                                 Note:
                                                     Where N is the number of points and n is the dimension (2-D, 3-D).
         """
-    
-        # https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-derv.html
-        
-        # ....
-        self.__S_dot = np.zeros(self.__S_dot.shape, dtype=self.__S_dot.dtype)
 
-        t_dot = self.__t[1:-1]
-        # ...
+        self.__S_dot = np.zeros(self.__S_dot.shape, dtype=self.__S_dot.dtype); t_dot = self.__t[1:-1]
         for i, t_i in enumerate(self.__Time):
             for j, (p_i, p_ii) in enumerate(zip(self.__P, self.__P[1:])):   
                 Q_i = (self.__n / (t_dot[j + self.__n] - t_dot[j])) * (p_ii - p_i)
