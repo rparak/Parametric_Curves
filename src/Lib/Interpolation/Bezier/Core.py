@@ -249,7 +249,6 @@ class Bezier_Cls(object):
         """
                 
         eq_ls = 1.0
-
         for m in range(0, j):
             eq_ls *= self.__n - m
 
