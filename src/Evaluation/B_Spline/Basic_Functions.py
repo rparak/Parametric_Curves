@@ -13,6 +13,17 @@ import matplotlib.pyplot as plt
 #   ../Lib/Interpolation/Bezier/Core
 import Lib.Interpolation.Utilities as Utilities
 
+"""
+Description:
+    Initialization of constants.
+"""
+# B-Spline interpolation parameters.
+#   n: Degree of a polynomial.
+#   N: The number of points to be generated in the interpolation function.
+#   'method': The method to be used to select the parameters of the knot vector. 
+#               method = 'Uniformly-Spaced', 'Chord-Length' or 'Centripetal'.
+CONST_B_SPLINE = {'n': 3, 'N': 100, 'method': 'Chord-Length'}
+
 def main():
     """
     Description:
@@ -27,19 +38,13 @@ def main():
                   [4.00,  0.75], 
                   [5.00,  1.00]], dtype=np.float32)
     
-    # The number of points to be generated in the interpolation function.
-    N = 100
-
     # The value of the time must be within the interval of the knot vector: 
     #   t[0] <= Time <= t[-1]
-    Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, N)
-
-    # Degree of a polynomial.
-    n = 3
+    Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, CONST_B_SPLINE['N'])
 
     # Generate a normalized vector of knots from the selected parameters 
     # using the chosen method.
-    t = Utilities.Generate_Knot_Vector(n, P, 'Chord-Length')
+    t = Utilities.Generate_Knot_Vector(CONST_B_SPLINE['n'], P, CONST_B_SPLINE['method'])
 
     # Set the parameters for the scientific style.
     plt.style.use(['science'])
@@ -51,21 +56,21 @@ def main():
     for j in range(P.shape[0]):
         B_in = np.zeros(Time.shape, dtype=Time.dtype)
         for i, t_i in enumerate(Time):
-            B_in[i] = Utilities.Basic_Function(j, n, t, t_i)
-        ax.plot(Time, B_in, '-', linewidth=1.0, label=r'$B_{(%d, %d)}(t)$' % (j, n))
+            B_in[i] = Utilities.Basic_Function(j, CONST_B_SPLINE['n'], t, t_i)
+        ax.plot(Time, B_in, '-', linewidth=1.0, label=r'$B_{(%d, %d)}(t)$' % (j, CONST_B_SPLINE['n']))
 
     # Visualization of the normalized vector of knots.
     ax.plot(t, t.shape[0] * [0.0],'o', color='#8d8d8d', linewidth=1.0, markersize = 8.0, 
             markeredgewidth = 4.0, markerfacecolor = '#ffffff', label=r'Normalized Knot Vector')
 
     # Set parameters of the graph (plot).
-    ax.set_title(f'B-spline Basis Functions of the {n}-th Degree', fontsize=25, pad=25.0)
+    ax.set_title(f"B-spline Basis Functions of the {CONST_B_SPLINE['n']}-th Degree", fontsize=25, pad=25.0)
     #   Set the x ticks.
     ax.set_xticks(np.arange(Utilities.CONST_T_0 - 0.1, Utilities.CONST_T_1 + 0.1, 0.1))
     #   Set the y ticks.
     ax.set_yticks(np.arange(Utilities.CONST_T_0 - 0.1, Utilities.CONST_T_1 + 0.1, 0.1))
     #   Label
-    ax.set_xlabel(r't', fontsize=15, labelpad=10); ax.set_ylabel(r'$B_{(i, %d)}(t)$' % n, fontsize=15, labelpad=10) 
+    ax.set_xlabel(r't', fontsize=15, labelpad=10); ax.set_ylabel(r'$B_{(i, %d)}(t)$' % CONST_B_SPLINE['n'], fontsize=15, labelpad=10) 
     #   Set parameters of the visualization.
     ax.grid(which='major', linewidth = 0.15, linestyle = '--')
     # Get handles and labels for the legend.

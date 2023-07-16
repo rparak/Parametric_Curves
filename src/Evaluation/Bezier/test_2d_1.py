@@ -19,6 +19,9 @@ Description:
     Initialization of constants.
 """
 # Bezier curve interpolation parameters.
+#   'method': The name of the method to be used to interpolate the parametric curve.
+#               method = 'Explicit' or 'Polynomial'.
+#   N: The number of points to be generated in the interpolation function.
 CONST_BEZIER_CURVE = {'method': 'Explicit', 'N': 100}
 # Visibility of the bounding box:
 #   'limitation': 'Control-Points' or 'Interpolated-Points'

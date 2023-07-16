@@ -26,7 +26,7 @@ Description:
     Open B_Spline.blend from the Blender folder and copy + paste this script and run it.
 
     Terminal:
-        $ cd Documents/GitHub/Curve_Interpolation/Blender/Interpolation
+        $ cd Documents/GitHub/Parametric_Curves/Blender/Interpolation
         $ blender B_Spline.blend
 """
 

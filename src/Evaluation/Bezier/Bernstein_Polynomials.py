@@ -13,6 +13,13 @@ import matplotlib.pyplot as plt
 #   ../Lib/Interpolation/Bezier/Core
 import Lib.Interpolation.Utilities as Utilities
 
+"""
+Description:
+    Initialization of constants.
+"""
+# Bezier curve interpolation parameters.
+#   N: The number of points to be generated in the interpolation function.
+CONST_BEZIER_CURVE = {'N': 100}
 
 def main():
     """
@@ -28,12 +35,9 @@ def main():
                   [4.00,  0.75], 
                   [5.00,  1.00]], dtype=np.float32)
     
-    # The number of points to be generated in the interpolation function.
-    N = 100
-
     # The value of the time must be within the interval of the knot vector: 
     #   t[0] <= Time <= t[-1]
-    Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, N)
+    Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, CONST_BEZIER_CURVE['N'])
 
     # Degree of a polynomial.
     n = P.shape[0] - 1

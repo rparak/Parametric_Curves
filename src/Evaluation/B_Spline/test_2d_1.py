@@ -19,6 +19,10 @@ Description:
     Initialization of constants.
 """
 # B-Spline interpolation parameters.
+#   n: Degree of a polynomial.
+#   N: The number of points to be generated in the interpolation function.
+#   'method': The method to be used to select the parameters of the knot vector. 
+#               method = 'Uniformly-Spaced', 'Chord-Length' or 'Centripetal'.
 CONST_B_SPLINE = {'n': 3, 'N': 100, 'method': 'Chord-Length'}
 # Visibility of the bounding box:
 #   'limitation': 'Control-Points' or 'Interpolated-Points'

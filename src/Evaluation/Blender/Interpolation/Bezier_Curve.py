@@ -26,7 +26,7 @@ Description:
     Open Bezier_Curve.blend from the Blender folder and copy + paste this script and run it.
 
     Terminal:
-        $ cd Documents/GitHub/Curve_Interpolation/Blender/Interpolation
+        $ cd Documents/GitHub/Parametric_Curves/Blender/Interpolation
         $ blender Bezier_Curve.blend
 """
 
