@@ -134,15 +134,15 @@ def Bernstein_Polynomial(i: int, n: int, t: tp.List[float]) -> tp.List[float]:
         Bernstein polynomials form the basis of the Bézier elements used in isogeometric analysis.
 
         For a given {n >= 0}, define the {n + 1} Bernstein basis polynomials of degree {n} on [0,1] as:
-            b_{i, n}(t) = (n k) * (1 - t)^(n - i) * (t^i), i = 0,..,n,
+            B_{i, n}(t) = (n i) * (1 - t)^(n - i) * (t^i), i = 0,..,n,
 
-            where (n k) is a binomial coefficient.
+            where (n i) is a binomial coefficient.
 
         There are four of them for n = 3, for example:
-            b_{0, 3} = (1 - t)^3
-            b_{1, 3} = 3 * t * (1 - t)^2
-            b_{2, 3} = 3 * (t^2) * (1 - t)
-            b_{3, 3} = t^3
+            B_{0, 3} = (1 - t)^3
+            B_{1, 3} = 3 * t * (1 - t)^2
+            B_{2, 3} = 3 * (t^2) * (1 - t)
+            B_{3, 3} = t^3
 
     Args:
         (1) i [int]: Iteration.

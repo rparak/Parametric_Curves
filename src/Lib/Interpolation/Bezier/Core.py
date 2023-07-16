@@ -11,7 +11,25 @@ import Lib.Transformation.Utilities.Mathematics as Mathematics
 class Bezier_Cls(object):
     """
     Description:
-        ....
+        A specific class for working with Bézier curves.
+
+            The Bézier curve is defined as:
+                (a) Explicit Form
+                    B(t) = sum_{i=0}^{n} B_{i, n}(t) * P_{i}, 0.0 <= t <= 1.0,
+
+                    Where B_{i, n}(t) are Bernstein basis polynomials of degree {n}, and P_{i} are control points.
+
+                    Note:
+                        See the Bernstein_Polynomial(i, n, t) function in ./Utilities.py for more information.
+
+                (b) Polynomial Form
+                    B(t) = sum_{j=0}^{n} t^(j) * C_{j},
+
+                    Where C_{j} is a polynomial of degree {j}.
+
+                    C_{j} is defined as:
+                        C_{j} = \prod_{m=0}^{j-1} (n - m) \sum_{i=0}^{j} ((-1)^(i + j) * P_{i}) / (i!(j - i)!)
+
 
     Initialization of the Class:
         Args:
@@ -57,8 +75,8 @@ class Bezier_Cls(object):
             #   'Explicit': 0; 'Polynomial': 1
             self.__method_id = 0 if method == 'Explicit' else 1
 
-            # The value of the time must be within the interval of the knot vector: 
-            #   t[0] <= Time <= t[-1]
+            # The value of the time must be within the interval: 
+            #   0.0 <= Time <= 1.0
             self.__Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, N)
 
             # Initialization of other class parameters.
@@ -239,13 +257,15 @@ class Bezier_Cls(object):
     def __C(self, j: int) -> tp.List[float]:
         """
         Description:
-            ....
+            Obtain a polynomial of degree {j} for each axis of point {P}.
         
         Args:
-            (1) j [int]: ...
+            (1) j [int]: The current degree of the polynomial.
 
         Returns:
-            (1) parameter [Vector<float> ..]:
+            (1) parameter [Vector<float> 1xn]: Polynomial of degree {j}.
+                                                Note:
+                                                    Where n is the dimension (2-D, 3-D) of the point {P}.
         """
                 
         eq_ls = 1.0
@@ -255,6 +275,7 @@ class Bezier_Cls(object):
         eq_rs = 0.0
         for i in range(0, j + 1):
             eq_rs += (((-1) ** (i + j)) * self.__P[i]) / (Mathematics.Factorial(i)*Mathematics.Factorial(j - i))
+
 
         return eq_ls * eq_rs
     
@@ -305,8 +326,8 @@ class Bezier_Cls(object):
                     if coeff_i.size != 1:
                         roots = Mathematics.Roots(coeff_i[::-1])
 
-                        # The value of the time must be within the interval of the knot vector: 
-                        #   t[0] <= Time <= t[-1]
+                        # The value of the time must be within the interval: 
+                        #   0.0 <= Time <= 1.0
                         t_tmp = []
                         for _, roots_i in enumerate(roots):
                             if Utilities.CONST_T_0 <= roots_i <= Utilities.CONST_T_1:
@@ -368,55 +389,62 @@ class Bezier_Cls(object):
     def Derivative_1st(self) -> tp.List[tp.List[float]]:
         """
         Description:
-            ....
+            Obtain the first derivative of the Bézier curve of degree {n}.
+
+            Note:
+                The function uses both explicit and polynomial methods to obtain 
+                the interpolated points.
 
         Returns:
-            (1) parameter [Vector<float> ..]: 
+            (1) parameter [Vector<float> Nxn]: Interpolated points of the first derivative of the parametric Bézier curve.
+                                                Note:
+                                                    Where N is the number of points and n is the dimension (2-D, 3-D).
         """
                 
-        # ....
         self.__B_dot = np.zeros(self.__B_dot.shape, dtype=self.__B_dot.dtype)
 
-        # 'Explicit': 0; 'Polynomial': 1
         if self.__method_id == 0:
-            # ...
+            # Explicit form.
+            #   Note:
+            #       De Casteljau's algorithm.
             n = self.__n - 1
-            
-            # ...
             for i, (p_i, p_ii) in enumerate(zip(self.__P, self.__P[1:])):
                 for j, (p_ij, p_iij) in enumerate(zip(p_i, p_ii)):
                     self.__B_dot[:, j] += Utilities.Bernstein_Polynomial(i, n, self.__Time) * (p_iij - p_ij)
-
             self.__B_dot = self.__n * self.__B_dot
-
         elif self.__method_id == 1:
+            # Polynomial form.
             for j in range(1, self.__n + 1):
                 for i, C_j in enumerate(self.__C(j)):
                     self.__B_dot[:, i] += (self.__Time ** (j - 1)) * C_j * j
-            
         return self.__B_dot
     
     def Interpolate(self) -> tp.List[tp.List[float]]:  
         """
         Description:
-            ....
+            Obtain the interpolated points of the parametric Bézier curve of degree {n}.
+
+            Note:
+                The function uses both explicit and polynomial methods to obtain 
+                the interpolated points.
 
         Returns:
-            (1) parameter [Vector<float> ..]: 
+            (1) parameter [Vector<float> Nxn]: Interpolated points of the parametric Bézier curve.
+                                                Note:
+                                                    Where N is the number of points and n is the dimension (2-D, 3-D).
         """
                   
-        # ....
         self.__B = np.zeros(self.__B.shape, dtype=self.__B.dtype)
-
-        # 'Explicit': 0; 'Polynomial': 1
         if self.__method_id == 0:
+            # Explicit form.
+            #   Note:
+            #       De Casteljau's algorithm.
             for i, p_i in enumerate(self.__P):
                 for j, p_ij in enumerate(p_i):
                     self.__B[:, j] += Utilities.Bernstein_Polynomial(i, self.__n, self.__Time) * p_ij
-
         elif self.__method_id == 1:
+            # Polynomial form.
             for j in range(1, self.__n + 1):
                 for i, C_j in enumerate(self.__C(j)): 
                     self.__B[:, i] += (self.__Time ** j) * C_j
-
         return self.__B

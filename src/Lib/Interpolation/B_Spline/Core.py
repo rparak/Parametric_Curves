@@ -28,7 +28,7 @@ import Lib.Transformation.Utilities.Mathematics as Mathematics
 class B_Spline_Cls(object):
     """
     Description:
-        ....
+        A specific class for working with B-Spline curves.
 
     Initialization of the Class:
         Args:
@@ -365,10 +365,13 @@ class B_Spline_Cls(object):
     def Derivative_1st(self) -> tp.List[tp.List[float]]:
         """
         Description:
-            ....
+            Obtain the first derivative of the B-Spline curve of degree {n} using De Boor's algorithm.
+
 
         Returns:
-            (1) parameter [Vector<float> ..]: 
+            (1) parameter [Vector<float> Nxn]: Interpolated points of the first derivative of the parametric B-Spline curve.
+                                                Note:
+                                                    Where N is the number of points and n is the dimension (2-D, 3-D).
         """
     
         # https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-derv.html
@@ -388,16 +391,15 @@ class B_Spline_Cls(object):
     def Interpolate(self) -> tp.List[tp.List[float]]:  
         """
         Description:
-            ....
+            Obtain the interpolated points of the parametric B-Spline curve of degree {n} using De Boor's algorithm.
 
         Returns:
-            (1) parameter [Vector<float> ..]: 
+            (1) parameter [Vector<float> Nxn]: Interpolated points of the parametric B-Spline curve.
+                                                Note:
+                                                    Where N is the number of points and n is the dimension (2-D, 3-D).
         """
                   
-        # ....
         self.__S = np.zeros(self.__S.shape, dtype=self.__S.dtype)
-
-        # ...
         for i, t_i in enumerate(self.__Time):
             for j, p_i in enumerate(self.__P):
                 self.__S[i, :] += Utilities.Basic_Function(j, self.__n, self.__t, t_i) * p_i
