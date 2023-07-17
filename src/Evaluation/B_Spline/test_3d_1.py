@@ -120,6 +120,8 @@ def main():
     ax.xaxis._axinfo['grid'].update({'linewidth': 0.15, 'linestyle': '--'})
     ax.yaxis._axinfo['grid'].update({'linewidth': 0.15, 'linestyle': '--'})
     ax.zaxis._axinfo['grid'].update({'linewidth': 0.15, 'linestyle': '--'})
+    #   Set the Axes box aspect.
+    ax.set_box_aspect(None, zoom=0.90)
     # Get handles and labels for the legend.
     handles, labels = plt.gca().get_legend_handles_labels()
     if CONST_BOUNDING_BOX['visibility'] == True:
