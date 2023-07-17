@@ -270,11 +270,16 @@ class B_Spline_Cls(object):
         try:
             assert N < self.__P.shape[0] and N > self.__n and N != 1
 
-            x = np.linspace(self.__t[0], self.__t[-1], self.__P.shape[0])
-
-            A = np.zeros((self.__P.shape[0], N), dtype=self.__P.dtype)
+            # Generate a normalized vector of knots from the selected parameters
+            # using the Uniformly-Spaced method.
             t = Utilities.Generate_Knot_Vector(self.__n, np.zeros((N, 1), dtype=self.__P.dtype), 
-                                            'Uniformly-Spaced')
+                                              'Uniformly-Spaced')
+            
+            # The value of the time must be within the interval of the knot vector: 
+            #   t[0] <= x <= t[-1]
+            x = np.linspace(self.__t[0], self.__t[-1], self.__P.shape[0])
+            
+            A = np.zeros((self.__P.shape[0], N), dtype=self.__P.dtype)
             for i in range(self.__P.shape[0]):
                 for j in range(N):
                     A[i, j] = Utilities.Basic_Function(j, self.__n, t, x[i])
