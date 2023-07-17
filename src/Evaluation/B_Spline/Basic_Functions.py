@@ -5,6 +5,8 @@ if '../' + 'src' not in sys.path:
     sys.path.append('../..')
 # Numpy (Array computing) [pip3 install numpy]
 import numpy as np
+# OS (Operating system interfaces)
+import os
 # SciencePlots (Matplotlib styles for scientific plotting) [pip3 install SciencePlots]
 import scienceplots
 # Matplotlib (Visualization) [pip3 install matplotlib]
@@ -23,12 +25,17 @@ Description:
 #   'method': The method to be used to select the parameters of the knot vector. 
 #               method = 'Uniformly-Spaced', 'Chord-Length' or 'Centripetal'.
 CONST_B_SPLINE = {'n': 3, 'N': 100, 'method': 'Chord-Length'}
+# Save the data to a file.
+CONST_SAVE_DATA = False
 
 def main():
     """
     Description:
         A program for visualization of n-th degree B-spline basis functions.
     """
+
+    # Locate the path to the project folder.
+    project_folder = os.getcwd().split('Parametric_Curves')[0] + 'Parametric_Curves'
 
     # Input control points {P} in two-dimensional space.
     P = np.array([[1.00,  0.00], 
@@ -80,8 +87,15 @@ def main():
     # Show the labels (legends) of the graph.
     ax.legend(legend.values(), legend.keys(), fontsize=10.0)
 
-    # Show the result.
-    plt.show()
+    if CONST_SAVE_DATA == True:
+        # Set the full scree mode.
+        plt.get_current_fig_manager().full_screen_toggle()
+
+        # Save the results.
+        plt.savefig(f'{project_folder}/images/B_Spline/Basic_Functions.png', format='png', dpi=300)
+    else:
+        # Show the result.
+        plt.show()
 
 if __name__ == "__main__":
     sys.exit(main())

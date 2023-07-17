@@ -5,6 +5,8 @@ if '../' + 'src' not in sys.path:
     sys.path.append('../..')
 # Numpy (Array computing) [pip3 install numpy]
 import numpy as np
+# OS (Operating system interfaces)
+import os
 # SciencePlots (Matplotlib styles for scientific plotting) [pip3 install SciencePlots]
 import scienceplots
 # Matplotlib (Visualization) [pip3 install matplotlib]
@@ -29,13 +31,18 @@ CONST_BEZIER_CURVE = {'method': 'Explicit', 'N': 100}
 # Visibility of the bounding box:
 #   'limitation': 'Control-Points' or 'Interpolated-Points'
 CONST_BOUNDING_BOX = {'visibility': False, 'limitation': 'Control-Points'}
+# Save the data to a file.
+CONST_SAVE_DATA = False
 
 def main():
     """
     Description:
         A program to visualize a parametric three-dimensional Bézier curve of degree n.
     """
-        
+    
+    # Locate the path to the project folder.
+    project_folder = os.getcwd().split('Parametric_Curves')[0] + 'Parametric_Curves'
+
     # Input control points {P} in three-dimensional space.
     P = np.array([[1.00,  0.00, -1.00], 
                   [2.00, -0.75,  0.50], 
@@ -124,8 +131,15 @@ def main():
     # Show the labels (legends) of the graph.
     ax.legend(legend.values(), legend.keys(), fontsize=10.0)
 
-    # Show the result.
-    plt.show()
+    if CONST_SAVE_DATA == True:
+        # Set the full scree mode.
+        plt.get_current_fig_manager().full_screen_toggle()
+
+        # Save the results.
+        plt.savefig(f'{project_folder}/images/Bezier/test_3d_1_0.png', format='png', dpi=300)
+    else:
+        # Show the result.
+        plt.show()
 
 if __name__ == "__main__":
     sys.exit(main())
