@@ -52,7 +52,7 @@ class Bezier_Cls(object):
                 self.__B_dot = self.__n * self.__B_dot
 
             elif method == 'Polynomial':
-                for j in range(0, self.__n + 1):
+                for j in range(1, self.__n + 1):
                     self.__B_dot += self.__t ** (j - 1) * self.__C(j) * j
 
             return str(sp.Array([self.__B_dot])).replace('1.0*', '')
@@ -76,7 +76,6 @@ class Bezier_Cls(object):
             elif method == 'Polynomial':
                 # ...
                 for j in range(0, self.__n + 1):
-                    print(self.__C(j))
                     self.__B += (self.__t ** j) * self.__C(j)
 
             return str(sp.Array([self.__B])).replace('1.0*', '')

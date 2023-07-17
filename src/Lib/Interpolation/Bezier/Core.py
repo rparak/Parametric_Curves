@@ -15,7 +15,7 @@ class Bezier_Cls(object):
 
             The Bézier curve is defined as:
                 (a) Explicit Form
-                    B(t) = sum_{i=0}^{n} B_{i, n}(t) * P_{i}, 0.0 <= t <= 1.0,
+                    B(t) = sum_{i=0}^{n} B_{i, n}(t) * P_{i},
 
                     Where B_{i, n}(t) are Bernstein basis polynomials of degree {n}, and P_{i} are control points.
 
@@ -30,6 +30,12 @@ class Bezier_Cls(object):
                     C_{j} is defined as:
                         C_{j} = \prod_{m=0}^{j-1} (n - m) \sum_{i=0}^{j} ((-1)^(i + j) * P_{i}) / (i!(j - i)!)
 
+                    Warning:
+                        However, caution should be exercised as high-order curves may lack numerical stability. Note that the empty
+                        product is equal to 1.
+
+            The value of the time must be within the interval: 
+                0.0 <= Time <= 1.0
 
     Initialization of the Class:
         Args:
@@ -310,19 +316,22 @@ class Bezier_Cls(object):
                     min[i] = Mathematics.Min(P_T)[1]
                     max[i] = Mathematics.Max(P_T)[1]
             else:
-                # https://snoozetime.github.io/2018/05/22/bezier-curve-bounding-box.html
-
                 # Obtain the minimum and maximum values in each axis from 
                 # the input control points (P_0, P_N).
                 (min, max) = self.__Get_Initial_Min_Max_BB(self.__P[0], self.__P[-1])
 
-                # ...
+                # Find the coefficients of the polynomial of degree n.
+                #   Note:
+                #       The coefficients are of the form x^0 + x^1 + .. + x^n.
                 coeff = np.array([i*self.__C(i) for i in range(1, self.__n + 1)],
                                  dtype=np.float32).T
                 
                 # ....
                 for i, coeff_i in enumerate(coeff):
                     if coeff_i.size != 1:
+                        # Find the roots of the equation of a polynomial of degree n.
+                        #   Note:
+                        #       We need to invert the vector of coefficients and get the form x^n + .. + x^1 + x^0.
                         roots = Mathematics.Roots(coeff_i[::-1])
 
                         # The value of the time must be within the interval: 
@@ -351,7 +360,9 @@ class Bezier_Cls(object):
                         B_i.append(self.__Get_B_t(self.__P[:, i], np.array(t_i, dtype=np.float32)))
                     B_i = np.array(B_i, dtype=np.float32).flatten()
 
-                    # ...
+                    # Obtain the minimum and maximum of the parametric curve in the i-axis.
+                    #   Note:
+                    #       If i = 0, we get the x-axis and so on.
                     min[i] = Mathematics.Min(np.append(min[i], B_i))[1]
                     max[i] = Mathematics.Max(np.append(max[i], B_i))[1]
 
@@ -390,6 +401,13 @@ class Bezier_Cls(object):
         Description:
             Obtain the first derivative of the Bézier curve of degree {n}.
 
+            The first derivative of a Bézier curve of degree n is defined as:
+                (a) Explicit Form
+                    B(t) = n sum_{i=0}^{n-1} B_{i, n-1}(t) * (P_{i+1} - P_{i}).
+
+                (b) Polynomial Form
+                    B(t) = sum_{j=1}^{n+1} t^(j-1) * C_{j} * j.
+
             Note:
                 The function uses both explicit and polynomial methods to obtain 
                 the interpolated points.
@@ -416,6 +434,7 @@ class Bezier_Cls(object):
             for j in range(1, self.__n + 1):
                 for i, C_j in enumerate(self.__C(j)):
                     self.__B_dot[:, i] += (self.__Time ** (j - 1)) * C_j * j
+
         return self.__B_dot
     
     def Interpolate(self) -> tp.List[tp.List[float]]:  
@@ -443,7 +462,8 @@ class Bezier_Cls(object):
                     self.__B[:, j] += Utilities.Bernstein_Polynomial(i, self.__n, self.__Time) * p_ij
         elif self.__method_id == 1:
             # Polynomial form.
-            for j in range(1, self.__n + 1):
-                for i, C_j in enumerate(self.__C(j)): 
+            for j in range(0, self.__n + 1):
+                for i, C_j in enumerate(self.__C(j)):
                     self.__B[:, i] += (self.__Time ** j) * C_j
+                    
         return self.__B

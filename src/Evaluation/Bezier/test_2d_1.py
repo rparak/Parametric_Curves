@@ -22,7 +22,7 @@ Description:
 #   'method': The name of the method to be used to interpolate the parametric curve.
 #               method = 'Explicit' or 'Polynomial'.
 #   N: The number of points to be generated in the interpolation function.
-CONST_BEZIER_CURVE = {'method': 'Explicit', 'N': 100}
+CONST_BEZIER_CURVE = {'method': 'Explicit', 'N': 10}
 # Visibility of the bounding box:
 #   'limitation': 'Control-Points' or 'Interpolated-Points'
 CONST_BOUNDING_BOX = {'visibility': False, 'limitation': 'Control-Points'}
@@ -46,7 +46,7 @@ def main():
                               CONST_BEZIER_CURVE['N'])
     # ...
     B = B_Cls.Interpolate()
-    
+
     # Obtain the arc length L(t) of the general parametric curve.
     L = B_Cls.Get_Arc_Length()
 
