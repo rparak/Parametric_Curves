@@ -37,14 +37,14 @@ def main():
                   [3.75, -1.25], 
                   [4.00,  0.75], 
                   [5.00,  1.00]], dtype=np.float32)
-    
-    # The value of the time must be within the interval of the knot vector: 
-    #   t[0] <= Time <= t[-1]
-    Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, CONST_B_SPLINE['N'])
 
     # Generate a normalized vector of knots from the selected parameters 
     # using the chosen method.
     t = Utilities.Generate_Knot_Vector(CONST_B_SPLINE['n'], P, CONST_B_SPLINE['method'])
+
+    # The value of the time must be within the interval of the knot vector: 
+    #   t[0] <= x <= t[-1]
+    x = np.linspace(t[0], t[-1], CONST_B_SPLINE['N'])
 
     # Set the parameters for the scientific style.
     plt.style.use(['science'])
@@ -54,10 +54,10 @@ def main():
 
     # Visualization of n-th degree B-spline basis functions.
     for j in range(P.shape[0]):
-        B_in = np.zeros(Time.shape, dtype=Time.dtype)
-        for i, t_i in enumerate(Time):
-            B_in[i] = Utilities.Basic_Function(j, CONST_B_SPLINE['n'], t, t_i)
-        ax.plot(Time, B_in, '-', linewidth=1.0, label=r'$B_{(%d, %d)}(t)$' % (j, CONST_B_SPLINE['n']))
+        B_in = np.zeros(x.shape, dtype=x.dtype)
+        for i, x_i in enumerate(x):
+            B_in[i] = Utilities.Basic_Function(j, CONST_B_SPLINE['n'], t, x_i)
+        ax.plot(x, B_in, '-', linewidth=1.0, label=r'$B_{(%d, %d)}(x)$' % (j, CONST_B_SPLINE['n']))
 
     # Visualization of the normalized vector of knots.
     ax.plot(t, t.shape[0] * [0.0],'o', color='#8d8d8d', linewidth=1.0, markersize = 8.0, 
@@ -66,11 +66,11 @@ def main():
     # Set parameters of the graph (plot).
     ax.set_title(f"B-spline Basis Functions of the {CONST_B_SPLINE['n']}-th Degree", fontsize=25, pad=25.0)
     #   Set the x ticks.
-    ax.set_xticks(np.arange(Utilities.CONST_T_0 - 0.1, Utilities.CONST_T_1 + 0.1, 0.1))
+    ax.set_xticks(np.arange(t[0] - 0.1, t[-1] + 0.1, 0.1))
     #   Set the y ticks.
-    ax.set_yticks(np.arange(Utilities.CONST_T_0 - 0.1, Utilities.CONST_T_1 + 0.1, 0.1))
+    ax.set_yticks(np.arange(t[0] - 0.1, t[-1] + 0.1, 0.1))
     #   Label
-    ax.set_xlabel(r't', fontsize=15, labelpad=10); ax.set_ylabel(r'$B_{(i, %d)}(t)$' % CONST_B_SPLINE['n'], fontsize=15, labelpad=10) 
+    ax.set_xlabel(r'x', fontsize=15, labelpad=10); ax.set_ylabel(r'$B_{(i, %d)}(x)$' % CONST_B_SPLINE['n'], fontsize=15, labelpad=10) 
     #   Set parameters of the visualization.
     ax.grid(which='major', linewidth = 0.15, linestyle = '--')
     # Get handles and labels for the legend.

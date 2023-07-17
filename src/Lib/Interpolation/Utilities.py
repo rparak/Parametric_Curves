@@ -17,7 +17,7 @@ Description:
 CONST_T_0 = 0.0
 CONST_T_1 = 1.0
 
-def Lerp(method: str, p_0: tp.List[float], p_1: tp.List[float], t: float) -> tp.List[float]:
+def Lerp(method: str, p_0: tp.List[float], p_1: tp.List[float], x: float) -> tp.List[float]:
     """
     Description:
         Linear interpolation (Lerp) is a method of curve fitting using linear polynomials to construct new data 
@@ -25,12 +25,12 @@ def Lerp(method: str, p_0: tp.List[float], p_1: tp.List[float], t: float) -> tp.
 
         The equation of the Lerp function is defined as follows:
             1\ Explicit Method:
-                B(t) = (1 - t) * p_{0} + t * p_{1},
+                B(x) = (1 - t) * p_{0} + x * p_{1},
             
             2\ Polynomial Method:
-                B(t) = p_{0} + t * (p_{1} - p_{0}),
+                B(x) = p_{0} + x * (p_{1} - p_{0}),
 
-            where t can take values 0.0 <= t <= 1.0.
+            where x can take values 0.0 <= x <= 1.0.
     
     Args:
         (1) method [string]: The name of the method to calculate the {Lerp} function.
@@ -39,7 +39,7 @@ def Lerp(method: str, p_0: tp.List[float], p_1: tp.List[float], t: float) -> tp.
         (2) p_0, p_1 [Vector<float> 1xn]: Input points to be interpolated.
                                           Note:
                                             Where n is the number of dimensions of the point.
-        (3) t [float]: Time t (0.0 <= t <= 1.0).
+        (3) x [float]: Time x (0.0 <= x <= 1.0).
         
     Returns: 
         (1) parameter [Vector<float> 1xn]: Interpolated point at time {t}.
@@ -50,23 +50,23 @@ def Lerp(method: str, p_0: tp.List[float], p_1: tp.List[float], t: float) -> tp.
     try:
         assert method in ['Explicit', 'Polynomial']
 
-        # The time value must be within the interval: 0.0 <= t <= 1.0
-        t = Mathematics.Clamp(t, CONST_T_0, CONST_T_1)
+        # The time value must be within the interval: 0.0 <= x <= 1.0
+        x = Mathematics.Clamp(x, CONST_T_0, CONST_T_1)
 
         if method == 'Explicit':
             # Equation:
-            #   B(t) = (1 - t) * p_{0} + t * p_{1}
-            return (1 - t) * p_0 + t * p_1
+            #   B(x) = (1 - x) * p_{0} + x * p_{1}
+            return (1 - x) * p_0 + x * p_1
         elif method == 'Polynomial':
             # Equation:
-            #   B(t) = p_{0} + t * (p_{1} - p_{0})
-            return p_0 + t * (p_1 - p_0)
+            #   B(x) = p_{0} + x * (p_{1} - p_{0})
+            return p_0 + x * (p_1 - p_0)
         
     except AssertionError as error:
         print(f'[ERROR] Information: {error}')
         print(f'[ERROR] Incorrect type of function input parameters. The calculation method must correspond to the name Explicit or Polynomial, not {method}.')
 
-def Slerp(method: str, q_0: tp.List[float], q_1: tp.List[float], t: float) -> tp.List[float]:
+def Slerp(method: str, q_0: tp.List[float], q_1: tp.List[float], x: float) -> tp.List[float]:
     """
     Description:
         Performs a spherical linear interpolation (Slerp) between the given quaternions 
@@ -74,18 +74,18 @@ def Slerp(method: str, q_0: tp.List[float], q_1: tp.List[float], t: float) -> tp
 
         The equation of the Slerp function is defined as follows:
             1\ Geometric:
-                B(t) = (sin[(1 - t) * theta] / sin(theta)) * q_{0} + (sin[t * theta] / sin(theta)) * q_{1},
+                B(x) = (sin[(1 - x) * theta] / sin(theta)) * q_{0} + (sin[x * theta] / sin(theta)) * q_{1},
             2\ Quaternion:
-                B(t) = (q_{1} * q_{0}^(-1))^(t) * q_0,
+                B(x) = (q_{1} * q_{0}^(-1))^(x) * q_0,
 
-            where t can take values 0.0 <= t <= 1.0.
+            where x can take values 0.0 <= x <= 1.0.
 
     Args:
         (1) method [string]: The name of the method to calculate the {Slerp} function.
                              Note:
                                 method = 'Geometric' or 'Quaternion'
         (2) q_0, q_1 [Vector<float> 1x4]: Input quaternions to be interpolated.
-        (3) t [float]: Time t (0.0 <= t <= 1.0).
+        (3) x [float]: Time x (0.0 <= x <= 1.0).
 
     Returns: 
         (1) parameter [Vector<float> 1x4]: Interpolated quaternion at time {t}.                  
@@ -94,8 +94,8 @@ def Slerp(method: str, q_0: tp.List[float], q_1: tp.List[float], t: float) -> tp
     try:
         assert method in ['Geometric', 'Quaternion']
     
-        # The time value must be within the interval: 0.0 <= t <= 1.0
-        t = Mathematics.Clamp(t, CONST_T_0, CONST_T_1)
+        # The time value must be within the interval: 0.0 <= x <= 1.0
+        x = Mathematics.Clamp(x, CONST_T_0, CONST_T_1)
 
         if isinstance(q_0, Transformation.Quaternion_Cls) and isinstance(q_1, Transformation.Quaternion_Cls):
             q_0 = q_0.Normalize()
@@ -114,41 +114,41 @@ def Slerp(method: str, q_0: tp.List[float], q_1: tp.List[float], t: float) -> tp
             if q_01_angle > 0.9995:
                 # If the input quaternions are too close, perform a linear 
                 # interpolation (Lerp):
-                #   Lerp (polynomial form): q_{0} + t * (q_{1} - q_{0})
-                return Lerp('Polynomial', q_0, q_1, t)
+                #   Lerp (polynomial form): q_{0} + x * (q_{1} - q_{0})
+                return Lerp('Polynomial', q_0, q_1, x)
 
             # Auxiliary expression for the final equation.
             theta = np.arccos(q_01_angle); sin_theta = np.sin(theta)
 
-            return (np.sin((1 - t) * theta) / sin_theta) * q_0 + (np.sin(t * theta) / sin_theta) * q_1
+            return (np.sin((1 - x) * theta) / sin_theta) * q_0 + (np.sin(x * theta) / sin_theta) * q_1
         elif method == 'Quaternion':
-            return (q_1 * q_0.Inverse())**t * q_0
+            return (q_1 * q_0.Inverse())**x * q_0
     
     except AssertionError as error:
         print(f'[ERROR] Information: {error}')
         print(f'[ERROR] Incorrect type of function input parameters. The calculation method must correspond to the name Geometric or Quaternion, not {method}.')
         
-def Bernstein_Polynomial(i: int, n: int, t: tp.List[float]) -> tp.List[float]:
+def Bernstein_Polynomial(i: int, n: int, x: tp.List[float]) -> tp.List[float]:
     """
     Description:
         Bernstein polynomials form the basis of the Bézier elements used in isogeometric analysis.
 
         For a given {n >= 0}, define the {n + 1} Bernstein basis polynomials of degree {n} on [0,1] as:
-            B_{i, n}(t) = (n i) * (1 - t)^(n - i) * (t^i), i = 0,..,n,
+            B_{i, n}(x) = (n i) * (1 - x)^(n - i) * (x^i), i = 0,..,n,
 
             where (n i) is a binomial coefficient.
 
         There are four of them for n = 3, for example:
-            B_{0, 3} = (1 - t)^3
-            B_{1, 3} = 3 * t * (1 - t)^2
-            B_{2, 3} = 3 * (t^2) * (1 - t)
-            B_{3, 3} = t^3
+            B_{0, 3} = (1 - x)^3
+            B_{1, 3} = 3 * x * (1 - x)^2
+            B_{2, 3} = 3 * (x^2) * (1 - x)
+            B_{3, 3} = x^3
 
     Args:
         (1) i [int]: Iteration.
         (2) n [int]: Degree of a polynomial.
-        (3) t [Vector<float> 1xk]: Time t ∈ [0: The starting value of the sequence, 1: The end value of the sequence].
-                                   {0.0 <= t <= 1.0}
+        (3) x [Vector<float> 1xk]: Time x ∈ [0: The starting value of the sequence, 1: The end value of the sequence].
+                                   {0.0 <= x <= 1.0}
                                    Note:
                                     Where k is the number of elements of the time vector.
                              
@@ -161,8 +161,8 @@ def Bernstein_Polynomial(i: int, n: int, t: tp.List[float]) -> tp.List[float]:
     try:
         assert n >= Mathematics.CONST_NULL
   
-        # Bernstein basis polynomials b_{i, n}(t).
-        return Mathematics.Binomial_Coefficient(n, i) * (1 - t) ** (n - i) * (t ** i)
+        # Bernstein basis polynomials b_{i, n}(x).
+        return Mathematics.Binomial_Coefficient(n, i) * (1 - x) ** (n - i) * (x ** i)
 
     except AssertionError as error:
         print(f'[ERROR] Information: {error}')
@@ -172,7 +172,7 @@ def Bernstein_Polynomial(i: int, n: int, t: tp.List[float]) -> tp.List[float]:
 def Basic_Function(i: int, n: int, t: tp.List[float], x: float) -> float:
     """
     Description:
-        Get the 'B_in' as a recursively defined basic functions of a B-spline.
+        Get the 'B_in' as a recursively defined i-th B-spline basis functions of degree n.
 
         The i-th basis function of degree {n} with {t} knots is defined as follows:
 
@@ -181,7 +181,7 @@ def Basic_Function(i: int, n: int, t: tp.List[float], x: float) -> float:
 
         for all real numbers x, where:
         
-            B_{i, 0}(x) -> 1, t -> [t_{i}, t_{i + 1})
+            B_{i, 0}(x) -> 1, x -> [t_{i}, t_{i + 1})
                         -> 0, otherwise.    
 
     Args:

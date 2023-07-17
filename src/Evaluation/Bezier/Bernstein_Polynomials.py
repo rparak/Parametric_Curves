@@ -35,9 +35,9 @@ def main():
                   [4.00,  0.75], 
                   [5.00,  1.00]], dtype=np.float32)
     
-    # The value of the time must be within the interval of the knot vector: 
-    #   t[0] <= Time <= t[-1]
-    Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, CONST_BEZIER_CURVE['N'])
+    # The value of the time must be within the interval: 
+    #   0.0 <= x <= 1.0
+    x = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, CONST_BEZIER_CURVE['N'])
 
     # Degree of a polynomial.
     n = P.shape[0] - 1
@@ -50,8 +50,8 @@ def main():
 
     # Visualization of Bernstein basis polynomials functions of degree n.
     for i in range(P.shape[0]):
-        B_in = Utilities.Bernstein_Polynomial(i, n, Time)
-        ax.plot(Time, B_in, '-', linewidth=1.0, label=r'$B_{(%d, %d)}(t)$' % (i, n))
+        B_in = Utilities.Bernstein_Polynomial(i, n, x)
+        ax.plot(x, B_in, '-', linewidth=1.0, label=r'$B_{(%d, %d)}(x)$' % (i, n))
 
     # Set parameters of the graph (plot).
     ax.set_title(f'Bernstein Basis Polynomials of the Degree {n}', fontsize=25, pad=25.0)
@@ -60,7 +60,7 @@ def main():
     #   Set the y ticks.
     ax.set_yticks(np.arange(Utilities.CONST_T_0 - 0.1, Utilities.CONST_T_1 + 0.1, 0.1))
     #   Label
-    ax.set_xlabel(r't', fontsize=15, labelpad=10); ax.set_ylabel(r'$B_{(i, %d)}(t)$' % n, fontsize=15, labelpad=10) 
+    ax.set_xlabel(r'x', fontsize=15, labelpad=10); ax.set_ylabel(r'$B_{(i, %d)}(x)$' % n, fontsize=15, labelpad=10) 
     #   Set parameters of the visualization.
     ax.grid(which='major', linewidth = 0.15, linestyle = '--')
     # Get handles and labels for the legend.

@@ -41,7 +41,7 @@ CONST_B_SPLINE = {'n': 3, 'N': 50, 'method': 'Chord-Length'}
 # Visibility of the bounding box:
 #   'limitation': 'Control-Points' or 'Interpolated-Points'
 CONST_BOUNDING_BOX = {'visibility': False, 'limitation': 'Control-Points'}
-#   Animation stop(t_0), start(t_1) time in seconds.
+#   Animation stop(x_0), start(x_1) time in seconds.
 CONST_T_0 = 0.0
 CONST_T_1 = 5.0
 
@@ -167,7 +167,7 @@ def main():
     Description:
         Animation of a wiewpoint object on an interpolated curve.
     """
-    for i, (S_i, t_i) in enumerate(zip(S, S_Cls.Time)):
+    for i, (S_i, t_i) in enumerate(zip(S, S_Cls.x)):
         # Expression of the current animation frame.
         frame = np.int32((i/(S_Cls.N / (CONST_T_1 - CONST_T_0))) * fps)
         # Set scene frame.
@@ -181,7 +181,7 @@ def main():
         # Set the transformation of the object (Viewpoint) to the current position/rotation of the curve.
         Lib.Blender.Utilities.Set_Object_Transformation('Viewpoint', T)
 
-        # Insert a keyframe of the object (Viewpoint) into the frame at time t_{i}. 
+        # Insert a keyframe of the object (Viewpoint) into the frame at time x_{i}. 
         Lib.Blender.Utilities.Insert_Key_Frame('Viewpoint', 'matrix_basis', frame, 'ALL')
 
     # The last frame on which the animation stops.

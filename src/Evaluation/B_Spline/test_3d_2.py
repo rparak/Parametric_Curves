@@ -70,7 +70,7 @@ def main():
     # Interpolation of the parametric B-Spline curve from the optimized control points.
     S_optimized = S_Cls_optimized.Interpolate()
 
-    # Obtain the arc length L(t) of the general parametric curve.
+    # Obtain the arc length L(x) of the general parametric curve.
     L = S_Cls_optimized.Get_Arc_Length()
 
     # Set the parameters for the scientific style.

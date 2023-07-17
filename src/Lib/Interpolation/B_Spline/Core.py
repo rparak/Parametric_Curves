@@ -8,30 +8,21 @@ import Lib.Interpolation.Utilities as Utilities
 #   ../Lib/Transformation/Utilities/Mathematics
 import Lib.Transformation.Utilities.Mathematics as Mathematics
 
-# https://stackoverflow.com/questions/34803197/fast-b-spline-algorithm-with-numpy-scipy
-# https://github.com/johntfoster/bspline/blob/master/bspline/splinelab.py
-# https://github.com/XuejiaoYuan/BSpline/blob/master/parameter_selection.py
-
-# https://github.com/bhagath555/Symbolic_BSpline/blob/main/Jupyter%20Version/B_Spline.ipynb
-
-# https://github.com/pkicki/cnp-b/tree/master/utils
-
-# https://github.com/kentamt/b_spline
-
-#https://tiborstanko.sk/teaching/geo-num-2017/tp3.html
-#https://en.wikipedia.org/wiki/De_Boor%27s_algorithm
-#https://cran.r-project.org/web/packages/crs/vignettes/spline_primer.pdf
-#https://www.uio.no/studier/emner/matnat/ifi/nedlagte-emner/INF-MAT5340/v05/undervisningsmateriale/kap2-new.pdf
-
-# Book ... Nurbs Book
-
 class B_Spline_Cls(object):
     """
     Description:
         A specific class for working with B-Spline curves.
 
-        The value of the time must be within the interval: 
-            0.0 <= Time <= 1.0.
+            The B-Spline curve is defined as:
+                S(x) = sum_{i=0}^{n} B_{i, n}(x) * P_{i},
+
+                where B_{i, n}(x) are the i-th B-spline basis functions of degree {n}, and P_{i} are control points.
+
+                Note:
+                    See the Basic_Function(i, n, t, x) function in ./Utilities.py for more information.
+
+        The value of the time must be within the interval of the knot vector: 
+            t[0] <= x <= t[-1].
 
         The points must be in the following form:
             P = [p_0{x, y, ..}, 
@@ -65,7 +56,7 @@ class B_Spline_Cls(object):
 
             Features:
                 # Properties of the class.
-                Cls.P; Cls.Time, Cls.N
+                Cls.P; Cls.x, Cls.N
                 ...
                 Cls.dim
 
@@ -90,8 +81,8 @@ class B_Spline_Cls(object):
             self.__t = Utilities.Generate_Knot_Vector(n, P, self.__method)
 
             # The value of the time must be within the interval of the knot vector: 
-            #   t[0] <= Time <= t[-1]
-            self.__Time = np.linspace(self.__t[0], self.__t[-1], N)
+            #   t[0] <= x <= t[-1]
+            self.__x = np.linspace(self.__t[0], self.__t[-1], N)
 
             # Initialization of other class parameters.
             #   Control Points.
@@ -163,8 +154,8 @@ class B_Spline_Cls(object):
             self.__t = Utilities.Generate_Knot_Vector(self.__n, P, self.__method)
 
             # The value of the time must be within the interval of the knot vector: 
-            #   t[0] <= Time <= t[-1]
-            self.__Time = np.linspace(self.__t[0], self.__t[-1], self.__N)
+            #   t[0] <= x <= t[-1]
+            self.__x = np.linspace(self.__t[0], self.__t[-1], self.__N)
 
         except AssertionError as error:
             print(f'[ERROR] Information: {error}')
@@ -200,7 +191,7 @@ class B_Spline_Cls(object):
         return self.__t
     
     @property
-    def Time(self) -> tp.List[float]:
+    def x(self) -> tp.List[float]:
         """
         Description:
            Get the time as an interval of values from 0 to 1.
@@ -211,7 +202,7 @@ class B_Spline_Cls(object):
                                                     Where n is the number of points.
         """
                 
-        return self.__Time
+        return self.__x
     
     @property
     def N(self) -> int:
@@ -240,14 +231,14 @@ class B_Spline_Cls(object):
     def Get_Arc_Length(self) -> float:
         """
         Description:
-            Obtain the arc length L(t) of the general parametric curve.
+            Obtain the arc length L(x) of the general parametric curve.
 
-            The arc length L(t) is defined by:
+            The arc length L(x) is defined by:
                 
-                L(t) = \int_{0}^{t} ||B'(t)||_{2} dt.
+                L(x) = \int_{0}^{x} ||B'(x)||_{2} dt.
 
         Returns:
-            (1) parameter [float]: The arc length L(t) of the general parametric curve.
+            (1) parameter [float]: The arc length L(x) of the general parametric curve.
         """
                 
         # Obtain the first derivative of the B-Spline curve.  
@@ -279,14 +270,14 @@ class B_Spline_Cls(object):
         try:
             assert N < self.__P.shape[0] and N > self.__n and N != 1
 
-            Time = np.linspace(self.__t[0], self.__t[-1], self.__P.shape[0])
+            x = np.linspace(self.__t[0], self.__t[-1], self.__P.shape[0])
 
             A = np.zeros((self.__P.shape[0], N), dtype=self.__P.dtype)
             t = Utilities.Generate_Knot_Vector(self.__n, np.zeros((N, 1), dtype=self.__P.dtype), 
                                             'Uniformly-Spaced')
             for i in range(self.__P.shape[0]):
                 for j in range(N):
-                    A[i, j] = Utilities.Basic_Function(j, self.__n, t, Time[i])
+                    A[i, j] = Utilities.Basic_Function(j, self.__n, t, x[i])
 
             # estimated control points
             Q = (np.linalg.inv(A.T @ A) @ A.T) @ self.__P
@@ -318,7 +309,7 @@ class B_Spline_Cls(object):
                                                 - The result depends on the parameters (min, max) of the control points.
                                             limitation = 'Interpolated-Points'
                                                 - The result depends on the parameters (min, max) of the general parametric 
-                                                curve (interpolated points).
+                                                  curve (interpolated points).
 
         Returns:
             (1) parameter [Dictionary {'x_min': int, 'y_min': int, etc.}]: Bounding box parameters (min, max) defined by the limitation 
@@ -376,8 +367,17 @@ class B_Spline_Cls(object):
         Description:
             Obtain the first derivative of the B-Spline curve of degree {n} using De Boor's algorithm.
 
-            # ...
-            # https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-derv.html
+                The first derivative of a B-Spline curve of degree n is defined as:
+                    S'(x) = sum_{i=0}^{n-1} B_{i, n - 1}(x) * Q_{i},
+                
+                    where Q_{i} are defined as follows:
+                        Q_{i} = (n / (t_dot[j + n] - t_dot[j])) * (P_{i+1} - P_{i}),
+
+                        where t_dot is described as the derivative of the vector of knots with the first 
+                        and last knot removed.
+
+                    Therefore, the derivative of the B-spline curve is another B-spline curve of degree n - 1 on the original 
+                    knot vector with a new set of n control points Q_{0}, Q{1}, .. , Q_{n-1}.
 
         Returns:
             (1) parameter [Vector<float> Nxn]: Interpolated points of the first derivative of the parametric B-Spline curve.
@@ -386,10 +386,10 @@ class B_Spline_Cls(object):
         """
 
         self.__S_dot = np.zeros(self.__S_dot.shape, dtype=self.__S_dot.dtype); t_dot = self.__t[1:-1]
-        for i, t_i in enumerate(self.__Time):
+        for i, x_i in enumerate(self.__x):
             for j, (p_i, p_ii) in enumerate(zip(self.__P, self.__P[1:])):   
                 Q_i = (self.__n / (t_dot[j + self.__n] - t_dot[j])) * (p_ii - p_i)
-                self.__S_dot[i, :] += Utilities.Basic_Function(j, self.__n - 1, t_dot, t_i) * Q_i
+                self.__S_dot[i, :] += Utilities.Basic_Function(j, self.__n - 1, t_dot, x_i) * Q_i
 
         return self.__S_dot
     
@@ -405,8 +405,8 @@ class B_Spline_Cls(object):
         """
                   
         self.__S = np.zeros(self.__S.shape, dtype=self.__S.dtype)
-        for i, t_i in enumerate(self.__Time):
+        for i, x_i in enumerate(self.__x):
             for j, p_i in enumerate(self.__P):
-                self.__S[i, :] += Utilities.Basic_Function(j, self.__n, self.__t, t_i) * p_i
+                self.__S[i, :] += Utilities.Basic_Function(j, self.__n, self.__t, x_i) * p_i
 
         return self.__S

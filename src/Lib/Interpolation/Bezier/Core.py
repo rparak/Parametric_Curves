@@ -15,17 +15,17 @@ class Bezier_Cls(object):
 
             The Bézier curve is defined as:
                 (a) Explicit Form
-                    B(t) = sum_{i=0}^{n} B_{i, n}(t) * P_{i},
+                    B(x) = sum_{i=0}^{n} B_{i, n}(x) * P_{i},
 
-                    Where B_{i, n}(t) are Bernstein basis polynomials of degree {n}, and P_{i} are control points.
+                    where B_{i, n}(x) are the Bernstein basis polynomials of degree {n}, and P_{i} are control points.
 
                     Note:
-                        See the Bernstein_Polynomial(i, n, t) function in ./Utilities.py for more information.
+                        See the Bernstein_Polynomial(i, n, x) function in ./Utilities.py for more information.
 
                 (b) Polynomial Form
-                    B(t) = sum_{j=0}^{n} t^(j) * C_{j},
+                    B(x) = sum_{j=0}^{n} x^(j) * C_{j},
 
-                    Where C_{j} is a polynomial of degree {j}.
+                    where C_{j} is a polynomial of degree {j}.
 
                     C_{j} is defined as:
                         C_{j} = \prod_{m=0}^{j-1} (n - m) \sum_{i=0}^{j} ((-1)^(i + j) * P_{i}) / (i!(j - i)!)
@@ -35,7 +35,7 @@ class Bezier_Cls(object):
                         product is equal to 1.
 
         The value of the time must be within the interval: 
-            0.0 <= Time <= 1.0.
+            0.0 <= x <= 1.0.
 
         The points must be in the following form:
             P = [p_0{x, y, ..}, 
@@ -68,7 +68,7 @@ class Bezier_Cls(object):
 
             Features:
                 # Properties of the class.
-                Cls.P; Cls.Time, Cls.N
+                Cls.P; Cls.x, Cls.N
                 ...
                 Cls.dim
 
@@ -87,8 +87,8 @@ class Bezier_Cls(object):
             self.__method_id = 0 if method == 'Explicit' else 1
 
             # The value of the time must be within the interval: 
-            #   0.0 <= Time <= 1.0
-            self.__Time = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, N)
+            #   0.0 <= x <= 1.0
+            self.__x = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, N)
 
             # Initialization of other class parameters.
             #   Control Points.
@@ -156,7 +156,7 @@ class Bezier_Cls(object):
         return self.__B
     
     @property
-    def Time(self) -> tp.List[float]:
+    def x(self) -> tp.List[float]:
         """
         Description:
            Get the time as an interval of values from 0 to 1.
@@ -167,7 +167,7 @@ class Bezier_Cls(object):
                                                     Where n is the number of points.
         """
                 
-        return self.__Time
+        return self.__x
     
     @property
     def N(self) -> int:
@@ -179,7 +179,7 @@ class Bezier_Cls(object):
             (1) parameter [int]: Number of interpolated points. 
         """
                 
-        return self.__Time.shape[0]
+        return self.__x.shape[0]
     
     @property
     def dim(self) -> int:
@@ -196,14 +196,14 @@ class Bezier_Cls(object):
     def Get_Arc_Length(self) -> float:
         """
         Description:
-            Obtain the arc length L(t) of the general parametric curve.
+            Obtain the arc length L(x) of the general parametric curve.
 
-            The arc length L(t) is defined by:
+            The arc length L(x) is defined by:
                 
-                L(t) = \int_{0}^{t} ||B'(t)||_{2} dt.
+                L(x) = \int_{0}^{t} ||B'(x)||_{2} dt.
 
         Returns:
-            (1) parameter [float]: The arc length L(t) of the general parametric curve.
+            (1) parameter [float]: The arc length L(x) of the general parametric curve.
         """
                 
         # Obtain the first derivative of the Bézier curve. 
@@ -240,16 +240,16 @@ class Bezier_Cls(object):
 
         return (min, max)
     
-    def __Get_B_t(self, P: tp.List[float], t: tp.List[float]) -> tp.List[float]:
+    def __Get_B_t(self, P: tp.List[float], x: tp.List[float]) -> tp.List[float]:
         """
         Description:
-            Obtain the interpolated control points with the defined time value t.
+            Obtain the interpolated control points with the defined time value x.
         
         Args:
             (1) P [Vector<float> mxn]: Input control points to be interpolated.
                                         Note:
                                             Where m is the number of points and n is the dimension (2-D, 3-D).
-            (2) t [Vector<float> 1xk]: Defined time value t.
+            (2) x [Vector<float> 1xk]: Defined time value x.
                                         Note:
                                             Where k is the number of values in the vector.
 
@@ -261,7 +261,7 @@ class Bezier_Cls(object):
 
         B = np.zeros(self.__dim, dtype=np.float32)
         for j, p_j in enumerate(P):
-            B += Utilities.Bernstein_Polynomial(j, self.__n, t) * p_j
+            B += Utilities.Bernstein_Polynomial(j, self.__n, x) * p_j
 
         return B
 
@@ -302,7 +302,7 @@ class Bezier_Cls(object):
                                                 - The result depends on the parameters (min, max) of the control points.
                                             limitation = 'Interpolated-Points'
                                                 - The result depends on the parameters (min, max) of the general parametric 
-                                                curve (interpolated points).
+                                                  curve (interpolated points).
 
         Returns:
             (1) parameter [Dictionary {'x_min': int, 'y_min': int, etc.}]: Bounding box parameters (min, max) defined by the limitation 
@@ -332,7 +332,7 @@ class Bezier_Cls(object):
                                  dtype=np.float32).T
                 
                 # Calculate the roots of the parametric curve to obtain the minimum 
-                # and maximum on the axis for t between the values 0.0 and 1.0.
+                # and maximum on the axis for x between the values 0.0 and 1.0.
                 for i, coeff_i in enumerate(coeff):
                     if coeff_i.size != 1:
                         # Find the roots of the equation of a polynomial of degree n.
@@ -342,30 +342,30 @@ class Bezier_Cls(object):
                         roots = Mathematics.Roots(coeff_i[::-1])
 
                         # The value of the time must be within the interval: 
-                        #   0.0 <= Time <= 1.0
-                        t_tmp = []
+                        #   0.0 <= x <= 1.0
+                        x_tmp = []
                         for _, roots_i in enumerate(roots):
                             if Utilities.CONST_T_0 <= roots_i <= Utilities.CONST_T_1:
-                                t_tmp.append(roots_i)
+                                x_tmp.append(roots_i)
                         
                         # Remove duplicates from the vector.
-                        t_tmp = np.array([*set(t_tmp)], dtype=np.float32)
+                        x_tmp = np.array([*set(x_tmp)], dtype=np.float32)
                         
-                        if t_tmp.size == 0:
+                        if x_tmp.size == 0:
                             continue
                         else:
-                            t = t_tmp
+                            x = x_tmp
                     else:
                         if Utilities.CONST_T_0 <= coeff_i <= Utilities.CONST_T_1:
-                            t = np.array(coeff_i, dtype=np.float32)
+                            x = np.array(coeff_i, dtype=np.float32)
                         else:
                             continue
 
                     # Find the points on the interpolated parametric Bézier curve 
-                    # that correspond to time t.
+                    # that correspond to time x.
                     B_i = []
-                    for _, t_i in enumerate(t):
-                        B_i.append(self.__Get_B_t(self.__P[:, i], np.array(t_i, dtype=np.float32)))
+                    for _, x_i in enumerate(x):
+                        B_i.append(self.__Get_B_t(self.__P[:, i], np.array(x_i, dtype=np.float32)))
                     B_i = np.array(B_i, dtype=np.float32).flatten()
 
                     # Obtain the minimum and maximum of the parametric curve in the i-axis.
@@ -409,12 +409,12 @@ class Bezier_Cls(object):
         Description:
             Obtain the first derivative of the Bézier curve of degree {n}.
 
-            The first derivative of a Bézier curve of degree n is defined as:
-                (a) Explicit Form
-                    B(t) = n sum_{i=0}^{n-1} B_{i, n-1}(t) * (P_{i+1} - P_{i}).
+                The first derivative of a Bézier curve of degree n is defined as:
+                    (a) Explicit Form
+                        B'(x) = n sum_{i=0}^{n-1} B_{i, n-1}(x) * (P_{i+1} - P_{i}).
 
-                (b) Polynomial Form
-                    B(t) = sum_{j=1}^{n+1} t^(j-1) * C_{j} * j.
+                    (b) Polynomial Form
+                        B'(x) = sum_{j=1}^{n+1} x^(j-1) * C_{j} * j.
 
             Note:
                 The function uses both explicit and polynomial methods to obtain 
@@ -435,13 +435,13 @@ class Bezier_Cls(object):
             n = self.__n - 1
             for i, (p_i, p_ii) in enumerate(zip(self.__P, self.__P[1:])):
                 for j, (p_ij, p_iij) in enumerate(zip(p_i, p_ii)):
-                    self.__B_dot[:, j] += Utilities.Bernstein_Polynomial(i, n, self.__Time) * (p_iij - p_ij)
+                    self.__B_dot[:, j] += Utilities.Bernstein_Polynomial(i, n, self.__x) * (p_iij - p_ij)
             self.__B_dot = self.__n * self.__B_dot
         elif self.__method_id == 1:
             # Polynomial form.
             for j in range(1, self.__n + 1):
                 for i, C_j in enumerate(self.__C(j)):
-                    self.__B_dot[:, i] += (self.__Time ** (j - 1)) * C_j * j
+                    self.__B_dot[:, i] += (self.__x ** (j - 1)) * C_j * j
 
         return self.__B_dot
     
@@ -467,11 +467,11 @@ class Bezier_Cls(object):
             #       De Casteljau's algorithm.
             for i, p_i in enumerate(self.__P):
                 for j, p_ij in enumerate(p_i):
-                    self.__B[:, j] += Utilities.Bernstein_Polynomial(i, self.__n, self.__Time) * p_ij
+                    self.__B[:, j] += Utilities.Bernstein_Polynomial(i, self.__n, self.__x) * p_ij
         elif self.__method_id == 1:
             # Polynomial form.
             for j in range(0, self.__n + 1):
                 for i, C_j in enumerate(self.__C(j)):
-                    self.__B[:, i] += (self.__Time ** j) * C_j
+                    self.__B[:, i] += (self.__x ** j) * C_j
                     
         return self.__B

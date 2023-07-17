@@ -49,7 +49,7 @@ def main():
     # Interpolation of parametric B-Spline curve.
     S = S_Cls.Interpolate()
 
-    # Obtain the arc length L(t) of the general parametric curve.
+    # Obtain the arc length L(x) of the general parametric curve.
     L = S_Cls.Get_Arc_Length()
 
     # Set the parameters for the scientific style.
