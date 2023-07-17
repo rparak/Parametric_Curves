@@ -12,8 +12,8 @@ import Lib.Transformation.Utilities.Mathematics as Mathematics
 Description:
     Initialization of constants.
 """
-# Time t ∈ [0: The starting value of the sequence, 
-#           1: The end value of the sequence] {0.0 <= t <= 1.0}
+# Time x ∈ [0: The starting value of the sequence, 
+#           1: The end value of the sequence] {0.0 <= x <= 1.0}
 CONST_T_0 = 0.0
 CONST_T_1 = 1.0
 

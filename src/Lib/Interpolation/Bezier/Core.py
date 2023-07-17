@@ -39,8 +39,8 @@ class Bezier_Cls(object):
 
         The points must be in the following form:
             P = [p_0{x, y, ..}, 
-                    p_1{x, y, ..}, 
-                    ...].
+                 p_1{x, y, ..}, 
+                 ...].
 
     Initialization of the Class:
         Args:
@@ -240,7 +240,7 @@ class Bezier_Cls(object):
 
         return (min, max)
     
-    def __Get_B_t(self, P: tp.List[float], x: tp.List[float]) -> tp.List[float]:
+    def __Get_B_x(self, P: tp.List[float], x: tp.List[float]) -> tp.List[float]:
         """
         Description:
             Obtain the interpolated control points with the defined time value x.
@@ -292,8 +292,8 @@ class Bezier_Cls(object):
     def Get_Bounding_Box_Parameters(self, limitation: str) -> tp.Tuple[tp.List[float]]:
         """
         Description:
-            Obtain the bounding parameters (min, max) of the general parametric 
-            curve (interpolated points) as well as the control points.
+            Obtain the bounding parameters (min, max) of the general parametric curve (interpolated 
+            points) as well as the control points.
         
         Args:
             (1) limitation [string]: The limitation to be used to describe the bounding box.
@@ -365,7 +365,7 @@ class Bezier_Cls(object):
                     # that correspond to time x.
                     B_i = []
                     for _, x_i in enumerate(x):
-                        B_i.append(self.__Get_B_t(self.__P[:, i], np.array(x_i, dtype=np.float32)))
+                        B_i.append(self.__Get_B_x(self.__P[:, i], np.array(x_i, dtype=np.float32)))
                     B_i = np.array(B_i, dtype=np.float32).flatten()
 
                     # Obtain the minimum and maximum of the parametric curve in the i-axis.

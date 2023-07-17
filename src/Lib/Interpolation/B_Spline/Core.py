@@ -26,8 +26,8 @@ class B_Spline_Cls(object):
 
         The points must be in the following form:
             P = [p_0{x, y, ..}, 
-                    p_1{x, y, ..}, 
-                    ...].
+                 p_1{x, y, ..}, 
+                 ...].
 
     Initialization of the Class:
         Args:
@@ -105,7 +105,6 @@ class B_Spline_Cls(object):
             if n >= P.shape[0]:
                 print(f'[ERROR] The degree (n = {n}) of the B-spline must be less than the number of input control points (N = {P.shape[0]}).')
                 
-
     @property
     def n(self) -> int:
         """
@@ -253,11 +252,21 @@ class B_Spline_Cls(object):
     def Optimize_Control_Points(self, N: int) -> cls_data_type:
         """
         Description:
-            ....
+            Obtain optimized control points from a set of control points on a B-Spline curve using the Least-Squares method.
 
-            # Least-Squares Fitting of Data with B-Spline Curves
-            # https://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf
-            # https://github.com/kentamt/b_spline/blob/master/Least_Square_B-spline.ipynb
+                The fitted B-spline curve is formally presented in equation:
+                    S(x) = sum_{i=0}^{n} B_{i, n}(x) * Q_{i},
+                
+                but the control points Q_{i} are unknown quantities to be determined later.
+
+                From the link below we can get the equation to calculate Q:
+                    Q = (A^T * A)^(-1) * A^T * P,
+
+                wher Q are optimized control points, P are the input control points on the B-Spline 
+                curve, and A are the i-th B-spline basis functions of degree {n}.
+                
+            Reference:
+                https://www.geometrictools.com/Documentation/BSplineCurveLeastSquaresFit.pdf
 
         Args:
             (1) N [int]: The resulting number of optimized control points.
@@ -279,12 +288,15 @@ class B_Spline_Cls(object):
             #   t[0] <= x <= t[-1]
             x = np.linspace(self.__t[0], self.__t[-1], self.__P.shape[0])
             
+            """
+            Description:
+                Least-Squares Fitting.
+            """
             A = np.zeros((self.__P.shape[0], N), dtype=self.__P.dtype)
             for i in range(self.__P.shape[0]):
                 for j in range(N):
                     A[i, j] = Utilities.Basic_Function(j, self.__n, t, x[i])
 
-            # estimated control points
             Q = (np.linalg.inv(A.T @ A) @ A.T) @ self.__P
             Q[0] = self.__P[0]; Q[-1] = self.__P[-1]
 
@@ -304,8 +316,8 @@ class B_Spline_Cls(object):
     def Get_Bounding_Box_Parameters(self, limitation: str) -> tp.Tuple[tp.List[float]]:
         """
         Description:
-            Obtain the bounding parameters (min, max) of the general parametric 
-            curve (interpolated points) as well as the control points.
+            Obtain the bounding parameters (min, max) of the general parametric curve (interpolated 
+            points) as well as the control points.
         
         Args:
             (1) limitation [string]: The limitation to be used to describe the bounding box.

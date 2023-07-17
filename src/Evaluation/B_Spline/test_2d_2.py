@@ -81,7 +81,7 @@ def main():
     ax.plot(S_Cls_2.P[:, 0], S_Cls_2.P[:, 1], 'o', color='#e7e7e7', linewidth=1.0, markersize = 8.0, 
             markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Noisy Control Points')
     ax.plot(S_Cls_optimized.P[:, 0], S_Cls_optimized.P[:, 1], 'o--', color='#8ca8c5', linewidth=1.0, markersize = 8.0, 
-            markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Optimized Control Points')
+            markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Optimized Control Points using the Least-Squares Method')
     ax.plot(S_optimized[:, 0], S_optimized[:, 1], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
             markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'B-Spline (n = {S_Cls_optimized.n}, N = {S_Cls_optimized.N}, L = {L:.03})')
 
