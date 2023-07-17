@@ -242,7 +242,7 @@ class B_Spline_Cls(object):
             (1) parameter [float]: The arc length L(t) of the general parametric curve.
         """
                 
-        # ...   
+        # Obtain the first derivative of the B-Spline curve.  
         _ = self.Derivative_1st()
 
         L = 0.0
@@ -264,7 +264,8 @@ class B_Spline_Cls(object):
             (1) N [int]: The resulting number of optimized control points.
 
         Returns:
-            (1) parameter [B_Spline_Cls(object)]: 
+            (1) parameter [B_Spline_Cls(object)]: Self-class (B-Spline) with optimized control points as input. The other class parameters 
+                                                  remain unchanged.
         """
 
         try:
