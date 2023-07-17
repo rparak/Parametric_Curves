@@ -33,7 +33,7 @@ CONST_BOUNDING_BOX = {'visibility': False, 'limitation': 'Control-Points'}
 def main():
     """
     Description:
-        ..
+        A program to optimize and visualize the parametric three-dimensional B-Spline curve of degree n.
     """
         
     # Input control points {P} in three-dimensional space.
@@ -44,24 +44,30 @@ def main():
                   [4.00,  0.75,  1.50], 
                   [5.00,  1.00, -1.50]], dtype=np.float32)
 
-    # ...
+    # Initialization of a specific class to work with B-Spline curves from input 
+    # control points.
     S_Cls_1 = B_Spline.B_Spline_Cls(CONST_B_SPLINE['n'], CONST_B_SPLINE['method'], P, 
-                                  CONST_B_SPLINE['N'])
-    # ...
+                                    CONST_B_SPLINE['N'])
+    
+    # Interpolation of the parametric B-Spline curve from the input control points.
     S = S_Cls_1.Interpolate()
 
-    # ...
+    # Generation of random data from interpolated points with additional noise.
     S_noise = np.zeros(S.shape)
     for i, S_i in enumerate(S):
         S_noise[i, :] = S_i + np.random.uniform((-1) * np.random.uniform(0.05, 0.20), 
                                               np.random.uniform(0.05, 0.20), S.shape[1])
     S_noise[0] = P[0]; S_noise[-1] = P[-1]
 
-    # ...
+    # Initialization of a specific class to work with B-Spline curves from 
+    # noisy points.
     S_Cls_2 = B_Spline.B_Spline_Cls(CONST_B_SPLINE['n'], CONST_B_SPLINE['method'], S_noise, 
                                     CONST_B_SPLINE['N'])
-    # ...
+    
+    # Get optimized control points from noisy points.
     S_Cls_optimized = S_Cls_2.Optimize_Control_Points(P.shape[0])
+
+    # Interpolation of the parametric B-Spline curve from the optimized control points.
     S_optimized = S_Cls_optimized.Interpolate()
 
     # Obtain the arc length L(t) of the general parametric curve.
@@ -74,13 +80,11 @@ def main():
     figure = plt.figure()
     ax = figure.add_subplot(projection='3d')
 
-    # ... 
-    ax.plot(S_noise[:, 0], S_noise[:, 1], S_noise[:, 2], 'o', color='#e7e7e7', linewidth=1.0, markersize = 8.0, 
+    # Visualization of relevant structures.
+    ax.plot(S_Cls_2.P[:, 0], S_Cls_2.P[:, 1], S_Cls_2.P[:, 2], 'o', color='#e7e7e7', linewidth=1.0, markersize = 8.0, 
             markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Noisy Control Points')
-    # ...
     ax.plot(S_Cls_optimized.P[:, 0], S_Cls_optimized.P[:, 1], S_Cls_optimized.P[:, 2], 'o--', color='#8ca8c5', linewidth=1.0, markersize = 8.0, 
             markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Optimized Control Points')
-    # ...
     ax.plot(S_optimized[:, 0], S_optimized[:, 1], S_optimized[:, 2], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
             markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'B-Spline (n = {S_Cls_optimized.n}, N = {S_Cls_optimized.N}, L = {L:.03})')
 

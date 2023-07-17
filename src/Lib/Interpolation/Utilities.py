@@ -222,7 +222,9 @@ def Simple_Simplification(P: tp.List[float], s_f: int) -> tp.List[float]:
         depend on the simplification factor.
 
         The points must be in the following form:
-            P = [p_0{x, y, ..}, p_1{x, y, ..}, ...]
+            P = [p_0{x, y, ..}, 
+                 p_1{x, y, ..}, 
+                 ...].
 
         Example:
             Input Points: 
@@ -275,7 +277,9 @@ def RDP_Simplification(P: tp.List[float], epsilon: float) -> tp.List[float]:
             is approximated by a series of points.
     
         The points must be in the following form:
-            P = [p_0{x, y, ..}, p_1{x, y, ..}, ...]
+            P = [p_0{x, y, ..}, 
+                 p_1{x, y, ..}, 
+                 ...].
 
     Args:
         (1) P [Vector<float> mxn]: Input points to be simplified.

@@ -37,7 +37,7 @@ Description:
 # Set the structure of the main parameters of the camera.
 CONST_CAMERA_TYPE = Lib.Blender.Parameters.Camera.Right_View_Camera_Parameters_Str
 # Bezier curve interpolation parameters.
-CONST_BEZIER_CURVE = {'method': 'Explicit', 'N': 100}
+CONST_BEZIER_CURVE = {'method': 'Explicit', 'N': 50}
 # Visibility of the bounding box:
 #   'limitation': 'Control-Points' or 'Interpolated-Points'
 CONST_BOUNDING_BOX = {'visibility': False, 'limitation': 'Control-Points'}
@@ -48,7 +48,14 @@ CONST_T_1 = 5.0
 def main():
     """
     Description:
-        A program for ...
+         A program to visualize a parametric three-dimensional Bézier curve of degree n.
+
+         Note:
+            (1) The position and number of control points is set by the user.
+                Object Name: 'Control_Point_{i}', where i is the identification number of control point.
+            (2) The orientation of the object is set by the user.
+                Object Name: 'Viewpoint_Control_Point_0', 'Viewpoint_Control_Point_n', where 0 denotes the first point 
+                              and n the last point.
     """
 
     # Deselect all objects in the current scene.
@@ -77,6 +84,13 @@ def main():
             break     
         i += 1
 
+    # Initialization of a specific class to work with Bézier curves.
+    B_Cls = Bezier.Bezier_Cls(CONST_BEZIER_CURVE['method'], np.array(P), 
+                              CONST_BEZIER_CURVE['N'])
+    
+    # Interpolation of parametric Bézier curve.
+    B = B_Cls.Interpolate()
+
     # Removes objects, if they exist.
     for _, obj_name in enumerate(['Bezier_Poly', 'Control_Points_Poly', 'Bounding_Box']):
         if Lib.Blender.Utilities.Object_Exist(obj_name) == True:
@@ -92,17 +106,10 @@ def main():
     # Initialize the size (length) of the polyline data set.
     Control_Points_Poly.Initialization(i)
     # # Add coordinates to the polyline.
-    for i, P_i in enumerate(P):           
+    for i, P_i in enumerate(B_Cls.P):           
         Control_Points_Poly.Add(i, P_i)
     # Visualization of a 3-D (dimensional) polyline in the scene.
     Control_Points_Poly.Visualization()
-
-    # ...
-    #   ...
-    B_Cls = Bezier.Bezier_Cls(CONST_BEZIER_CURVE['method'], np.array(P), 
-                              CONST_BEZIER_CURVE['N'])
-    #   ...
-    B = B_Cls.Interpolate()
 
     # Visibility of the bounding box of the interpolated curve.
     if CONST_BOUNDING_BOX['visibility'] == True:

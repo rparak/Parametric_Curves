@@ -34,8 +34,13 @@ class Bezier_Cls(object):
                         However, caution should be exercised as high-order curves may lack numerical stability. Note that the empty
                         product is equal to 1.
 
-            The value of the time must be within the interval: 
-                0.0 <= Time <= 1.0
+        The value of the time must be within the interval: 
+            0.0 <= Time <= 1.0.
+
+        The points must be in the following form:
+            P = [p_0{x, y, ..}, 
+                    p_1{x, y, ..}, 
+                    ...].
 
     Initialization of the Class:
         Args:
@@ -326,12 +331,14 @@ class Bezier_Cls(object):
                 coeff = np.array([i*self.__C(i) for i in range(1, self.__n + 1)],
                                  dtype=np.float32).T
                 
-                # ....
+                # Calculate the roots of the parametric curve to obtain the minimum 
+                # and maximum on the axis for t between the values 0.0 and 1.0.
                 for i, coeff_i in enumerate(coeff):
                     if coeff_i.size != 1:
                         # Find the roots of the equation of a polynomial of degree n.
                         #   Note:
-                        #       We need to invert the vector of coefficients and get the form x^n + .. + x^1 + x^0.
+                        #       We need to invert the vector of coefficients 
+                        #       and get the form x^n + .. + x^1 + x^0.
                         roots = Mathematics.Roots(coeff_i[::-1])
 
                         # The value of the time must be within the interval: 
@@ -354,7 +361,8 @@ class Bezier_Cls(object):
                         else:
                             continue
 
-                    # ...
+                    # Find the points on the interpolated parametric Bézier curve 
+                    # that correspond to time t.
                     B_i = []
                     for _, t_i in enumerate(t):
                         B_i.append(self.__Get_B_t(self.__P[:, i], np.array(t_i, dtype=np.float32)))

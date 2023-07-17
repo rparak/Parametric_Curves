@@ -30,6 +30,14 @@ class B_Spline_Cls(object):
     Description:
         A specific class for working with B-Spline curves.
 
+        The value of the time must be within the interval: 
+            0.0 <= Time <= 1.0.
+
+        The points must be in the following form:
+            P = [p_0{x, y, ..}, 
+                    p_1{x, y, ..}, 
+                    ...].
+
     Initialization of the Class:
         Args:
             (1) n [int]: Degree of a polynomial.

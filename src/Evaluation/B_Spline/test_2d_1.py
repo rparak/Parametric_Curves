@@ -31,7 +31,7 @@ CONST_BOUNDING_BOX = {'visibility': False, 'limitation': 'Control-Points'}
 def main():
     """
     Description:
-        ..
+        A program to visualize a parametric two-dimensional B-Spline curve of degree n.
     """
 
     # Input control points {P} in two-dimensional space.
@@ -42,10 +42,11 @@ def main():
                   [4.00,  0.75], 
                   [5.00,  1.00]], dtype=np.float32)
 
-    # ...
+    # Initialization of a specific class to work with B-Spline curves.
     S_Cls = B_Spline.B_Spline_Cls(CONST_B_SPLINE['n'], CONST_B_SPLINE['method'], P, 
                                   CONST_B_SPLINE['N'])
-    # ...
+    
+    # Interpolation of parametric B-Spline curve.
     S = S_Cls.Interpolate()
 
     # Obtain the arc length L(t) of the general parametric curve.
@@ -57,10 +58,9 @@ def main():
     # Create a figure.
     _, ax = plt.subplots()
 
-    # ...
+    # Visualization of relevant structures.
     ax.plot(S_Cls.P[:, 0], S_Cls.P[:, 1], 'o--', color='#d0d0d0', linewidth=1.0, markersize = 8.0, 
             markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Control Points')
-    # ...
     ax.plot(S[:, 0], S[:, 1], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
             markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'B-Spline (n = {S_Cls.n}, N = {S_Cls.N}, L = {L:.03})')
     

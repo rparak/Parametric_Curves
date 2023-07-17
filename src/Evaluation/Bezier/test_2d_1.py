@@ -30,7 +30,7 @@ CONST_BOUNDING_BOX = {'visibility': False, 'limitation': 'Control-Points'}
 def main():
     """
     Description:
-        ..
+        A program to visualize a parametric two-dimensional Bézier curve of degree n.
     """
 
     # Input control points {P} in two-dimensional space.
@@ -41,10 +41,11 @@ def main():
                   [4.00,  0.75], 
                   [5.00,  1.00]], dtype=np.float32)
 
-    # ...
+    # Initialization of a specific class to work with Bézier curves.
     B_Cls = Bezier.Bezier_Cls(CONST_BEZIER_CURVE['method'], P, 
                               CONST_BEZIER_CURVE['N'])
-    # ...
+    
+    # Interpolation of parametric Bézier curve.
     B = B_Cls.Interpolate()
 
     # Obtain the arc length L(t) of the general parametric curve.
@@ -56,10 +57,9 @@ def main():
     # Create a figure.
     _, ax = plt.subplots()
 
-    # ...
+    # Visualization of relevant structures.
     ax.plot(B_Cls.P[:, 0], B_Cls.P[:, 1], 'o--', color='#d0d0d0', linewidth=1.0, markersize = 8.0, 
             markeredgewidth = 4.0, markerfacecolor = '#ffffff', label='Control Points')
-    # ...
     ax.plot(B[:, 0], B[:, 1], '.-', color='#ffbf80', linewidth=1.5, markersize = 8.0, 
             markeredgewidth = 2.0, markerfacecolor = '#ffffff', label=f'Bézier Curve (N = {B_Cls.N}, L = {L:.03})')
     
