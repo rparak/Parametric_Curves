@@ -157,11 +157,11 @@ def main():
     # Visualization of a 3-D (dimensional) polyline in the scene.
     Bezier_Poly.Visualization()
 
-    # The first frame on which the animation starts.
-    np.int32(CONST_T_0 * (bpy.context.scene.render.fps / bpy.context.scene.render.fps_base))
-
     # Get the FPS (Frames Per Seconds) value from the Blender settings.
     fps = bpy.context.scene.render.fps / bpy.context.scene.render.fps_base
+
+    # The first frame on which the animation starts.
+    bpy.context.scene.frame_start = np.int32(CONST_T_0 * fps)
 
     """
     Description:
