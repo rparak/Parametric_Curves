@@ -185,9 +185,7 @@ def main():
         Lib.Blender.Utilities.Insert_Key_Frame('Viewpoint', 'matrix_basis', frame, 'ALL')
 
     # The last frame on which the animation stops.
-    #   Note:
-    #       Convert the time in seconds to the FPS value from the Blender settings.
-    bpy.context.scene.frame_end = np.int32(CONST_T_1 * (bpy.context.scene.render.fps / bpy.context.scene.render.fps_base))
+    bpy.context.scene.frame_end = np.int32(CONST_T_1 * fps)
 
 if __name__ == '__main__':
     main()
