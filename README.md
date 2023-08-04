@@ -1,4 +1,4 @@
-# ...
+# An Open-Source Parametric Curves Library Useful for Robotics Applications
 
 <p align="center">
 <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Parametric_Curves_Background.png width="800" height="380">
@@ -11,7 +11,7 @@ Roman.Parak@outlook.com
 ```bash
 @misc{RomanParak_DataConverter,
   author = {Roman Parak},
-  title = {...},
+  title = {An open-source parametric curves library useful for robotics applications},
   year = {2023},
   publisher = {GitHub},
   journal = {GitHub repository},
