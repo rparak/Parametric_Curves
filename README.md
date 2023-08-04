@@ -1,7 +1,7 @@
 # ...
 
 <p align="center">
-<img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Parametric_Curves_Background.png width="800" height="400">
+<img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Parametric_Curves_Background.png width="800" height="380">
 </p>
 
 ## Contact Info:
