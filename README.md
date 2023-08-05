@@ -33,6 +33,26 @@ The library can be used within the Robot Operating System (ROS), Blender, PyBull
 
 ## Bézier Curves
 
+**Bernstein_Polynomials**
+
+<p align="center">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/Bernstein_Polynomials.png width="600" height="350">
+</p>
+
+**Demonstration of two-dimensional (2D) Curves**
+
+<p align="center">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_2d_1_0.png width="600" height="350">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_2d_1_0.png width="600" height="350">
+</p>
+
+**Demonstration of three-dimensional (3D) Curves**
+
+<p align="center">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_3d_1_0.png width="600" height="350">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_3d_1_0.png width="600" height="350">
+</p>
+
 A simple program that describes how to work with the library can be found below. The whole program is located in the individual evaluation folder.
 
 ```py 
@@ -97,12 +117,6 @@ def main():
 if __name__ == '__main__':
     sys.exit(main())
 ```
-
-**Bernstein_Polynomials**
-
-<p align="center">
-<img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/Bernstein_Polynomials.png width="600" height="350">
-</p>
 
 ## B-Spline Curves
 
