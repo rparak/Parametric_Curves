@@ -35,15 +35,35 @@ The library can be used within the Robot Operating System (ROS), Blender, PyBull
 Text .....
 
 ## Blender
-Text .....
+The library for parametric curves can also be used within the Blender software. See the instructions below for more information.
 
 **Bézier Curve**
+
+A description of how to run a program to visualize a parametric three-dimensional Bézier curve of degree n.
+1. Open Bezier_Curve.blend from the Blender folder.
+2. Copy and paste the script from the evaluation folder (../Bezier_Curve.py).
+3. Run it and evaluate the results.
+   
+```bash
+$ /> cd Documents/GitHub/Parametric_Curves/Blender/Interpolation
+$ ../Collision_Detection/Blender> blender Bezier_Curve.blend
+```
 
 <p align="center">
 <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Blender/Bezier_Curve.png width="650" height="350">
 </p>
 
 **B-Spline Curve**
+
+A description of how to run a program to visualize a parametric three-dimensional B-Spline curve of degree n.
+1. Open B_Spline.blend from the Blender folder.
+2. Copy and paste the script from the evaluation folder (../B_Spline.py).
+3. Run it and evaluate the results.
+   
+```bash
+$ /> cd Documents/GitHub/Parametric_Curves/Blender/Interpolation
+$ ../Collision_Detection/Blender> blender B_Spline.blend
+```
 
 <p align="center">
 <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Blender/B_Spline.png width="650" height="350">
