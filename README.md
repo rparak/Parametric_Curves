@@ -1,7 +1,7 @@
 # An Open-Source Parametric Curves Library Useful for Robotics Applications
 
 <p align="center">
-<img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Parametric_Curves_Background.png width="800" height="380">
+<img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Parametric_Curves_Background.png width="800" height="350">
 </p>
 
 ## Requirements:
