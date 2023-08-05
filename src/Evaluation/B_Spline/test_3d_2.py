@@ -16,8 +16,8 @@ import matplotlib.patches as pat
 # Custom Script:
 #   ../Lib/Interpolation/B_Spline/Core
 import Lib.Interpolation.B_Spline.Core as B_Spline
-#   ../Lib/Utilities/Primitives
-import Lib.Utilities.Primitives as Primitives
+#   ../Lib/Primitives/Core
+import Lib.Primitives.Core as Primitives
 """
 Description:
     Initialization of constants.

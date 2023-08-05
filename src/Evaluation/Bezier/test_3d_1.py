@@ -16,8 +16,8 @@ import matplotlib.patches as pat
 # Custom Script:
 #   ../Lib/Interpolation/Bezier/Core
 import Lib.Interpolation.Bezier.Core as Bezier
-#   ../Lib/Utilities/Primitives
-import Lib.Utilities.Primitives as Primitives
+#   ../Lib/Primitives/Core
+import Lib.Primitives.Core as Primitives
 
 """
 Description:
