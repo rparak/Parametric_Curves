@@ -32,6 +32,8 @@ Path (Bézier): ..\Collision_Detection\src\Lib\Interpolation\Bezier\Core.py
 Path (B-Spline): ..\Collision_Detection\src\Lib\Interpolation\B_Spline\Core.py
 ```
 
+In particular, the library focuses on solving the path planning problem of the industrial/collaborative robotic arms. But, as an open-source library, it can be used for other tasks, as creativity knows no limits.
+
 The repository also contains a transformation library with the necessary project-related functions. See link below.
 
 [/rparak/Transformation](https://github.com/rparak/Transformation)
