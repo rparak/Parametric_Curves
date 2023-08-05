@@ -4,31 +4,31 @@
 <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Parametric_Curves_Background.png width="800" height="350">
 </p>
 
-## Requirements:
+## Requirements
 
-**Programming Language:**
+**Programming Language**
 
 ```bash
 Python
 ```
 
-**Import Libraries:**
+**Import Libraries**
 ```bash
 More information can be found in the individual scripts (.py).
 ```
 
-**Supported on the following operating systems:**
+**Supported on the following operating systems**
 ```bash
 Windows, Linux, macOS
 ```
 
-## Project Description:
+## Project Description
 The library can be used within the Robot Operating System (ROS), Blender, PyBullet, Nvidia Isaac, or any program that allows Python as a programming language.
 
-## Simple Demonstration:
+## Simple Demonstration
 Text .....
 
-## Contact Info:
+## Contact Info
 Roman.Parak@outlook.com
 
 ## Citation (BibTex)
