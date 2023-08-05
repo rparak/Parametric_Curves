@@ -40,13 +40,13 @@ Text .....
 **Bézier Curve**
 
 <p align="center">
-<img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Blender/Bezier_Curve.png width="500" height="350">
+<img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Blender/Bezier_Curve.png width="650" height="350">
 </p>
 
 **B-Spline Curve**
 
 <p align="center">
-<img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Blender/B_Spline.png width="500" height="350">
+<img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Blender/B_Spline.png width="650" height="350">
 </p>
 
 ## Contact Info
