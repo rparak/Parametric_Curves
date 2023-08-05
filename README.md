@@ -23,7 +23,14 @@ Windows, Linux, macOS
 ```
 
 ## Project Description
-....
+An open-source library of parametric curves interpolation (Bézier, B-Spline) useful for robotics applications, such as path planning, etc. The library provides access to specific classes for working with two types of parametric curves: Bézier curves and B-Spline curves. The specific classes focus on the problem of interpolating both two-dimensional and three-dimensional curves from input control points.
+
+The classes also include the methods to calculate the derivative of the individual curves, arc-length, bounding box, simplification of the curves, and much more. The B-Spline interpolation class contains a function to optimize control points using the least squares method.
+
+```bash
+Path (Bézier): ..\Collision_Detection\src\Lib\Interpolation\Bezier\Core.py
+Path (B-Spline): ..\Collision_Detection\src\Lib\Interpolation\B_Spline\Core.py
+```
 
 The repository also contains a transformation library with the necessary project-related functions. See link below.
 
