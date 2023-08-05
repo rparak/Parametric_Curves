@@ -49,8 +49,8 @@ The library can be used within the Robot Operating System (ROS), Blender, PyBull
 **Demonstration of three-dimensional (3D) Curves**
 
 <p align="center">
-    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_3d_1_0.png width="350" height="350">
-    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_3d_1_0.png width="350" height="350">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_3d_1_0.png width="600" height="600">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_3d_1_0.png width="600" height="600">
 </p>
 
 A simple program that describes how to work with the library can be found below. The whole program is located in the individual evaluation folder.
