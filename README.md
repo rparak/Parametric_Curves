@@ -34,6 +34,21 @@ The library can be used within the Robot Operating System (ROS), Blender, PyBull
 ## Simple Demonstration
 Text .....
 
+## Blender
+Text .....
+
+**Bézier Curve**
+
+<p align="center">
+<img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Blender/Bezier_Curve.png width="800" height="350">
+</p>
+
+**B-Spline Curve**
+
+<p align="center">
+<img src=https://github.com/rparak/Parametric_Curves/blob/main/images/B_Spline.png width="800" height="350">
+</p>
+
 ## Contact Info
 Roman.Parak@outlook.com
 
