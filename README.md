@@ -33,24 +33,40 @@ The library can be used within the Robot Operating System (ROS), Blender, PyBull
 
 ## Bézier Curves
 
-**Bernstein_Polynomials**
+**Bernstein Polynomials**
+
+```bash
+$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/Bezier
+$ ../Collision_Detection/Blender> python3 Bernstein_Polynomials.py
+```
 
 <p align="center">
     <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/Bernstein_Polynomials.png width="600" height="350">
 </p>
 
+
 **Demonstration of two-dimensional (2D) Curves**
+
+```bash
+$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/Bezier
+$ ../Collision_Detection/Blender> python3 test_2d_1.py
+```
 
 <p align="center">
     <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_2d_1_0.png width="600" height="350">
-    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_2d_1_0.png width="600" height="350">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_2d_1_1.png width="600" height="350">
 </p>
 
 **Demonstration of three-dimensional (3D) Curves**
 
+```bash
+$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/Bezier
+$ ../Collision_Detection/Blender> python3 test_3d_1.py
+```
+
 <p align="center">
     <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_3d_1_0.png width="600" height="600">
-    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_3d_1_0.png width="600" height="600">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/test_3d_1_1.png width="600" height="600">
 </p>
 
 A simple program that describes how to work with the library can be found below. The whole program is located in the individual evaluation folder.
@@ -119,6 +135,60 @@ if __name__ == '__main__':
 ```
 
 ## B-Spline Curves
+
+**Basic Functions**
+
+```bash
+$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
+$ ../Collision_Detection/Blender> python3 Basic_Functions.py
+```
+
+<p align="center">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/B_Spline/Basic_Functions.png width="600" height="350">
+</p>
+
+
+**Demonstration of two-dimensional (2D) Curves**
+
+```bash
+$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
+$ ../Collision_Detection/Blender> python3 test_2d_1.py
+```
+
+<p align="center">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/B_Spline/test_2d_1_0.png width="600" height="350">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/B_Spline/test_2d_1_1.png width="600" height="350">
+</p>
+
+```bash
+$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
+$ ../Collision_Detection/Blender> python3 test_2d_2.py
+```
+
+<p align="center">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/B_Spline/test_2d_2_0.png width="600" height="350">
+</p>
+
+**Demonstration of three-dimensional (3D) Curves**
+
+```bash
+$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
+$ ../Collision_Detection/Blender> python3 test_3d_1.py
+```
+
+<p align="center">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/B_Spline/test_3d_1_0.png width="600" height="600">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/B_Spline/test_3d_1_1.png width="600" height="600">
+</p>
+
+```bash
+$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
+$ ../Collision_Detection/Blender> python3 test_3d_2.py
+```
+
+<p align="center">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/B_Spline/test_3d_2_0.png width="600" height="350">
+</p>
 
 A simple program that describes how to work with the library can be found below. The whole program is located in the individual evaluation folder.
 
