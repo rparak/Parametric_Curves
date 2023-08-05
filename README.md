@@ -101,7 +101,7 @@ if __name__ == '__main__':
 **Bernstein_Polynomials**
 
 <p align="center">
-<img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/Bernstein_Polynomials.png width="650" height="350">
+<img src=https://github.com/rparak/Parametric_Curves/blob/main/images/Bezier/Bernstein_Polynomials.png width="600" height="350">
 </p>
 
 ## B-Spline Curves
