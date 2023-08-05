@@ -187,7 +187,7 @@ $ ../Collision_Detection/Blender> python3 test_3d_2.py
 ```
 
 <p align="center">
-    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/B_Spline/test_3d_2_0.png width="600" height="350">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/B_Spline/test_3d_2_0.png width="600" height="600">
 </p>
 
 A simple program that describes how to work with the library can be found below. The whole program is located in the individual evaluation folder.
