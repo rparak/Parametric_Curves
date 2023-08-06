@@ -305,7 +305,7 @@ $ ../Collision_Detection/Blender> blender B_Spline.blend
 
 <p align="center">
   <a href="https://www.youtube.com/@RomanParak/videos">
-    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/YouTube.png width="650" height="350">
+    <img src=https://github.com/rparak/Parametric_Curves/blob/main/images/YouTube.png width="300" height="250">
   </a>
 </p>
 
