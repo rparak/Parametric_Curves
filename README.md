@@ -303,7 +303,9 @@ $ ../Collision_Detection/Blender> blender B_Spline.blend
 
 ## YouTube
 
-Text ...
+<a href="https://www.youtube.com/watch?v=your-video-id">
+  <img src="path-to-your-image.png" alt="Click me!" />
+</a>
 
 ## Contact Info
 Roman.Parak@outlook.com
