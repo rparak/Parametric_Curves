@@ -260,7 +260,6 @@ class B_Spline_Cls(object):
             Obtain the arc length L(x) of the general parametric curve.
 
             The arc length L(x) is defined by:
-                
                 L(x) = \int_{0}^{x} ||B'(x)||_{2} dx.
 
         Returns:
