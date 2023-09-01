@@ -226,7 +226,6 @@ class Bezier_Cls(object):
             Obtain the arc length L(x) of the general parametric curve.
 
             The arc length L(x) is defined by:
-                
                 L(x) = \int_{0}^{t} ||B'(x)||_{2} dx.
 
         Returns:
