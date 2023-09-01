@@ -47,7 +47,7 @@ CONST_T_1 = 1.0
 def Lerp(method: str, p_0: tp.List[float], p_1: tp.List[float], x: float) -> tp.List[float]:
     """
     Description:
-        Linear interpolation (Lerp) is a method of curve fitting using linear polynomials to construct new data 
+        Linear interpolation (Lerp) is a method of curve generating using linear polynomials to construct new data 
         points over the range of a discrete set of known data points. 
 
         The equation of the Lerp function is defined as follows:
