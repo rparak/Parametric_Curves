@@ -46,7 +46,7 @@ The library can be used within the Robot Operating System (ROS), Blender, PyBull
 
 ```bash
 $ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/Bezier
-$ ../Collision_Detection/Blender> python3 Bernstein_Polynomials.py
+$ ../Evaluation/Bezier> python3 Bernstein_Polynomials.py
 ```
 
 <p align="center">
@@ -58,7 +58,7 @@ $ ../Collision_Detection/Blender> python3 Bernstein_Polynomials.py
 
 ```bash
 $ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/Bezier
-$ ../Collision_Detection/Blender> python3 test_2d_1.py
+$ ../Evaluation/Bezier> python3 test_2d_1.py
 ```
 
 <p align="center">
@@ -70,7 +70,7 @@ $ ../Collision_Detection/Blender> python3 test_2d_1.py
 
 ```bash
 $ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/Bezier
-$ ../Collision_Detection/Blender> python3 test_3d_1.py
+$ ../Evaluation/Bezier> python3 test_3d_1.py
 ```
 
 <p align="center">
@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
 ```bash
 $ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
-$ ../Collision_Detection/Blender> python3 Basic_Functions.py
+$ ../Evaluation/B_Spline> python3 Basic_Functions.py
 ```
 
 <p align="center">
@@ -161,7 +161,7 @@ $ ../Collision_Detection/Blender> python3 Basic_Functions.py
 
 ```bash
 $ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
-$ ../Collision_Detection/Blender> python3 test_2d_1.py
+$ ../Evaluation/B_Spline> python3 test_2d_1.py
 ```
 
 <p align="center">
@@ -171,7 +171,7 @@ $ ../Collision_Detection/Blender> python3 test_2d_1.py
 
 ```bash
 $ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
-$ ../Collision_Detection/Blender> python3 test_2d_2.py
+$ ../Evaluation/B_Spline> python3 test_2d_2.py
 ```
 
 <p align="center">
@@ -182,7 +182,7 @@ $ ../Collision_Detection/Blender> python3 test_2d_2.py
 
 ```bash
 $ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
-$ ../Collision_Detection/Blender> python3 test_3d_1.py
+$ ../Evaluation/B_Spline> python3 test_3d_1.py
 ```
 
 <p align="center">
@@ -192,7 +192,7 @@ $ ../Collision_Detection/Blender> python3 test_3d_1.py
 
 ```bash
 $ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
-$ ../Collision_Detection/Blender> python3 test_3d_2.py
+$ ../Evaluation/B_Spline> python3 test_3d_2.py
 ```
 
 <p align="center">
