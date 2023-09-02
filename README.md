@@ -90,6 +90,7 @@ import matplotlib.pyplot as plt
 # Custom Script:
 #   ../Lib/Interpolation/Bezier/Core
 import Lib.Interpolation.Bezier.Core as Bezier
+
 """
 Description:
     Initialization of constants.
