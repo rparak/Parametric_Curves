@@ -88,7 +88,7 @@ class Bezier_Cls(object):
                               [3.00, -2.50], 
                               [3.75, -1.25], 
                               [4.00,  0.75], 
-                              [5.00,  1.00]], dtype=np.float32)
+                              [5.00,  1.00]], dtype=np.float64)
 
                 # Initialization of the class.
                 Cls = Bezier_Cls(method, P, N)
@@ -119,13 +119,13 @@ class Bezier_Cls(object):
 
             # Initialization of other class parameters.
             #   Control Points.
-            self.__P = np.array(P, dtype=np.float32)
+            self.__P = np.array(P, dtype=np.float64)
             #   Dimension (2-D, 3-D).
             self.__dim = self.__P.shape[1]
             #   Interpolated points.
-            self.__B = np.zeros((N, self.__dim), dtype=np.float32)
+            self.__B = np.zeros((N, self.__dim), dtype=np.float64)
             #   First derivation of interpolated points.
-            self.__B_dot = np.zeros((N, self.__dim), dtype=np.float32)
+            self.__B_dot = np.zeros((N, self.__dim), dtype=np.float64)
             #   Degree of a polynomial.
             self.__n = self.__P.shape[0] - 1
 
@@ -162,7 +162,7 @@ class Bezier_Cls(object):
         try:
             assert P.shape[1] == self.__dim
 
-            self.__P = np.array(P, dtype=np.float32)
+            self.__P = np.array(P, dtype=np.float64)
 
         except AssertionError as error:
             print(f'[ERROR] Information: {error}')
@@ -259,7 +259,7 @@ class Bezier_Cls(object):
                                                     Where n is the dimension (2-D, 3-D).
         """
 
-        min = np.zeros(self.__dim, dtype=np.float32); max = min.copy()
+        min = np.zeros(self.__dim, dtype=np.float64); max = min.copy()
         for i, (p_0_i, p_n_i) in enumerate(zip(P_0, P_N)):
             min[i] = Mathematics.Min([p_0_i, p_n_i])[1]
             max[i] = Mathematics.Max([p_0_i, p_n_i])[1]
@@ -285,7 +285,7 @@ class Bezier_Cls(object):
                                                     Where n is the dimension (2-D, 3-D).
         """
 
-        B = np.zeros(self.__dim, dtype=np.float32)
+        B = np.zeros(self.__dim, dtype=np.float64)
         for j, p_j in enumerate(P):
             B += Utilities.Bernstein_Polynomial(j, self.__n, x) * p_j
 
@@ -342,7 +342,7 @@ class Bezier_Cls(object):
             assert limitation in ['Control-Points', 'Interpolated-Points']
         
             if limitation == 'Control-Points':
-                min = np.zeros(self.__dim, dtype=np.float32); max = min.copy()
+                min = np.zeros(self.__dim, dtype=np.float64); max = min.copy()
                 for i, P_T in enumerate(self.__P.T):
                     min[i] = Mathematics.Min(P_T)[1]
                     max[i] = Mathematics.Max(P_T)[1]
@@ -355,7 +355,7 @@ class Bezier_Cls(object):
                 #   Note:
                 #       The coefficients are of the form x^0 + x^1 + .. + x^n.
                 coeff = np.array([i*self.__C(i) for i in range(1, self.__n + 1)],
-                                 dtype=np.float32).T
+                                 dtype=np.float64).T
                 
                 # Calculate the roots of the parametric curve to obtain the minimum 
                 # and maximum on the axis for x between the values 0.0 and 1.0.
@@ -375,7 +375,7 @@ class Bezier_Cls(object):
                                 x_tmp.append(roots_i)
                         
                         # Remove duplicates from the vector.
-                        x_tmp = np.array([*set(x_tmp)], dtype=np.float32)
+                        x_tmp = np.array([*set(x_tmp)], dtype=np.float64)
                         
                         if x_tmp.size == 0:
                             continue
@@ -383,7 +383,7 @@ class Bezier_Cls(object):
                             x = x_tmp
                     else:
                         if Utilities.CONST_T_0 <= coeff_i <= Utilities.CONST_T_1:
-                            x = np.array(coeff_i, dtype=np.float32)
+                            x = np.array(coeff_i, dtype=np.float64)
                         else:
                             continue
 
@@ -391,8 +391,8 @@ class Bezier_Cls(object):
                     # that correspond to time x.
                     B_i = []
                     for _, x_i in enumerate(x):
-                        B_i.append(self.__Get_B_x(self.__P[:, i], np.array(x_i, dtype=np.float32)))
-                    B_i = np.array(B_i, dtype=np.float32).flatten()
+                        B_i.append(self.__Get_B_x(self.__P[:, i], np.array(x_i, dtype=np.float64)))
+                    B_i = np.array(B_i, dtype=np.float64).flatten()
 
                     # Obtain the minimum and maximum of the parametric curve in the i-axis.
                     #   Note:

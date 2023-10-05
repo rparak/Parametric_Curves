@@ -50,7 +50,7 @@ def main():
                   [3.00, -2.50,  1.00], 
                   [3.75, -1.25, -0.50], 
                   [4.00,  0.75,  1.50], 
-                  [5.00,  1.00, -1.50]], dtype=np.float32)
+                  [5.00,  1.00, -1.50]], dtype=np.float64)
 
     # Initialization of a specific class to work with B-Spline curves.
     S_Cls = B_Spline.B_Spline_Cls(CONST_B_SPLINE['n'], CONST_B_SPLINE['method'], P, 

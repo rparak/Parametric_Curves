@@ -138,9 +138,9 @@ def main():
     #   Note:
     #       The orientation of the object is set by the user.
     q_0 = EA_Cls(np.array(bpy.data.objects['Viewpoint_Control_Point_0'].rotation_euler), 
-                 'ZYX', np.float32).Get_Quaternion()
+                 'ZYX', np.float64).Get_Quaternion()
     q_1 = EA_Cls(np.array(bpy.data.objects['Viewpoint_Control_Point_n'].rotation_euler), 
-                 'ZYX', np.float32).Get_Quaternion()
+                 'ZYX', np.float64).Get_Quaternion()
                 
     """
     Description:
@@ -176,7 +176,7 @@ def main():
         # Obtain the spherical linear interpolation (Slerp) between the given quaternions.
         q = Utilities.Slerp('Quaternion', q_0, q_1, t_i)
         # Express the homogeneous transformation matrix of an object from position and rotation.
-        T = HTM_Cls(None, np.float32).Rotation(q.all(), 'QUATERNION').Translation(S_i)
+        T = HTM_Cls(None, np.float64).Rotation(q.all(), 'QUATERNION').Translation(S_i)
 
         # Set the transformation of the object (Viewpoint) to the current position/rotation of the curve.
         Lib.Blender.Utilities.Set_Object_Transformation('Viewpoint', T)

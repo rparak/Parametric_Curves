@@ -76,7 +76,7 @@ class B_Spline_Cls(object):
                               [3.00, -2.50], 
                               [3.75, -1.25], 
                               [4.00,  0.75], 
-                              [5.00,  1.00]], dtype=np.float32)
+                              [5.00,  1.00]], dtype=np.float64)
 
                 # Initialization of the class.
                 Cls = B_Spline_Cls(n, method, P, N)
@@ -113,13 +113,13 @@ class B_Spline_Cls(object):
 
             # Initialization of other class parameters.
             #   Control Points.
-            self.__P = np.array(P, dtype=np.float32)
+            self.__P = np.array(P, dtype=np.float64)
             #   Dimension (2-D, 3-D).
             self.__dim = self.__P.shape[1]
             #   Interpolated points.
-            self.__S = np.zeros((N, self.__dim), dtype=np.float32)
+            self.__S = np.zeros((N, self.__dim), dtype=np.float64)
             #   First derivation of interpolated points.
-            self.__S_dot = np.zeros((N, self.__dim), dtype=np.float32)
+            self.__S_dot = np.zeros((N, self.__dim), dtype=np.float64)
             #   Degree of a polynomial.
             self.__n = n
             #   The number of interpolated points of the parametric curve.
@@ -173,7 +173,7 @@ class B_Spline_Cls(object):
         try:
             assert P.shape[1] == self.__dim
 
-            self.__P = np.array(P, dtype=np.float32)
+            self.__P = np.array(P, dtype=np.float64)
 
             # Generate a normalized vector of knots from the selected parameters 
             # using the chosen method.
@@ -365,7 +365,7 @@ class B_Spline_Cls(object):
         try:
             assert limitation in ['Control-Points', 'Interpolated-Points']
 
-            min = np.zeros(self.__dim, dtype=np.float32); max = min.copy()
+            min = np.zeros(self.__dim, dtype=np.float64); max = min.copy()
             if limitation == 'Control-Points':
                 for i, P_T in enumerate(self.__P.T):
                     min[i] = Mathematics.Min(P_T)[1]

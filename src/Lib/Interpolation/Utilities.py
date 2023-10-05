@@ -128,8 +128,8 @@ def Slerp(method: str, q_0: tp.List[float], q_1: tp.List[float], x: float) -> tp
             q_0 = q_0.Normalize()
             q_1 = q_1.Normalize()
         else:
-            q_0 = Transformation.Quaternion_Cls(q_0, np.float32).Normalize()
-            q_1 = Transformation.Quaternion_Cls(q_1, np.float32).Normalize()
+            q_0 = Transformation.Quaternion_Cls(q_0, np.float64).Normalize()
+            q_1 = Transformation.Quaternion_Cls(q_1, np.float64).Normalize()
 
         if method == 'Geometric':
             # Calculate angle between quaternions (q_0, q_1).

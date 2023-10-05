@@ -46,7 +46,7 @@ def main():
                   [3.00, -2.50], 
                   [3.75, -1.25], 
                   [4.00,  0.75], 
-                  [5.00,  1.00]], dtype=np.float32)
+                  [5.00,  1.00]], dtype=np.float64)
 
     # Initialization of a specific class to work with Bézier curves.
     B_Cls = Bezier.Bezier_Cls(CONST_BEZIER_CURVE['method'], P, 

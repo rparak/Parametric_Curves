@@ -43,7 +43,7 @@ def main():
                   [3.00, -2.50], 
                   [3.75, -1.25], 
                   [4.00,  0.75], 
-                  [5.00,  1.00]], dtype=np.float32)
+                  [5.00,  1.00]], dtype=np.float64)
 
     # Generate a normalized vector of knots from the selected parameters 
     # using the chosen method.
