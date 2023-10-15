@@ -12,7 +12,7 @@ import scienceplots
 # Matplotlib (Visualization) [pip3 install matplotlib]
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat
-# Custom Script:
+# Custom Lib.:
 #   ../Lib/Interpolation/B_Spline/Core
 import Lib.Interpolation.B_Spline.Core as B_Spline
 
