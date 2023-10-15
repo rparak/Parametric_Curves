@@ -11,7 +11,7 @@ import os
 import scienceplots
 # Matplotlib (Visualization) [pip3 install matplotlib]
 import matplotlib.pyplot as plt
-# Custom Script:
+# Custom Lib.:
 #   ../Lib/Interpolation/Bezier/Core
 import Lib.Interpolation.Utilities as Utilities
 
