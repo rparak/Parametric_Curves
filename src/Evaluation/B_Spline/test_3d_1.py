@@ -13,7 +13,7 @@ import scienceplots
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.art3d
 import matplotlib.patches as pat
-# Custom Script:
+# Custom Lib.:
 #   ../Lib/Interpolation/B_Spline/Core
 import Lib.Interpolation.B_Spline.Core as B_Spline
 #   ../Lib/Primitives/Core
