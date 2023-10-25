@@ -315,7 +315,7 @@ Roman.Parak@outlook.com
 
 ## Citation (BibTex)
 ```bash
-@misc{RomanParak_DataConverter,
+@misc{RomanParak_ParametricCurves,
   author = {Roman Parak},
   title = {An open-source parametric curves library useful for robotics applications},
   year = {2023},
