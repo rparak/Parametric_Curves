@@ -1,8 +1,8 @@
 # System (Default)
 import sys
 #   Add access if it is not in the system path.
-if '../' + 'src' not in sys.path:
-    sys.path.append('../..')
+if '../../' + 'src' not in sys.path:
+    sys.path.append('../../' + 'src')
 # Numpy (Array computing) [pip3 install numpy]
 import numpy as np
 # OS (Operating system interfaces)
@@ -14,10 +14,10 @@ import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.art3d
 import matplotlib.patches as pat
 # Custom Lib.:
-#   ../Lib/Interpolation/B_Spline/Core
-import Lib.Interpolation.B_Spline.Core as B_Spline
-#   ../Lib/Primitives/Core
-import Lib.Primitives.Core as Primitives
+#   ../Interpolation/B_Spline/Core
+import Interpolation.B_Spline.Core as B_Spline
+#   ../Primitives/Core
+import Primitives.Core as Primitives
 
 """
 Description:

@@ -1,8 +1,8 @@
 # System (Default)
 import sys
 #   Add access if it is not in the system path.
-if '../' + 'src' not in sys.path:
-    sys.path.append('../..')
+if '../../' + 'src' not in sys.path:
+    sys.path.append('../../' + 'src')
 # Numpy (Array computing) [pip3 install numpy]
 import numpy as np
 # OS (Operating system interfaces)
@@ -12,28 +12,25 @@ import scienceplots
 # Matplotlib (Visualization) [pip3 install matplotlib]
 import matplotlib.pyplot as plt
 # Custom Lib.:
-#   ../Lib/Interpolation/Bezier/Core
-import Lib.Interpolation.Utilities as Utilities
+#   ../Interpolation/Bezier/Core
+import Interpolation.Utilities as Utilities
 
 """
 Description:
     Initialization of constants.
 """
-# B-Spline interpolation parameters.
-#   n: Degree of a polynomial.
+# Bezier curve interpolation parameters.
 #   N: The number of points to be generated in the interpolation function.
-#   'method': The method to be used to select the parameters of the knot vector. 
-#               method = 'Uniformly-Spaced', 'Chord-Length' or 'Centripetal'.
-CONST_B_SPLINE = {'n': 3, 'N': 100, 'method': 'Chord-Length'}
+CONST_BEZIER_CURVE = {'N': 100}
 # Save the data to a file.
 CONST_SAVE_DATA = False
 
 def main():
     """
     Description:
-        A program for visualization of n-th degree B-spline basis functions.
+        A program for visualization of Bernstein basis polynomials functions of degree n.
     """
-
+    
     # Locate the path to the project folder.
     project_folder = os.getcwd().split('Parametric_Curves')[0] + 'Parametric_Curves'
 
@@ -44,14 +41,13 @@ def main():
                   [3.75, -1.25], 
                   [4.00,  0.75], 
                   [5.00,  1.00]], dtype=np.float64)
+    
+    # The value of the time must be within the interval: 
+    #   0.0 <= x <= 1.0
+    x = np.linspace(Utilities.CONST_T_0, Utilities.CONST_T_1, CONST_BEZIER_CURVE['N'])
 
-    # Generate a normalized vector of knots from the selected parameters 
-    # using the chosen method.
-    t = Utilities.Generate_Knot_Vector(CONST_B_SPLINE['n'], P, CONST_B_SPLINE['method'])
-
-    # The value of the time must be within the interval of the knot vector: 
-    #   t[0] <= x <= t[-1]
-    x = np.linspace(t[0], t[-1], CONST_B_SPLINE['N'])
+    # Degree of a polynomial.
+    n = P.shape[0] - 1
 
     # Set the parameters for the scientific style.
     plt.style.use(['science'])
@@ -59,25 +55,19 @@ def main():
     # Create a figure.
     _, ax = plt.subplots()
 
-    # Visualization of n-th degree B-spline basis functions.
-    for j in range(P.shape[0]):
-        B_in = np.zeros(x.shape, dtype=x.dtype)
-        for i, x_i in enumerate(x):
-            B_in[i] = Utilities.Basic_Function(j, CONST_B_SPLINE['n'], t, x_i)
-        ax.plot(x, B_in, '-', linewidth=1.0, label=r'$B_{(%d, %d)}(x)$' % (j, CONST_B_SPLINE['n']))
-
-    # Visualization of the normalized vector of knots.
-    ax.plot(t, t.shape[0] * [0.0],'o', color='#8d8d8d', linewidth=1.0, markersize = 8.0, 
-            markeredgewidth = 4.0, markerfacecolor = '#ffffff', label=r'Normalized Knot Vector')
+    # Visualization of Bernstein basis polynomials functions of degree n.
+    for i in range(P.shape[0]):
+        B_in = Utilities.Bernstein_Polynomial(i, n, x)
+        ax.plot(x, B_in, '-', linewidth=1.0, label=r'$B_{(%d, %d)}(x)$' % (i, n))
 
     # Set parameters of the graph (plot).
-    ax.set_title(f"B-spline Basis Functions of the {CONST_B_SPLINE['n']}-th Degree", fontsize=25, pad=25.0)
+    ax.set_title(f'Bernstein Basis Polynomials of the Degree {n}', fontsize=25, pad=25.0)
     #   Set the x ticks.
-    ax.set_xticks(np.arange(t[0] - 0.1, t[-1] + 0.1, 0.1))
+    ax.set_xticks(np.arange(Utilities.CONST_T_0 - 0.1, Utilities.CONST_T_1 + 0.1, 0.1))
     #   Set the y ticks.
-    ax.set_yticks(np.arange(t[0] - 0.1, t[-1] + 0.1, 0.1))
+    ax.set_yticks(np.arange(Utilities.CONST_T_0 - 0.1, Utilities.CONST_T_1 + 0.1, 0.1))
     #   Label
-    ax.set_xlabel(r'x', fontsize=15, labelpad=10); ax.set_ylabel(r'$B_{(i, %d)}(x)$' % CONST_B_SPLINE['n'], fontsize=15, labelpad=10) 
+    ax.set_xlabel(r'x', fontsize=15, labelpad=10); ax.set_ylabel(r'$B_{(i, %d)}(x)$' % n, fontsize=15, labelpad=10) 
     #   Set parameters of the visualization.
     ax.grid(which='major', linewidth = 0.15, linestyle = '--')
     # Get handles and labels for the legend.
@@ -92,7 +82,7 @@ def main():
         plt.get_current_fig_manager().full_screen_toggle()
 
         # Save the results.
-        plt.savefig(f'{project_folder}/images/B_Spline/Basic_Functions.png', format='png', dpi=300)
+        plt.savefig(f'{project_folder}/images/Bezier/Bernstein_Polynomials.png', format='png', dpi=300)
     else:
         # Show the result.
         plt.show()

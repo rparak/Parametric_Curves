@@ -30,10 +30,10 @@ import numpy as np
 # Typing (Support for type hints)
 import typing as tp
 # Custom Lib.:
-#   ../Lib/Transformation/Core
-import Lib.Transformation.Core as Transformation
-#   ../Lib/Transformation/Utilities/Mathematics
-import Lib.Transformation.Utilities.Mathematics as Mathematics
+#   ../Transformation/Core
+import Transformation.Core as Transformation
+#   ../Transformation/Utilities/Mathematics
+import Transformation.Utilities.Mathematics as Mathematics
 
 """
 Description:

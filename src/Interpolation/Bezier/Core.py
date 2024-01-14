@@ -31,9 +31,9 @@ import numpy as np
 import typing as tp
 # Custom Lib.:
 #   ../Interpolation/Utilities
-import Lib.Interpolation.Utilities as Utilities
-#   ../Lib/Transformation/Utilities/Mathematics
-import Lib.Transformation.Utilities.Mathematics as Mathematics
+import Interpolation.Utilities as Utilities
+#   ../Transformation/Utilities/Mathematics
+import Transformation.Utilities.Mathematics as Mathematics
 
 class Bezier_Cls(object):
     """

@@ -29,9 +29,9 @@ File Name: Transformation.py
 import numpy as np
 # Typing (Support for type hints)
 import typing as tp
-# Custom Lib.:
+# Custom :
 # ../Utilities/Mathematics
-import Lib.Transformation.Utilities.Mathematics as Mathematics
+import Transformation.Utilities.Mathematics as Mathematics
 
 def Is_Matrix_Square(M: tp.List[tp.List[float]]):
     """
@@ -1463,7 +1463,7 @@ class Euler_Angle_Cls(Vector3_Cls):
 
             Note 1:
                 For more information on simplifying the function, see:
-                    ../Lib/Simplification/Euler_Angles.py
+                    ../Simplification/Euler_Angles.py
 
             Note 2:
                 axes_sequence_cfg = 'ZYX'
@@ -2134,7 +2134,7 @@ class Quaternion_Cls(object):
 
             Note:
                 For more information on simplifying the function, see:
-                    ../Lib/Simplification/Quaternion.py
+                    ../Simplification/Quaternion.py
 
         Args:
             (1) method [string]: The name of the method to calculate the homogeneous transformation matrix {T}.
