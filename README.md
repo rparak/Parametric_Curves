@@ -28,8 +28,8 @@ An open-source library for interpolation functions of parametric curves (Bézier
 The classes also include the methods to calculate the derivative of the individual curves, arc-length, bounding box, simplification of the curves, and much more. The B-Spline interpolation class contains a function to optimize control points using the least squares method.
 
 ```bash
-Path (Bézier): ..\Collision_Detection\src\Lib\Interpolation\Bezier\Core.py
-Path (B-Spline): ..\Collision_Detection\src\Lib\Interpolation\B_Spline\Core.py
+Path (Bézier): ..\Collision_Detection\src\Interpolation\Bezier\Core.py
+Path (B-Spline): ..\Collision_Detection\src\Interpolation\B_Spline\Core.py
 ```
 
 In particular, the library focuses on solving the path planning problem of the industrial/collaborative robotic arms. But, as an open-source library, it can be used for other tasks, as creativity knows no limits.
@@ -45,7 +45,7 @@ The library can be used within the Robot Operating System (ROS), Blender, PyBull
 **Bernstein Polynomials**
 
 ```bash
-$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/Bezier
+$ /> cd Documents/GitHub/Parametric_Curves/Evaluation/Bezier
 $ ../Evaluation/Bezier> python3 Bernstein_Polynomials.py
 ```
 
@@ -57,7 +57,7 @@ $ ../Evaluation/Bezier> python3 Bernstein_Polynomials.py
 **Demonstration of two-dimensional (2D) Curves**
 
 ```bash
-$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/Bezier
+$ /> cd Documents/GitHub/Parametric_Curves/Evaluation/Bezier
 $ ../Evaluation/Bezier> python3 test_2d_1.py
 ```
 
@@ -69,7 +69,7 @@ $ ../Evaluation/Bezier> python3 test_2d_1.py
 **Demonstration of three-dimensional (3D) Curves**
 
 ```bash
-$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/Bezier
+$ /> cd Documents/GitHub/Parametric_Curves/Evaluation/Bezier
 $ ../Evaluation/Bezier> python3 test_3d_1.py
 ```
 
@@ -149,7 +149,7 @@ if __name__ == '__main__':
 **Basic Functions**
 
 ```bash
-$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
+$ /> cd Documents/GitHub/Parametric_Curves/Evaluation/B_Spline
 $ ../Evaluation/B_Spline> python3 Basic_Functions.py
 ```
 
@@ -161,7 +161,7 @@ $ ../Evaluation/B_Spline> python3 Basic_Functions.py
 **Demonstration of two-dimensional (2D) Curves**
 
 ```bash
-$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
+$ /> cd Documents/GitHub/Parametric_Curves/Evaluation/B_Spline
 $ ../Evaluation/B_Spline> python3 test_2d_1.py
 ```
 
@@ -171,7 +171,7 @@ $ ../Evaluation/B_Spline> python3 test_2d_1.py
 </p>
 
 ```bash
-$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
+$ /> cd Documents/GitHub/Parametric_Curves/Evaluation/B_Spline
 $ ../Evaluation/B_Spline> python3 test_2d_2.py
 ```
 
@@ -182,7 +182,7 @@ $ ../Evaluation/B_Spline> python3 test_2d_2.py
 **Demonstration of three-dimensional (3D) Curves**
 
 ```bash
-$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
+$ /> cd Documents/GitHub/Parametric_Curves/Evaluation/B_Spline
 $ ../Evaluation/B_Spline> python3 test_3d_1.py
 ```
 
@@ -192,7 +192,7 @@ $ ../Evaluation/B_Spline> python3 test_3d_1.py
 </p>
 
 ```bash
-$ /> cd Documents/GitHub/Parametric_Curves/src/Evaluation/B_Spline
+$ /> cd Documents/GitHub/Parametric_Curves/Evaluation/B_Spline
 $ ../Evaluation/B_Spline> python3 test_3d_2.py
 ```
 
