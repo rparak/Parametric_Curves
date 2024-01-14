@@ -88,8 +88,8 @@ import numpy as np
 # Matplotlib (Visualization) [pip3 install matplotlib]
 import matplotlib.pyplot as plt
 # Custom Script:
-#   ../Lib/Interpolation/Bezier/Core
-import Lib.Interpolation.Bezier.Core as Bezier
+#   ../Interpolation/Bezier/Core
+import Interpolation.Bezier.Core as Bezier
 
 """
 Description:
@@ -210,8 +210,8 @@ import numpy as np
 # Matplotlib (Visualization) [pip3 install matplotlib]
 import matplotlib.pyplot as plt
 # Custom Script:
-#   ../Lib/Interpolation/B_Spline/Core
-import Lib.Interpolation.B_Spline.Core as B_Spline
+#   ../Interpolation/B_Spline/Core
+import Interpolation.B_Spline.Core as B_Spline
 
 """
 Description:
